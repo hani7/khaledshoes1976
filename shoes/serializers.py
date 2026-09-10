@@ -35,6 +35,14 @@ class CouponSerializer(serializers.ModelSerializer):
 
 
 # ─── Category ────────────────────────────────────────────────────────────────
+class BrandSerializer(AbsoluteImageMixin, serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+    class Meta:
+        model = Brand
+        fields = ['id', 'name', 'slug', 'image']
+    def get_image(self, obj):
+        return self._abs(obj.image.url if obj.image else None)
+
 class CategorySerializer(AbsoluteImageMixin, serializers.ModelSerializer):
     product_count = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField()
@@ -103,6 +111,7 @@ class CategoryCompactSerializer(AbsoluteImageMixin, serializers.ModelSerializer)
 # ─── Product (list - compact) ─────────────────────────────────────────────────
 class ProductListSerializer(AbsoluteImageMixin, serializers.ModelSerializer):
     categories = CategoryCompactSerializer(many=True, read_only=True)
+    brand = BrandSerializer(read_only=True)
     is_promo = serializers.BooleanField(read_only=True)
     effective_price = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
     avg_rating = serializers.SerializerMethodField()
@@ -111,7 +120,7 @@ class ProductListSerializer(AbsoluteImageMixin, serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'id', 'name', 'slug', 'categories',
+            'id', 'name', 'slug', 'categories', 'brand',
             'price', 'promo_price', 'effective_price', 'is_promo',
             'units_per_carton', 'stock', 'is_featured', 'is_new', 'is_bestseller', 'is_promotion', 'thumbnail',
             'weight_box', 'weight_carton', 'contenance', 'contenance_unit', 'short_description',
@@ -344,6 +353,16 @@ class OrderCreateSerializer(serializers.Serializer):
 
 # ─── Admin Serializers ────────────────────────────────────────────────────────
 
+class AdminBrandSerializer(AbsoluteImageMixin, serializers.ModelSerializer):
+    image = serializers.ImageField(required=False, allow_null=True)
+    class Meta:
+        model = Brand
+        fields = ['id', 'name', 'slug', 'image']
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep['image'] = self._abs(instance.image.url if instance.image else None)
+        return rep
+
 class AdminCategorySerializer(serializers.ModelSerializer):
     product_count = serializers.SerializerMethodField()
 
@@ -383,6 +402,11 @@ class AdminProductImageSerializer(AbsoluteImageMixin, serializers.ModelSerialize
 
 class AdminProductSerializer(AbsoluteImageMixin, serializers.ModelSerializer):
     categories = AdminCategorySerializer(many=True, read_only=True)
+    brand = AdminBrandSerializer(read_only=True)
+    
+    brand_id = serializers.PrimaryKeyRelatedField(
+        queryset=Brand.objects.all(), source='brand', required=False, allow_null=True
+    )
     category_ids = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), many=True, source='categories', required=False
     )
@@ -399,7 +423,7 @@ class AdminProductSerializer(AbsoluteImageMixin, serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'id', 'name', 'slug', 'categories', 'category_ids',
+            'id', 'name', 'slug', 'brand', 'categories', 'brand_id', 'category_ids',
             'description', 'short_description', 'price', 'promo_price', 'effective_price', 'is_promo',
             'units_per_carton', 'stock', 'min_stock_alert', 'is_featured', 'is_new', 'is_bestseller', 'is_promotion', 'is_active',
             'thumbnail', 'weight_box', 'weight_carton', 'contenance', 'contenance_unit', 'created_at', 'updated_at', 'variants', 'images', 'related_products', 'related_product_ids'

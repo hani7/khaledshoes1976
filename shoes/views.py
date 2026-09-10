@@ -24,17 +24,17 @@ from django.utils.crypto import get_random_string
 from django.utils import timezone
 from datetime import timedelta
 from .models import (
-    Category, Product, ProductImage, ProductVariant, Banner, Order, OrderItem, Review, UserProfile,
+    Brand, Category, Product, ProductImage, ProductVariant, Banner, Order, OrderItem, Review, UserProfile,
     DeliveryCompany, DeliveryRate, Customer, OrderStatusHistory, Coupon
 )
 from .serializers import (
-    CategorySerializer,
+    BrandSerializer, CategorySerializer,
     ProductListSerializer, ProductDetailSerializer,
     BannerSerializer,
     UserSerializer, RegisterSerializer,
     OrderSerializer, OrderCreateSerializer,
     ReviewSerializer,
-    AdminProductSerializer, AdminProductVariantSerializer, AdminProductImageSerializer, AdminCategorySerializer,
+    AdminBrandSerializer, AdminProductSerializer, AdminProductVariantSerializer, AdminProductImageSerializer, AdminCategorySerializer,
     AdminBannerSerializer, AdminOrderSerializer, AdminOrderStatusSerializer, AdminOrderEditSerializer,
     DeliveryCompanySerializer, DeliveryRateSerializer, CustomerSerializer, CouponSerializer
 )
@@ -43,6 +43,11 @@ from .serializers import (
 # ÔöÇÔöÇÔöÇ Categories ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+
+
+class BrandViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Brand.objects.all().order_by('name')
+    serializer_class = BrandSerializer
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.filter(is_active=True)
@@ -923,6 +928,12 @@ class AdminProductImageViewSet(ActivityLogMixin, viewsets.ModelViewSet):
             user_agent=self.request.META.get('HTTP_USER_AGENT')
         )
         return Response({'message': 'Ordre mis ├á jour avec succ├¿s.'})
+
+
+class AdminBrandViewSet(ActivityLogMixin, viewsets.ModelViewSet):
+    queryset = Brand.objects.all().order_by('name')
+    serializer_class = AdminBrandSerializer
+    permission_classes = [IsAdminUser]
 
 class AdminCategoryViewSet(ActivityLogMixin, viewsets.ModelViewSet):
     queryset = Category.objects.all().order_by('order', 'name')

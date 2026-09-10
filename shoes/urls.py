@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from .views import (
+    BrandViewSet, AdminBrandViewSet,
     CategoryViewSet, ProductViewSet, BannerViewSet,
     RegisterView, LoginView, LogoutView, ProfileView, VerifyOTPView, PasswordChangeView,
     GoogleLoginView, FacebookLoginView,

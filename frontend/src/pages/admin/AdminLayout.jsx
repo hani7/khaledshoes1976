@@ -7,7 +7,7 @@ import CommandMenu from './CommandMenu'
 
 export const NAV_ITEMS = [
   {
-    section: 'Général',
+    section: 'GÃ©nÃ©ral',
     links: [
       { to: '/piove-secure-2026', label: 'Tableau de bord', end: true, icon: <LayoutDashboard size={20} /> },
     ]
@@ -16,7 +16,8 @@ export const NAV_ITEMS = [
     section: 'Catalogue',
     links: [
       { to: '/piove-secure-2026/products', label: 'Produits', icon: <Package size={20} /> },
-      { to: '/piove-secure-2026/categories', label: 'Catégories', icon: <Tags size={20} /> },
+      { to: '/piove-secure-2026/categories', label: 'CatÃ©gories', icon: <Tags size={20} /> },
+      { to: '/piove-secure-2026/brands', label: 'Marques', icon: <Tags size={20} /> },
       { to: '/piove-secure-2026/banners', label: 'Banners', icon: <Image size={20} /> },
     ]
   },
@@ -50,9 +51,9 @@ export const NAV_ITEMS = [
   {
     section: 'Configuration',
     links: [
-      { to: '/piove-secure-2026/mediatheque', label: 'Médiathèque', icon: <Film size={20} /> },
+      { to: '/piove-secure-2026/mediatheque', label: 'MÃ©diathÃ¨que', icon: <Film size={20} /> },
       { to: '/piove-secure-2026/boutiques', label: 'Boutiques', icon: <Store size={20} /> },
-      { to: '/piove-secure-2026/settings', label: 'Paramètres', icon: <Settings size={20} /> },
+      { to: '/piove-secure-2026/settings', label: 'ParamÃ¨tres', icon: <Settings size={20} /> },
     ]
   },
 ]
@@ -103,8 +104,8 @@ export default function AdminLayout() {
         setNotificationPerm(perm)
         if (perm === 'granted') {
           playNotificationSound() // play a test sound
-          new Notification('Piové Cosmetics Admin', {
-            body: "Notifications activées avec succès !",
+          new Notification('Khaled ShoesÃ©  Admin', {
+            body: "Notifications activÃ©es avec succÃ¨s !",
             icon: '/logo.png'
           })
         }
@@ -112,12 +113,12 @@ export default function AdminLayout() {
     }
   }
 
-  // === SONNERIE DOUCE — carillon mélodique ===
+  // === SONNERIE DOUCE â carillon mÃ©lodique ===
   const playNotificationSound = () => {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)()
 
-      // 3 notes douces : Do – Mi – Sol (accord majeur)
+      // 3 notes douces : Do â Mi â Sol (accord majeur)
       const notes = [
         { freq: 523.25, start: 0.0  },  // Do5
         { freq: 659.25, start: 0.22 },  // Mi5
@@ -129,16 +130,16 @@ export default function AdminLayout() {
         const gain = ctx.createGain()
         osc.connect(gain)
         gain.connect(ctx.destination)
-        osc.type = 'sine'              // onde sinusoïdale = son doux
+        osc.type = 'sine'              // onde sinusoÃ¯dale = son doux
         osc.frequency.value = freq
         gain.gain.setValueAtTime(0, ctx.currentTime + start)
-        gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + start + 0.05)  // montée douce
+        gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + start + 0.05)  // montÃ©e douce
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + 1.2) // fondu long
         osc.start(ctx.currentTime + start)
         osc.stop(ctx.currentTime + start + 1.3)
       })
     } catch (e) {
-      console.warn('Audio non supporté:', e)
+      console.warn('Audio non supportÃ©:', e)
     }
   }
 
@@ -146,9 +147,9 @@ export default function AdminLayout() {
     playNotificationSound()
     // Afficher le toast visuel
     setNewOrderToast({ message, count: orderCount })
-    setTimeout(() => setNewOrderToast(null), 8000) // disparaît après 8s
+    setTimeout(() => setNewOrderToast(null), 8000) // disparaÃ®t aprÃ¨s 8s
     if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification('🛍️ Piové — Nouvelle Commande !', {
+      new Notification('ðï¸ Khaled ShoesÃ© â Nouvelle Commande !', {
         body: message,
         icon: '/logo.png'
       })
@@ -164,7 +165,7 @@ export default function AdminLayout() {
       if (prev !== null) {
         const newNormal = newCounts.normal - prev.normal
         if (newNormal > 0) {
-          triggerDesktopNotification(`${newNormal} nouvelle${newNormal > 1 ? 's' : ''} commande${newNormal > 1 ? 's' : ''} reçue${newNormal > 1 ? 's' : ''} !`, newNormal)
+          triggerDesktopNotification(`${newNormal} nouvelle${newNormal > 1 ? 's' : ''} commande${newNormal > 1 ? 's' : ''} reÃ§ue${newNormal > 1 ? 's' : ''} !`, newNormal)
         }
       }
       
@@ -216,7 +217,7 @@ export default function AdminLayout() {
     const resetTimeout = () => {
       clearTimeout(timeoutId)
       timeoutId = setTimeout(() => {
-        alert("Session expirée pour inactivité.")
+        alert("Session expirÃ©e pour inactivitÃ©.")
         handleLogout()
       }, 15 * 60 * 1000)
     }
@@ -241,7 +242,7 @@ export default function AdminLayout() {
     return () => clearInterval(timer)
   }, [])
 
-  // Guard: not logged in — use Navigate component, not navigate()
+  // Guard: not logged in â use Navigate component, not navigate()
   if (!user) {
     return <Navigate to="/piove-secure-2026/login" replace />
   }
@@ -270,7 +271,7 @@ export default function AdminLayout() {
           fontWeight: 700, fontSize: '1rem', letterSpacing: '0.3px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <span style={{ fontSize: '1.6rem', animation: 'bellRing 0.5s ease infinite alternate' }}>🛍️</span>
+            <span style={{ fontSize: '1.6rem', animation: 'bellRing 0.5s ease infinite alternate' }}>ðï¸</span>
             <div>
               <div style={{ fontSize: '1.05rem' }}>NOUVELLE COMMANDE !</div>
               <div style={{ fontSize: '0.82rem', fontWeight: 400, opacity: 0.9 }}>{newOrderToast.message}</div>
@@ -278,14 +279,14 @@ export default function AdminLayout() {
           </div>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
             <a href="/piove-secure-2026/orders" style={{ background: 'white', color: '#dc2626', padding: '6px 16px', borderRadius: 50, fontSize: '0.82rem', fontWeight: 700, textDecoration: 'none' }}>Voir les commandes</a>
-            <button onClick={() => setNewOrderToast(null)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '1.2rem', lineHeight: 1 }}>✕</button>
+            <button onClick={() => setNewOrderToast(null)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '1.2rem', lineHeight: 1 }}>â</button>
           </div>
         </div>
       )}
       {/* Sidebar */}
       <aside className={`admin-sidebar ${!isSidebarOpen ? 'collapsed' : ''}`}>
         <div className="admin-sidebar-logo">
-          <img src="/logo.png" alt="PIOVÃ‰" style={{ height: '35px', width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', alignSelf: 'flex-start', marginBottom: '8px' }} />
+          <img src="/logo.png" alt="Khaled Shoes" style={{ height: '35px', width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', alignSelf: 'flex-start', marginBottom: '8px' }} />
           <span>Admin Panel</span>
         </div>
 
@@ -356,7 +357,7 @@ export default function AdminLayout() {
             {/* Fullscreen Toggle (like F11) */}
             <button
               onClick={toggleFullscreen}
-              title={isFullscreen ? 'Quitter le plein écran' : 'Plein écran (F11)'}
+              title={isFullscreen ? 'Quitter le plein Ã©cran' : 'Plein Ã©cran (F11)'}
               style={{ background: 'none', border: 'none', color: 'var(--admin-text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '6px', borderRadius: '8px', transition: 'all 0.2s' }}
             >
               {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
@@ -384,7 +385,7 @@ export default function AdminLayout() {
                 {isMaintenance ? 'Maintenance' : 'En Ligne'}
               </span>
               <div className="toggle-wrap">
-                <label className="toggle" title="Activer/Désactiver le mode maintenance">
+                <label className="toggle" title="Activer/DÃ©sactiver le mode maintenance">
                   <input type="checkbox" checked={isMaintenance} onChange={toggleMaintenance} />
                   <span className="toggle-slider" />
                 </label>
@@ -401,7 +402,7 @@ export default function AdminLayout() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
               <button 
                 onClick={requestNotificationPermission}
-                title={notificationPerm === 'granted' ? "Notifications activées (Cliquer pour tester)" : "Activer les notifications"}
+                title={notificationPerm === 'granted' ? "Notifications activÃ©es (Cliquer pour tester)" : "Activer les notifications"}
                 style={{ 
                   background: 'none', border: 'none', 
                   color: notificationPerm === 'granted' ? 'var(--admin-success)' : 'var(--admin-text-muted)', 
@@ -421,16 +422,16 @@ export default function AdminLayout() {
                 {isUserMenuOpen && (
                   <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: 8, background: 'var(--admin-surface)', border: '1px solid var(--admin-border)', borderRadius: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', minWidth: 200, zIndex: 50 }}>
                      <Link to="/piove-secure-2026/profile" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
-                      👤 Mon Profil
+                      ð¤ Mon Profil
                     </Link>
                     <Link to="/piove-secure-2026/settings" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
-                      ⚙️ Paramètres
+                      âï¸ ParamÃ¨tres
                     </Link>
                     <Link to="/piove-secure-2026/history" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
-                      Historique d'activité
+                      Historique d'activitÃ©
                     </Link>
                     <button style={{ display: 'block', width: '100%', textAlign: 'left', padding: '12px 16px', background: 'none', border: 'none', color: 'var(--admin-danger)', cursor: 'pointer' }} onClick={() => { setIsUserMenuOpen(false); handleLogout(); }}>
-                      Se déconnecter
+                      Se dÃ©connecter
                     </button>
                   </div>
                 )}

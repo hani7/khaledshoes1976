@@ -6,7 +6,7 @@ from decimal import Decimal
 from django.core.management.base import BaseCommand
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
-from shoes.models import Product, ProductVariant, Category, ProductImage
+from shoes.models import Product, ProductVariant, Category, ProductImage, Brand
 
 class Command(BaseCommand):
     help = "Import WooCommerce products from CSV"
@@ -76,11 +76,18 @@ class Command(BaseCommand):
                     unique_slug = f"{base_slug}-{woo_id}" if woo_id else base_slug
                     
                     product, _ = Product.objects.update_or_create(
-                        name=name,
-                        defaults={'slug': unique_slug, 'description': desc, 'short_description': short_desc, 'price': price, 'stock': stock}
+                        slug=unique_slug,
+                        defaults={'name': name, 'description': desc, 'short_description': short_desc, 'price': price, 'stock': stock}
                     )
                     
                     if product_categories: product.categories.set(product_categories)
+                    brand_name = row.get('Marques', '').strip()
+                    if brand_name:
+                        brand_slug = slugify(brand_name)
+                        brand_obj, _ = Brand.objects.get_or_create(name=brand_name, defaults={'slug': brand_slug})
+                        product.brand = brand_obj
+                        product.save(update_fields=['brand'])
+
                     products_dict[woo_id] = product
                     
                     images_str = row.get('Images', '')

@@ -39,6 +39,7 @@ const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'))
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 const AdminProducts = lazy(() => import('./pages/admin/AdminProducts'))
 const AdminCategories = lazy(() => import('./pages/admin/AdminCategories'))
+const AdminBrands = lazy(() => import('./pages/admin/AdminBrands'))
 const AdminOrders = lazy(() => import('./pages/admin/AdminOrders'))
 const AdminOrderHistory = lazy(() => import('./pages/admin/AdminOrderHistory'))
 const AdminOrderCreate = lazy(() => import('./pages/admin/AdminOrderCreate'))
@@ -239,6 +240,7 @@ export default function App() {
             <Route index element={<AdminDashboard />} />
             <Route path="products" element={<AdminProducts />} />
             <Route path="categories" element={<AdminCategories />} />
+            <Route path="brands" element={<AdminBrands />} />
             <Route path="orders" element={<AdminOrders />} />
             <Route path="orders-history" element={<AdminOrderHistory />} />
             <Route path="orders/new" element={<AdminOrderCreate />} />
