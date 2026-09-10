@@ -1,0 +1,115 @@
+import { Link } from 'react-router-dom'
+import './Footer.css'
+
+export default function Footer() {
+  return (
+    <footer className="footer">
+      <div className="usp-bar">
+        <div className="container usp-bar__inner">
+          {[
+            {
+              icon: (
+                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.79a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+              ),
+              label: 'Appelez-nous', sub: '0770 26 34 94'
+            },
+            {
+              icon: (
+                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                  <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+                </svg>
+              ),
+              label: 'Paiement à la livraison', sub: 'Cash on delivery'
+            },
+            {
+              icon: (
+                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              ),
+              label: 'Produits Authentiques', sub: '100% originaux'
+            },
+            {
+              icon: (
+                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                  <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.28"/>
+                </svg>
+              ),
+              label: 'Retour Facile', sub: '7 jours pour changer'
+            },
+          ].map((u, i) => (
+            <div key={i} className="usp-item">
+              <span className="usp-item__icon">{u.icon}</span>
+              <div>
+                <p className="usp-item__label">{u.label}</p>
+                <p className="usp-item__sub">{u.sub}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="footer__top container">
+        <div className="footer__brand">
+          <img src="/logo.png" alt="Piové Cosmetics" className="footer__logo" />
+          <p className="footer__tagline">Sublimez votre beauté</p>
+          <p className="footer__desc">
+            Piové Cosmetics vous propose une sélection de produits de maquillage
+            et soins de qualité professionnelle, livrés partout en Algérie.
+          </p>
+          <div className="footer__social">
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="footer__social-link" id="footer-instagram">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" className="footer__social-link" id="footer-facebook">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div className="footer__col">
+          <h4>Nos Catégories</h4>
+          <Link to="/eyes">Eyes</Link>
+          <Link to="/face">Face</Link>
+          <Link to="/lips">Lips</Link>
+          <Link to="/nails">Nails</Link>
+          <Link to="/skin-care-body">Skin Care & Body</Link>
+          <Link to="/accessoires">Accessoires</Link>
+        </div>
+
+        <div className="footer__col">
+          <h4>Service Client</h4>
+          <Link to="/compte">Mon Compte</Link>
+          <Link to="/suivi">🚚 Suivre ma Commande</Link>
+          <Link to="/compte/commandes">Mes Commandes</Link>
+          <Link to="/cart">Mon Panier</Link>
+          <a href="tel:+213770263494">0770 26 34 94</a>
+          <p style={{ marginTop: '10px', fontSize: '0.9rem', color: 'var(--color-gray-500)', lineHeight: '1.4' }}>
+            N°29/A Zone d’activités<br/>Zeralda, Alger
+          </p>
+          <a href="mailto:contact@piovecosmetics.dz">contact@piovecosmetics.dz</a>
+        </div>
+
+        <div className="footer__col">
+          <h4>Informations</h4>
+          <Link to="/about">À Propos</Link>
+          <Link to="/contact">Contactez-nous</Link>
+          <Link to="/livraison">Livraison & Retour</Link>
+          <Link to="/faq">FAQ</Link>
+          <Link to="/confidentialite">Politique de Confidentialité</Link>
+          <Link to="/conditions">Conditions d'Utilisation</Link>
+        </div>
+      </div>
+
+      <div className="footer__bottom container">
+        <p>© {new Date().getFullYear()} Piové Cosmetics. Tous droits réservés.</p>
+        <p>Conception et développement <a href="https://wa.me/213783773657" target="_blank" rel="noreferrer" style={{color: '#006045', fontWeight: 'bold', textDecoration: 'none'}}>B Tech</a></p>
+      </div>
+    </footer>
+  )
+}

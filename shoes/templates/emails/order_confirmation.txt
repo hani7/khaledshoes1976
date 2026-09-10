@@ -1,0 +1,38 @@
+Bonjour {{ order.guest_name|default:order.user.first_name|default:"chère cliente" }},
+
+🎉 Votre commande a bien été reçue !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMMANDE N° #{{ order.id }}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ARTICLES COMMANDÉS :
+{% for item in order.items.all %}
+  • {{ item.product_name }}{% if item.variant_name %} — Teinte: {{ item.variant_name }}{% endif %}
+    Quantité : {{ item.quantity }} × {{ item.price_at_purchase }} DA
+{% endfor %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL À PAYER : {{ order.total }} DA
+Mode de paiement : {% if order.payment_method == 'cash' %}Paiement à la livraison{% elif order.payment_method == 'cib' %}Carte CIB / Edahabia{% else %}{{ order.payment_method }}{% endif %}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+INFORMATIONS DE LIVRAISON :
+  Nom       : {{ order.guest_name|default:order.user.get_full_name|default:"—" }}
+  Téléphone : {{ order.guest_phone|default:"—" }}{% if order.guest_phone2 %} / {{ order.guest_phone2 }}{% endif %}
+  Wilaya    : {{ order.wilaya|default:"—" }}{% if order.city %} — {{ order.city }}{% endif %}
+  Adresse   : {{ order.shipping_address|default:"—" }}
+  Livraison : {% if order.delivery_type == 'home' %}À domicile{% elif order.delivery_type == 'desk' %}Point relais{% else %}{{ order.delivery_type }}{% endif %}
+
+{% if order.notes %}
+Notes : {{ order.notes }}
+{% endif %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Notre équipe vous contactera très prochainement pour confirmer la livraison.
+Délai estimé : 2 à 5 jours ouvrables selon votre wilaya.
+
+Des questions ? Écrivez-nous sur Instagram @piove.cosmetics
+
+L'équipe Piové Cosmetics 💄
+piovecosmetics.com
