@@ -331,28 +331,29 @@
 
 /* Categories Grid */
 .categories-grid {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  gap: 20px;
-  padding-bottom: 20px;
-  scrollbar-width: thin; /* Firefox */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  padding: 0;
+  width: 100%;
 }
 
-.categories-grid::-webkit-scrollbar {
-  height: 8px;
+@media (max-width: 768px) {
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.categories-grid::-webkit-scrollbar-thumb {
-  background-color: var(--color-gray-300);
-  border-radius: 4px;
+@media (max-width: 480px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .cat-card {
-  flex: 0 0 clamp(260px, 30vw, 350px);
   position: relative;
-  aspect-ratio: 4/3;
-  border-radius: var(--radius-lg);
+  aspect-ratio: 3/4;
+  border-radius: 0;
   overflow: hidden;
   display: block;
   background: var(--color-gray-100);
@@ -368,10 +369,11 @@
 .cat-card__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%);
+  background: rgba(0,0,0,0.2);
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: center;
   padding: 20px;
   transition: background 0.3s ease;
 }

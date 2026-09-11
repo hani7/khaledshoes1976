@@ -187,9 +187,11 @@ export default function ProductPage() {
           )}
           / <span aria-current="page">{product.name}</span>
         </nav>
+      </div>
 
-        {/* Main layout: gallery + info */}
-        <div className="product-page__layout">
+      {/* Main layout: gallery + info (Full bleed) */}
+      <div className="product-page__layout-full">
+        <div className="product-page__gallery-wrapper">
           <ProductGallery
             product={product}
             images={images}
@@ -197,6 +199,8 @@ export default function ProductPage() {
             selectedVariant={selectedVariant}
             onSelectImage={setSelectedImage}
           />
+        </div>
+        <div className="product-page__info-wrapper">
           <ProductInfo
             product={product}
             selectedVariant={selectedVariant}

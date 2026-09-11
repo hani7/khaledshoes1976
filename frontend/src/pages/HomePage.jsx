@@ -157,23 +157,22 @@ export default function HomePage() {
           <p className="section-subtitle">Nos Collections</p>
           <h2 className="section-title">Explorez par Catégorie</h2>
           <div className="section-line" />
-          <div className="categories-grid">
-            {(categories || []).map((cat) => (
-              <Link key={cat.slug} to={`/${cat.slug}`} className="cat-card" id={`cat-${cat.slug}`}>
-                <div className="cat-card__img">
-                  {cat.image ? (
-                    <img src={mediaUrl(cat.image)} alt={cat.name} />
-                  ) : (
-                    <div className="cat-card__placeholder" />
-                  )}
-                </div>
-                <div className="cat-card__overlay">
-                  <p className="cat-card__name">{cat.name}</p>
-                  <p className="cat-card__count">{cat.product_count} produits</p>
-                </div>
-              </Link>
-            ))}
-          </div>
+        </div>
+        <div className="categories-grid" style={{ marginTop: '20px' }}>
+          {(categories || []).filter(c => c.is_active).slice(0, 6).map((cat) => (
+            <Link key={cat.slug} to={`/${cat.slug}`} className="cat-card" id={`cat-${cat.slug}`}>
+              <div className="cat-card__img">
+                {cat.image ? (
+                  <img src={mediaUrl(cat.image)} alt={cat.name} />
+                ) : (
+                  <div className="cat-card__placeholder" />
+                )}
+              </div>
+              <div className="cat-card__overlay">
+                <p className="cat-card__name">{cat.name.toUpperCase()}</p>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
