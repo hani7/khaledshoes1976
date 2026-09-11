@@ -12,7 +12,7 @@ export default function ReturnsPage() {
 
       {/* Hero */}
       <div style={{
-        background: '#EDDEC9',
+        background: '#F5EBE0',
         padding: '56px 24px 48px',
         textAlign: 'center',
       }}>
@@ -130,7 +130,7 @@ export default function ReturnsPage() {
 
         {/* Note importante */}
         <div style={{
-          background: '#EDDEC9',
+          background: '#F5EBE0',
           borderRadius: '12px',
           padding: '20px 24px',
           marginBottom: '32px',
@@ -172,7 +172,7 @@ export default function ReturnsPage() {
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <a href="mailto:contact@khaledshoes.dz" style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
-              background: '#EDDEC9', color: '#111',
+              background: '#F5EBE0', color: '#111',
               padding: '12px 22px', borderRadius: '50px',
               fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.06em',
               textDecoration: 'none',

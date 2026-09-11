@@ -3,7 +3,7 @@
 }
 
 .size-guide__hero {
-  background: #EDDEC9;
+  background: #F5EBE0;
   text-align: center;
   padding: 60px 24px 48px;
 }
@@ -35,7 +35,7 @@
   text-transform: uppercase;
   margin-bottom: 24px;
   padding-bottom: 12px;
-  border-bottom: 2px solid #EDDEC9;
+  border-bottom: 2px solid #F5EBE0;
 }
 
 /* Steps */
@@ -77,7 +77,7 @@
 }
 
 .size-guide__tip {
-  background: #EDDEC9;
+  background: #F5EBE0;
   border-radius: 10px;
   padding: 16px 20px;
   font-size: 0.9rem;
@@ -126,7 +126,7 @@
 }
 
 .size-guide__table tbody tr:hover {
-  background: #EDDEC9;
+  background: #F5EBE0;
 }
 
 .size-guide__table tbody td strong {

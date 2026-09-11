@@ -11,7 +11,7 @@ const STORES = [
     phone2: null,
     hours: 'Lun – Sam : 9h00 – 20h00',
     mapsUrl: 'https://maps.app.goo.gl/GqGXYnfNHgM8auu79',
-    accent: '#EDDEC9',
+    accent: '#F5EBE0',
   },
   {
     id: 'hydra',
@@ -39,7 +39,7 @@ export default function BoutiquesPage() {
 
       {/* Hero */}
       <div style={{
-        background: '#EDDEC9',
+        background: '#F5EBE0',
         padding: '52px 24px 44px',
         textAlign: 'center',
       }}>
@@ -153,7 +153,7 @@ export default function BoutiquesPage() {
                     <p style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: store.dark ? 'rgba(255,255,255,0.45)' : '#aaa', marginBottom: '2px' }}>Téléphone</p>
                     <a href={`tel:${store.phone.replace(/\s/g,'')}`} style={{
                       fontSize: '1rem', fontWeight: 700,
-                      color: store.dark ? '#EDDEC9' : 'var(--color-accent)',
+                      color: store.dark ? '#F5EBE0' : 'var(--color-accent)',
                       textDecoration: 'none',
                     }}>
                       {store.phone}
@@ -190,7 +190,7 @@ export default function BoutiquesPage() {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '10px',
-                  background: store.dark ? '#EDDEC9' : '#111',
+                  background: store.dark ? '#F5EBE0' : '#111',
                   color: store.dark ? '#111' : '#fff',
                   padding: '14px 24px',
                   borderRadius: '50px',

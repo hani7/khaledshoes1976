@@ -31,7 +31,7 @@ export default function FidelitePage() {
         </p>
         <Link to="/compte/fidelite" style={{
           display: 'inline-block',
-          background: '#EDDEC9',
+          background: '#F5EBE0',
           color: '#111',
           fontWeight: 700,
           fontSize: '0.85rem',
@@ -110,7 +110,7 @@ export default function FidelitePage() {
 
         {/* Bloc principal - Règle */}
         <div style={{
-          background: '#EDDEC9',
+          background: '#F5EBE0',
           borderRadius: '20px',
           padding: '40px 36px',
           textAlign: 'center',
@@ -139,7 +139,7 @@ export default function FidelitePage() {
         <h2 style={{
           fontSize: '1rem', fontWeight: 700, letterSpacing: '0.14em',
           textTransform: 'uppercase', marginBottom: '24px',
-          paddingBottom: '10px', borderBottom: '2px solid #EDDEC9',
+          paddingBottom: '10px', borderBottom: '2px solid #F5EBE0',
         }}>
           Questions fréquentes
         </h2>

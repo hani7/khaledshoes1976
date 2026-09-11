@@ -2,7 +2,7 @@ import React from 'react'
 
 const Section = ({ title, children }) => (
   <div style={{ marginBottom: '32px' }}>
-    <h2 style={{ fontSize: '1.15rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px', color: '#111', borderBottom: '2px solid #EDDEC9', paddingBottom: '8px' }}>{title}</h2>
+    <h2 style={{ fontSize: '1.15rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px', color: '#111', borderBottom: '2px solid #F5EBE0', paddingBottom: '8px' }}>{title}</h2>
     {children}
   </div>
 )

@@ -173,7 +173,7 @@ export default function ShippingPage() {
         <h2 style={{
           fontSize: '1rem', fontWeight: 700, letterSpacing: '0.12em',
           textTransform: 'uppercase', marginBottom: '20px',
-          paddingBottom: '10px', borderBottom: '2px solid #EDDEC9',
+          paddingBottom: '10px', borderBottom: '2px solid #F5EBE0',
         }}>
           Tarifs de livraison par wilaya
         </h2>
@@ -188,7 +188,7 @@ export default function ShippingPage() {
             placeholder="🔍 Rechercher votre wilaya..."
             style={{
               width: '100%', padding: '12px 16px 12px 44px',
-              border: '2px solid #EDDEC9', borderRadius: '10px',
+              border: '2px solid #F5EBE0', borderRadius: '10px',
               fontSize: '0.9rem', fontFamily: 'inherit',
               outline: 'none', boxSizing: 'border-box',
               background: '#fffdf9',
@@ -203,7 +203,7 @@ export default function ShippingPage() {
         {/* Résultat mis en avant */}
         {highlighted && (
           <div style={{
-            background: '#EDDEC9', borderRadius: '12px', padding: '20px 24px',
+            background: '#F5EBE0', borderRadius: '12px', padding: '20px 24px',
             marginBottom: '20px', display: 'flex', alignItems: 'center',
             justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px',
           }}>
@@ -278,7 +278,7 @@ export default function ShippingPage() {
         </div>
 
         {/* Note */}
-        <div style={{ marginTop: '24px', background: '#EDDEC9', borderRadius: '10px', padding: '16px 20px' }}>
+        <div style={{ marginTop: '24px', background: '#F5EBE0', borderRadius: '10px', padding: '16px 20px' }}>
           <p style={{ fontSize: '0.88rem', color: '#444', lineHeight: 1.7 }}>
             📞 <strong>Besoin d'aide ?</strong> Contactez-nous au <strong>0553 94 74 06</strong> ou sur{' '}
             <a href="https://wa.me/213553947406" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-accent)', fontWeight: 600 }}>
