@@ -1,5 +1,5 @@
 """
-Django settings for khaled project — Piové Cosmetics E-Commerce
+Django settings for Khaled Shoes E-Commerce
 """
 from pathlib import Path
 from datetime import timedelta
@@ -173,20 +173,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
+    'http://localhost:5174',
     'http://127.0.0.1:5173',
-    'https://piovecosmetics.dz',
-    'https://www.piovecosmetics.dz',
-    'https://app.piovecosmetics.dz',
+    'http://127.0.0.1:5174',
+    'https://khaledshoes.dz',
+    'https://www.khaledshoes.dz',
+    'https://api.khaledshoes.dz',
 ]
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:5173',
+    'http://localhost:5174',
     'http://127.0.0.1:5173',
-    'https://piovecosmetics.dz',
-    'https://www.piovecosmetics.dz',
-    'https://app.piovecosmetics.dz',
-    'https://api.piovecosmetics.dz',
+    'https://khaledshoes.dz',
+    'https://www.khaledshoes.dz',
+    'https://api.khaledshoes.dz',
 ]
 
 # ─── REST FRAMEWORK ──────────────────────────────────────────────────────────
@@ -225,7 +227,7 @@ SIMPLE_JWT = {
 }
 
 # ─── EMAIL CONFIGURATION ─────────────────────────────────────────────────────
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Piove Cosmetics <contact@piovecosmetics.dz>')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Khaled Shoes <contact@khaledshoes.dz>')
 SERVER_EMAIL       = DEFAULT_FROM_EMAIL
 
 _email_host = os.environ.get('EMAIL_HOST', '')

@@ -92,7 +92,10 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='promotions')
     def promotions(self, request):
-        qs = self.get_queryset().filter(is_promotion=True)[:8]
+        from django.db.models import Q
+        qs = self.get_queryset().filter(
+            Q(is_promotion=True) | Q(promo_price__isnull=False)
+        ).distinct()[:12]
         serializer = ProductListSerializer(qs, many=True, context={'request': request})
         return Response(serializer.data)
 
