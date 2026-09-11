@@ -92,7 +92,7 @@ function ScrollToTop() {
 
 export default function App() {
   const { pathname } = useLocation()
-  const isAdmin = pathname.startsWith('/piove-secure-2026')
+  const isAdmin = pathname.startsWith('/kh-76')
   const user = useAuthStore(s => s.user)
 
   const [settings, setSettings] = useState(null)
@@ -213,8 +213,8 @@ export default function App() {
           </Route>
 
           {/* Admin */}
-          <Route path="/piove-secure-2026/login" element={<AdminLogin />} />
-          <Route path="/piove-secure-2026" element={<AdminLayout />}>
+          <Route path="/kh-76/login" element={<AdminLogin />} />
+          <Route path="/kh-76" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="products" element={<AdminProducts />} />
             <Route path="categories" element={<AdminCategories />} />
@@ -255,3 +255,4 @@ export default function App() {
     </>
   )
 }
+

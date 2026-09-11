@@ -9,64 +9,64 @@ export const NAV_ITEMS = [
   {
     section: 'Général',
     links: [
-      { to: '/piove-secure-2026', label: 'Tableau de bord', end: true, icon: <LayoutDashboard size={20} /> },
+      { to: '/kh-76', label: 'Tableau de bord', end: true, icon: <LayoutDashboard size={20} /> },
     ]
   },
   {
     section: 'Catalogue',
     links: [
-      { to: '/piove-secure-2026/products', label: 'Produits', icon: <Package size={20} /> },
-      { to: '/piove-secure-2026/categories', label: 'Catégories', icon: <Tags size={20} /> },
-      { to: '/piove-secure-2026/brands', label: 'Marques', icon: <Tags size={20} /> },
-      { to: '/piove-secure-2026/banners', label: 'Banners', icon: <Image size={20} /> },
+      { to: '/kh-76/products', label: 'Produits', icon: <Package size={20} /> },
+      { to: '/kh-76/categories', label: 'Catégories', icon: <Tags size={20} /> },
+      { to: '/kh-76/brands', label: 'Marques', icon: <Tags size={20} /> },
+      { to: '/kh-76/banners', label: 'Banners', icon: <Image size={20} /> },
     ]
   },
   {
     section: 'Ventes',
     marketingHidden: true,
     links: [
-      { to: '/piove-secure-2026/pos', label: 'Caisse (POS)', icon: <ShoppingCart size={20} /> },
-      { to: '/piove-secure-2026/orders', label: 'Commandes (Site)', icon: <ShoppingCart size={20} /> },
-      { to: '/piove-secure-2026/pos-sales', label: 'Ventes (POS)', icon: <History size={20} /> },
-      { to: '/piove-secure-2026/orders-history', label: 'Historique', icon: <History size={20} /> },
-      { to: '/piove-secure-2026/coupons', label: 'Codes Promos', icon: <Ticket size={20} /> },
-      { to: '/piove-secure-2026/reports', label: 'Rapports Ventes', icon: <BarChart2 size={20} /> },
+      { to: '/kh-76/pos', label: 'Caisse (POS)', icon: <ShoppingCart size={20} /> },
+      { to: '/kh-76/orders', label: 'Commandes (Site)', icon: <ShoppingCart size={20} /> },
+      { to: '/kh-76/pos-sales', label: 'Ventes (POS)', icon: <History size={20} /> },
+      { to: '/kh-76/orders-history', label: 'Historique', icon: <History size={20} /> },
+      { to: '/kh-76/coupons', label: 'Codes Promos', icon: <Ticket size={20} /> },
+      { to: '/kh-76/reports', label: 'Rapports Ventes', icon: <BarChart2 size={20} /> },
     ]
   },
   {
     section: 'ERP & Finance',
     marketingHidden: true,
     links: [
-      { to: '/piove-secure-2026/purchases', label: 'Achats & Entrées', icon: <Package size={20} /> },
-      { to: '/piove-secure-2026/suppliers', label: 'Fournisseurs', icon: <Users size={20} /> },
-      { to: '/piove-secure-2026/stock-ledger', label: 'Mouv. de Stock', icon: <History size={20} /> },
-      { to: '/piove-secure-2026/expenses', label: 'Charges & Frais', icon: <Banknote size={20} /> },
-      { to: '/piove-secure-2026/reports/profit', label: 'Rapport Bénéfices', icon: <BarChart2 size={20} /> },
+      { to: '/kh-76/purchases', label: 'Achats & Entrées', icon: <Package size={20} /> },
+      { to: '/kh-76/suppliers', label: 'Fournisseurs', icon: <Users size={20} /> },
+      { to: '/kh-76/stock-ledger', label: 'Mouv. de Stock', icon: <History size={20} /> },
+      { to: '/kh-76/expenses', label: 'Charges & Frais', icon: <Banknote size={20} /> },
+      { to: '/kh-76/reports/profit', label: 'Rapport Bénéfices', icon: <BarChart2 size={20} /> },
     ]
   },
   {
     section: 'Clients',
     marketingHidden: true,
     links: [
-      { to: '/piove-secure-2026/customers', label: 'Tous les clients', icon: <Users size={20} /> },
-      { to: '/piove-secure-2026/blacklist', label: 'Blacklist', icon: <UserX size={20} /> },
-      { to: '/piove-secure-2026/newsletter', label: 'Newsletter', icon: <Mail size={20} /> },
+      { to: '/kh-76/customers', label: 'Tous les clients', icon: <Users size={20} /> },
+      { to: '/kh-76/blacklist', label: 'Blacklist', icon: <UserX size={20} /> },
+      { to: '/kh-76/newsletter', label: 'Newsletter', icon: <Mail size={20} /> },
     ]
   },
   {
     section: 'Livraison',
     marketingHidden: true,
     links: [
-      { to: '/piove-secure-2026/delivery-companies', label: 'Transporteurs', icon: <Truck size={20} /> },
-      { to: '/piove-secure-2026/delivery-rates', label: 'Tarifs', icon: <Banknote size={20} /> },
+      { to: '/kh-76/delivery-companies', label: 'Transporteurs', icon: <Truck size={20} /> },
+      { to: '/kh-76/delivery-rates', label: 'Tarifs', icon: <Banknote size={20} /> },
     ]
   },
   {
     section: 'Configuration',
     links: [
-      { to: '/piove-secure-2026/mediatheque', label: 'Médiathèque', icon: <Film size={20} /> },
-      { to: '/piove-secure-2026/boutiques', label: 'Boutiques', icon: <Store size={20} /> },
-      { to: '/piove-secure-2026/settings', label: 'Paramètres', icon: <Settings size={20} /> },
+      { to: '/kh-76/mediatheque', label: 'Médiathèque', icon: <Film size={20} /> },
+      { to: '/kh-76/boutiques', label: 'Boutiques', icon: <Store size={20} /> },
+      { to: '/kh-76/settings', label: 'Paramètres', icon: <Settings size={20} /> },
     ]
   },
 ]
@@ -257,14 +257,14 @@ export default function AdminLayout() {
 
   // Guard: not logged in — use Navigate component, not navigate()
   if (!user) {
-    return <Navigate to="/piove-secure-2026/login" replace />
+    return <Navigate to="/kh-76/login" replace />
   }
 
   const handleLogout = () => {
     localStorage.removeItem('admin_access_token')
     localStorage.removeItem('admin_refresh_token')
     localStorage.removeItem('admin_user')
-    navigate('/piove-secure-2026/login')
+    navigate('/kh-76/login')
   }
 
   const initials = (user.first_name?.[0] || user.username?.[0] || 'A').toUpperCase()
@@ -291,7 +291,7 @@ export default function AdminLayout() {
             </div>
           </div>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-            <a href="/piove-secure-2026/orders" style={{ background: 'white', color: '#dc2626', padding: '6px 16px', borderRadius: 50, fontSize: '0.82rem', fontWeight: 700, textDecoration: 'none' }}>Voir les commandes</a>
+            <a href="/kh-76/orders" style={{ background: 'white', color: '#dc2626', padding: '6px 16px', borderRadius: 50, fontSize: '0.82rem', fontWeight: 700, textDecoration: 'none' }}>Voir les commandes</a>
             <button onClick={() => setNewOrderToast(null)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '1.2rem', lineHeight: 1 }}>✖</button>
           </div>
         </div>
@@ -322,7 +322,7 @@ export default function AdminLayout() {
                 >
                   {link.icon}
                   <span style={{ flex: 1 }}>{link.label}</span>
-                  {link.to === '/piove-secure-2026/orders' && unviewed.normal > 0 && (
+                  {link.to === '/kh-76/orders' && unviewed.normal > 0 && (
                     <span className="admin-nav-badge">{unviewed.normal}</span>
                   )}
 
@@ -434,13 +434,13 @@ export default function AdminLayout() {
                 </div>
                 {isUserMenuOpen && (
                   <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: 8, background: 'var(--admin-surface)', border: '1px solid var(--admin-border)', borderRadius: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', minWidth: 200, zIndex: 50 }}>
-                     <Link to="/piove-secure-2026/profile" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
+                     <Link to="/kh-76/profile" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
                       ð¤ Mon Profil
                     </Link>
-                    <Link to="/piove-secure-2026/settings" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
+                    <Link to="/kh-76/settings" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
                       âï¸ Paramètres
                     </Link>
-                    <Link to="/piove-secure-2026/history" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
+                    <Link to="/kh-76/history" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
                       Historique d'activité
                     </Link>
                     <button style={{ display: 'block', width: '100%', textAlign: 'left', padding: '12px 16px', background: 'none', border: 'none', color: 'var(--admin-danger)', cursor: 'pointer' }} onClick={() => { setIsUserMenuOpen(false); handleLogout(); }}>
@@ -461,4 +461,5 @@ export default function AdminLayout() {
     </div>
   )
 }
+
 

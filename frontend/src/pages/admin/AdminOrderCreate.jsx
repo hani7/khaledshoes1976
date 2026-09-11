@@ -160,7 +160,7 @@ export default function AdminOrderCreate() {
         }))
       }
       const res = await adminClient.post('/admin/orders/create_order/', payload)
-      navigate(`/piove-secure-2026/orders/${res.data.id}`)
+      navigate(`/kh-76/orders/${res.data.id}`)
     } catch (err) {
       console.error(err)
       alert("Erreur lors de la création de la commande : " + JSON.stringify(err.response?.data))
@@ -173,7 +173,7 @@ export default function AdminOrderCreate() {
     <div className="admin-page" style={{ paddingBottom: 60 }}>
       <div className="admin-page-header">
         <h2 style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <button className="btn-icon" onClick={() => navigate('/piove-secure-2026/orders')}><ArrowLeft size={20}/></button>
+          <button className="btn-icon" onClick={() => navigate('/kh-76/orders')}><ArrowLeft size={20}/></button>
           {'Créer une Commande'}
         </h2>
         <button className="btn-primary" onClick={handleSubmit} disabled={saving}>
@@ -383,4 +383,5 @@ export default function AdminOrderCreate() {
     </div>
   )
 }
+
 

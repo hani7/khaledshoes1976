@@ -204,7 +204,7 @@ export default function AdminDashboard() {
                     <li 
                       key={`fraud-${o.id}`} 
                       style={{ padding: '12px 20px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
-                      onClick={() => navigate(`/piove-secure-2026/orders/${o.id}`)}
+                      onClick={() => navigate(`/kh-76/orders/${o.id}`)}
                     >
                       <div>
                         <div style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--admin-text)', marginBottom: 2 }}>{o.customer_name}</div>
@@ -226,7 +226,7 @@ export default function AdminDashboard() {
               <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--admin-success)', animation: 'pulse 2s infinite' }}></div>
               Dernières Commandes
             </span>
-            <Link to="/piove-secure-2026/orders" style={{ fontSize: '0.8rem', color: 'var(--color-primary)', textDecoration: 'none', fontWeight: 500 }}>Voir tout</Link>
+            <Link to="/kh-76/orders" style={{ fontSize: '0.8rem', color: 'var(--color-primary)', textDecoration: 'none', fontWeight: 500 }}>Voir tout</Link>
           </div>
           <div style={{ padding: 0 }}>
             {data.recent_orders.length === 0 ? (
@@ -237,7 +237,7 @@ export default function AdminDashboard() {
                   <li 
                     key={o.id} 
                     style={{ padding: '16px 20px', borderBottom: '1px solid var(--admin-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', transition: 'background 0.2s' }}
-                    onClick={() => navigate(`/piove-secure-2026/orders/${o.id}`)}
+                    onClick={() => navigate(`/kh-76/orders/${o.id}`)}
                     onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
                     onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                   >
@@ -310,4 +310,5 @@ export default function AdminDashboard() {
     </div>
   )
 }
+
 

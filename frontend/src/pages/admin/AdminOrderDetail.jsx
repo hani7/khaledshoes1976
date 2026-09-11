@@ -149,7 +149,7 @@ export default function AdminOrderDetail() {
       .then(r => setDetail(r.data))
       .catch(() => {
         alert('Erreur: Commande introuvable')
-        navigate('/piove-secure-2026/orders')
+        navigate('/kh-76/orders')
       })
       .finally(() => setLoading(false))
   }
@@ -319,7 +319,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
     <>
     <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
-        <button className="btn-icon" onClick={() => navigate('/piove-secure-2026/orders')} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '50%', padding: 8 }}>
+        <button className="btn-icon" onClick={() => navigate('/kh-76/orders')} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '50%', padding: 8 }}>
           <svg viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" width="20" height="20"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </button>
         <div>
@@ -599,7 +599,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
               <button className="btn btn-outline" style={{ width: '100%', color: '#dc3545', borderColor: '#dc3545', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8 }} onClick={async () => {
                 if(window.confirm('Supprimer cette commande ?')) {
                   await adminClient.delete(`/admin/orders/${detail.id}/`);
-                  navigate('/piove-secure-2026/orders')
+                  navigate('/kh-76/orders')
                 }
               }}>
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
@@ -1179,4 +1179,5 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
     </>
   )
 }
+
 

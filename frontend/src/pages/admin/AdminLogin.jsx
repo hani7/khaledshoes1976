@@ -35,7 +35,7 @@ export default function AdminLogin() {
       localStorage.setItem('admin_access_token', access)
       localStorage.setItem('admin_refresh_token', refresh)
       localStorage.setItem('admin_user', JSON.stringify(user))
-      navigate('/piove-secure-2026')
+      navigate('/kh-76')
     } catch {
       setError('Identifiants invalides.')
     } finally {
@@ -53,7 +53,7 @@ export default function AdminLogin() {
       localStorage.setItem('admin_access_token', access)
       localStorage.setItem('admin_refresh_token', refresh)
       localStorage.setItem('admin_user', JSON.stringify(user))
-      navigate('/piove-secure-2026')
+      navigate('/kh-76')
     } catch {
       setError('Code OTP invalide ou expiré.')
     } finally {
@@ -295,5 +295,6 @@ export default function AdminLogin() {
     </div>
   )
 }
+
 
 

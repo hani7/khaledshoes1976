@@ -474,7 +474,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
             </div>
           ) : (
             <>
-            <button className="btn-primary" onClick={() => navigate('/piove-secure-2026/orders/new')}>
+            <button className="btn-primary" onClick={() => navigate('/kh-76/orders/new')}>
               <Plus size={16}/> Créer une Commande
             </button>
             </>
@@ -663,7 +663,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
                         <button 
                           className="btn-icon" 
                           style={{ padding: '6px', background: '#f1f5f9', borderRadius: '50%', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28 }} 
-                          onClick={() => navigate(`/piove-secure-2026/orders/${o.id}`)} 
+                          onClick={() => navigate(`/kh-76/orders/${o.id}`)} 
                           title="Détails complets"
                         >
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
@@ -836,7 +836,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
               </div>
             </div>
             <div className="admin-modal-footer" style={{ display: 'flex', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
-               <button className="btn" style={{ background: '#eab308', color: 'white', borderRadius: 20, border: 'none', fontWeight: 600, padding: '8px 20px' }} onClick={() => navigate(`/piove-secure-2026/orders/${detail.id}`)}>Voir tout</button>
+               <button className="btn" style={{ background: '#eab308', color: 'white', borderRadius: 20, border: 'none', fontWeight: 600, padding: '8px 20px' }} onClick={() => navigate(`/kh-76/orders/${detail.id}`)}>Voir tout</button>
                <button className="btn" style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#3b82f6', color: 'white', border: 'none', borderRadius: 20, fontWeight: 600, padding: '8px 20px' }} onClick={() => handlePrintSingleBordereau(detail.id)}>
                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
                  Bordereau
@@ -897,3 +897,4 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
 }
 
 }
+
