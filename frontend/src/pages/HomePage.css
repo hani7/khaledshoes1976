@@ -1,15 +1,6 @@
 /* Hero */
 .homepage {
-  padding-top: 0;
-}
-
-.homepage > section:first-child {
-  padding-top: calc(var(--navbar-height) + 40px) !important;
-}
-@media (max-width: 768px) {
-  .homepage > section:first-child {
-    padding-top: var(--navbar-height) !important;
-  }
+  padding-top: var(--navbar-height);
 }
 
 .hero {
