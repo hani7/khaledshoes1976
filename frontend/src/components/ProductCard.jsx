@@ -104,6 +104,18 @@ const ProductCard = memo(function ProductCard({ product }) {
             </span>
           )}
         </div>
+        {product.variants?.length > 0 && (
+          <div className="product-card__sizes">
+            {product.variants
+               .filter(v => v.is_available !== false)
+               .map(v => (
+                 <span key={v.id} className={`product-card__size ${v.stock === 0 ? 'product-card__size--out' : ''}`}>
+                   {v.name}
+                 </span>
+               ))
+            }
+          </div>
+        )}
         {product.avg_rating && (
           <div className="product-card__rating">
             {[1,2,3,4,5].map(s => (
