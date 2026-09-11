@@ -37,12 +37,23 @@ const ProductGallery = memo(function ProductGallery({
 
   const showPlaceholder = imgError || (images.length === 0 && !selectedVariant?.image && !product?.thumbnail)
 
+  const [isHovering, setIsHovering] = useState(false)
+
+  const handleMouseEnter = () => setIsHovering(true)
+  const handleMouseLeave = () => setIsHovering(false)
+
+  const displayIndex = (isHovering && images.length > 1 && selectedImage === 0) ? 1 : selectedImage
+
   return (
     <div className="product-gallery">
-      <div className="product-gallery__main">
+      <div 
+        className="product-gallery__main"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         {!showPlaceholder ? (
           <>
-            {selectedImage === -1 && selectedVariant?.image ? (
+            {displayIndex === -1 && selectedVariant?.image ? (
               <img 
                 key={`variant-${selectedVariant.id}-${useFallback ? 'fallback' : 'main'}`}
                 src={useFallback ? mediaUrl(product.thumbnail) : mediaUrl(selectedVariant.image)} 
@@ -51,11 +62,11 @@ const ProductGallery = memo(function ProductGallery({
                 decoding="async" 
                 onError={handleMainImageError}
               />
-            ) : images[selectedImage]?.video ? (
+            ) : images[displayIndex]?.video ? (
               <video
-                key={images[selectedImage].video}
-                src={images[selectedImage].video + '#t=0.001'}
-                poster={mediaUrl(images[selectedImage].image) || undefined}
+                key={images[displayIndex].video}
+                src={images[displayIndex].video + '#t=0.001'}
+                poster={mediaUrl(images[displayIndex].image) || undefined}
                 controls
                 preload="metadata"
                 playsInline
@@ -64,9 +75,9 @@ const ProductGallery = memo(function ProductGallery({
               />
             ) : (
               <img
-                key={`gallery-${selectedImage}-${useFallback ? 'fallback' : 'main'}`}
-                src={useFallback ? mediaUrl(product.thumbnail) : (mediaUrl(images[selectedImage]?.image) || mediaUrl(product.thumbnail))}
-                alt={images[selectedImage]?.alt || product.name}
+                key={`gallery-${displayIndex}-${useFallback ? 'fallback' : 'main'}`}
+                src={useFallback ? mediaUrl(product.thumbnail) : (mediaUrl(images[displayIndex]?.image) || mediaUrl(product.thumbnail))}
+                alt={images[displayIndex]?.alt || product.name}
                 loading="eager"
                 decoding="async"
                 onError={handleMainImageError}
