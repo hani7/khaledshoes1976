@@ -1,4 +1,4 @@
-.shop-page { padding-top: calc(var(--navbar-height) + 16px); min-height: 80vh; }
+.shop-page { padding-top: calc(var(--navbar-height) + 32px); min-height: 80vh; }
 
 /* Shop page layout */
 .shop-page__body {
@@ -11,8 +11,8 @@
 .shop-page__breadcrumb {
   font-size: 0.8rem;
   color: var(--color-gray-500);
-  padding: 8px var(--gutter);
-  margin-bottom: 8px;
+  padding: 12px var(--gutter);
+  margin-bottom: 12px;
 }
 .shop-page__breadcrumb a:hover { color: var(--color-accent); }
 
