@@ -331,7 +331,7 @@
 
 @media (max-width: 768px) {
   .categories-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 
@@ -534,9 +534,9 @@
     margin: 0 auto;
   }
 
-  /* Categories grid: 2 columns on mobile */
+  /* Categories grid: 1 column on mobile */
   .categories-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: 1fr !important;
   }
 
   /* Boutique cards: 1 col */
