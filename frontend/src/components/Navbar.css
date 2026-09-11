@@ -19,8 +19,11 @@
 .navbar__italy-bar {
   background: #111;
   color: #fff;
-  text-align: center;
-  padding: 6px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 16px;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.18em;
