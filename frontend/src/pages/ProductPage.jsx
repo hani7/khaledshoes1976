@@ -222,21 +222,20 @@ export default function ProductPage() {
           />
         </div>
 
-        {/* Reviews */}
-        <ProductReviews reviews={product.reviews} />
+      {/* Reviews */}
+      <ProductReviews reviews={product.reviews} />
 
-        {/* Related products */}
-        {relatedProducts.length > 0 && (
-          <section className="product-related">
-            <h2 className="product-section-title">Vous aimerez aussi</h2>
-            <div className="related-products-grid">
-              {relatedProducts.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
-            </div>
-          </section>
-        )}
-      </div>
+      {/* Related products */}
+      {relatedProducts.length > 0 && (
+        <section className="product-related">
+          <h2 className="product-section-title">Vous aimerez aussi</h2>
+          <div className="related-products-grid">
+            {relatedProducts.slice(0, 5).map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </section>
+      )}
     </main>
   )
 }
