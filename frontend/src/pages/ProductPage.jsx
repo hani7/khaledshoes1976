@@ -180,12 +180,17 @@ export default function ProductPage() {
       <div className="container">
         {/* Breadcrumb */}
         <nav className="product-page__breadcrumb" aria-label="Fil d'Ariane">
-          <Link to="/">Accueil</Link> /
-          <Link to="/shop">Produits</Link> /
+          <Link to="/">Accueil</Link>
+          <span className="breadcrumb-sep">&gt;</span>
+          <Link to="/shop">Produits</Link>
           {product.categories?.length > 0 && (
-            <Link to={`/${product.categories[0].slug}`}>{product.categories[0].name}</Link>
+            <>
+              <span className="breadcrumb-sep">&gt;</span>
+              <Link to={`/${product.categories[0].slug}`}>{product.categories[0].name}</Link>
+            </>
           )}
-          / <span aria-current="page">{product.name}</span>
+          <span className="breadcrumb-sep">&gt;</span>
+          <span aria-current="page" className="breadcrumb-active">{product.name}</span>
         </nav>
       </div>
 
