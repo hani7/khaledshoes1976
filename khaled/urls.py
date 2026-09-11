@@ -403,7 +403,7 @@ def yassir_test_view(request):
 
 urlpatterns = [
     #path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
-    path('piove-secure-gate-2026/', admin.site.urls),
+    path('kh-secure-gate-2026/', admin.site.urls),
     path('api/run-migrations-secret-key-998877/', run_migration_view),
     path('api/setup-staff-998877/', setup_staff_accounts_view),
     path('api/fix-yassir-998877/', fix_yassir_view),
