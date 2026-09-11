@@ -80,7 +80,7 @@ export default function CommandMenu({ isOpen, setIsOpen }) {
       if (allItems[selectedIndex]) {
         handleSelect(allItems[selectedIndex])
       } else if (query.trim()) {
-        navigate(`/kh-76/orders?search=${encodeURIComponent(query)}`)
+        navigate(`/kh-secure-2026/orders?search=${encodeURIComponent(query)}`)
         setIsOpen(false)
       }
     } else if (e.key === 'Escape') {
@@ -92,9 +92,9 @@ export default function CommandMenu({ isOpen, setIsOpen }) {
     if (item.type === 'page') {
       navigate(item.to)
     } else if (item.type === 'product') {
-      navigate(`/kh-76/products?search=${encodeURIComponent(item.name)}`)
+      navigate(`/kh-secure-2026/products?search=${encodeURIComponent(item.name)}`)
     } else if (item.type === 'order') {
-      navigate(`/kh-76/orders/${item.id}`)
+      navigate(`/kh-secure-2026/orders/${item.id}`)
     }
     setIsOpen(false)
   }

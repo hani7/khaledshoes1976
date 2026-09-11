@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { NavLink, useNavigate, Outlet, Navigate, Link, useLocation } from 'react-router-dom'
 import { LayoutDashboard, Package, Tags, Image, ShoppingCart, Briefcase, BarChart2, Users, UserX, Mail, Truck, Banknote, Menu, LogOut, Bell, Ticket, Search, Settings, Film, Sun, Moon, Maximize2, Minimize2, History, Eye, Store } from 'lucide-react'
 import adminClient from '../../api/adminClient'
@@ -7,66 +7,66 @@ import CommandMenu from './CommandMenu'
 
 export const NAV_ITEMS = [
   {
-    section: 'Général',
+    section: 'GÃ©nÃ©ral',
     links: [
-      { to: '/kh-76', label: 'Tableau de bord', end: true, icon: <LayoutDashboard size={20} /> },
+      { to: '/kh-secure-2026', label: 'Tableau de bord', end: true, icon: <LayoutDashboard size={20} /> },
     ]
   },
   {
     section: 'Catalogue',
     links: [
-      { to: '/kh-76/products', label: 'Produits', icon: <Package size={20} /> },
-      { to: '/kh-76/categories', label: 'Catégories', icon: <Tags size={20} /> },
-      { to: '/kh-76/brands', label: 'Marques', icon: <Tags size={20} /> },
-      { to: '/kh-76/banners', label: 'Banners', icon: <Image size={20} /> },
+      { to: '/kh-secure-2026/products', label: 'Produits', icon: <Package size={20} /> },
+      { to: '/kh-secure-2026/categories', label: 'CatÃ©gories', icon: <Tags size={20} /> },
+      { to: '/kh-secure-2026/brands', label: 'Marques', icon: <Tags size={20} /> },
+      { to: '/kh-secure-2026/banners', label: 'Banners', icon: <Image size={20} /> },
     ]
   },
   {
     section: 'Ventes',
     marketingHidden: true,
     links: [
-      { to: '/kh-76/pos', label: 'Caisse (POS)', icon: <ShoppingCart size={20} /> },
-      { to: '/kh-76/orders', label: 'Commandes (Site)', icon: <ShoppingCart size={20} /> },
-      { to: '/kh-76/pos-sales', label: 'Ventes (POS)', icon: <History size={20} /> },
-      { to: '/kh-76/orders-history', label: 'Historique', icon: <History size={20} /> },
-      { to: '/kh-76/coupons', label: 'Codes Promos', icon: <Ticket size={20} /> },
-      { to: '/kh-76/reports', label: 'Rapports Ventes', icon: <BarChart2 size={20} /> },
+      { to: '/kh-secure-2026/pos', label: 'Caisse (POS)', icon: <ShoppingCart size={20} /> },
+      { to: '/kh-secure-2026/orders', label: 'Commandes (Site)', icon: <ShoppingCart size={20} /> },
+      { to: '/kh-secure-2026/pos-sales', label: 'Ventes (POS)', icon: <History size={20} /> },
+      { to: '/kh-secure-2026/orders-history', label: 'Historique', icon: <History size={20} /> },
+      { to: '/kh-secure-2026/coupons', label: 'Codes Promos', icon: <Ticket size={20} /> },
+      { to: '/kh-secure-2026/reports', label: 'Rapports Ventes', icon: <BarChart2 size={20} /> },
     ]
   },
   {
     section: 'ERP & Finance',
     marketingHidden: true,
     links: [
-      { to: '/kh-76/purchases', label: 'Achats & Entrées', icon: <Package size={20} /> },
-      { to: '/kh-76/suppliers', label: 'Fournisseurs', icon: <Users size={20} /> },
-      { to: '/kh-76/stock-ledger', label: 'Mouv. de Stock', icon: <History size={20} /> },
-      { to: '/kh-76/expenses', label: 'Charges & Frais', icon: <Banknote size={20} /> },
-      { to: '/kh-76/reports/profit', label: 'Rapport Bénéfices', icon: <BarChart2 size={20} /> },
+      { to: '/kh-secure-2026/purchases', label: 'Achats & EntrÃ©es', icon: <Package size={20} /> },
+      { to: '/kh-secure-2026/suppliers', label: 'Fournisseurs', icon: <Users size={20} /> },
+      { to: '/kh-secure-2026/stock-ledger', label: 'Mouv. de Stock', icon: <History size={20} /> },
+      { to: '/kh-secure-2026/expenses', label: 'Charges & Frais', icon: <Banknote size={20} /> },
+      { to: '/kh-secure-2026/reports/profit', label: 'Rapport BÃ©nÃ©fices', icon: <BarChart2 size={20} /> },
     ]
   },
   {
     section: 'Clients',
     marketingHidden: true,
     links: [
-      { to: '/kh-76/customers', label: 'Tous les clients', icon: <Users size={20} /> },
-      { to: '/kh-76/blacklist', label: 'Blacklist', icon: <UserX size={20} /> },
-      { to: '/kh-76/newsletter', label: 'Newsletter', icon: <Mail size={20} /> },
+      { to: '/kh-secure-2026/customers', label: 'Tous les clients', icon: <Users size={20} /> },
+      { to: '/kh-secure-2026/blacklist', label: 'Blacklist', icon: <UserX size={20} /> },
+      { to: '/kh-secure-2026/newsletter', label: 'Newsletter', icon: <Mail size={20} /> },
     ]
   },
   {
     section: 'Livraison',
     marketingHidden: true,
     links: [
-      { to: '/kh-76/delivery-companies', label: 'Transporteurs', icon: <Truck size={20} /> },
-      { to: '/kh-76/delivery-rates', label: 'Tarifs', icon: <Banknote size={20} /> },
+      { to: '/kh-secure-2026/delivery-companies', label: 'Transporteurs', icon: <Truck size={20} /> },
+      { to: '/kh-secure-2026/delivery-rates', label: 'Tarifs', icon: <Banknote size={20} /> },
     ]
   },
   {
     section: 'Configuration',
     links: [
-      { to: '/kh-76/mediatheque', label: 'Médiathèque', icon: <Film size={20} /> },
-      { to: '/kh-76/boutiques', label: 'Boutiques', icon: <Store size={20} /> },
-      { to: '/kh-76/settings', label: 'Paramètres', icon: <Settings size={20} /> },
+      { to: '/kh-secure-2026/mediatheque', label: 'MÃ©diathÃ¨que', icon: <Film size={20} /> },
+      { to: '/kh-secure-2026/boutiques', label: 'Boutiques', icon: <Store size={20} /> },
+      { to: '/kh-secure-2026/settings', label: 'ParamÃ¨tres', icon: <Settings size={20} /> },
     ]
   },
 ]
@@ -117,8 +117,8 @@ export default function AdminLayout() {
         setNotificationPerm(perm)
         if (perm === 'granted') {
           playNotificationSound() // play a test sound
-          new Notification('Khaled Shoesé  Admin', {
-            body: "Notifications activées avec succès !",
+          new Notification('Khaled ShoesÃ©  Admin', {
+            body: "Notifications activÃ©es avec succÃ¨s !",
             icon: '/logo.png'
           })
         }
@@ -126,12 +126,12 @@ export default function AdminLayout() {
     }
   }
 
-  // === SONNERIE DOUCE â carillon mélodique ===
+  // === SONNERIE DOUCE Ã¢Â€Â” carillon mÃ©lodique ===
   const playNotificationSound = () => {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)()
 
-      // 3 notes douces : Do â Mi â Sol (accord majeur)
+      // 3 notes douces : Do Ã¢Â€Â“ Mi Ã¢Â€Â“ Sol (accord majeur)
       const notes = [
         { freq: 523.25, start: 0.0  },  // Do5
         { freq: 659.25, start: 0.22 },  // Mi5
@@ -143,16 +143,16 @@ export default function AdminLayout() {
         const gain = ctx.createGain()
         osc.connect(gain)
         gain.connect(ctx.destination)
-        osc.type = 'sine'              // onde sinusoïdale = son doux
+        osc.type = 'sine'              // onde sinusoÃ¯dale = son doux
         osc.frequency.value = freq
         gain.gain.setValueAtTime(0, ctx.currentTime + start)
-        gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + start + 0.05)  // montée douce
+        gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + start + 0.05)  // montÃ©e douce
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + 1.2) // fondu long
         osc.start(ctx.currentTime + start)
         osc.stop(ctx.currentTime + start + 1.3)
       })
     } catch (e) {
-      console.warn('Audio non supporté:', e)
+      console.warn('Audio non supportÃ©:', e)
     }
   }
 
@@ -160,9 +160,9 @@ export default function AdminLayout() {
     playNotificationSound()
     // Afficher le toast visuel
     setNewOrderToast({ message, count: orderCount })
-    setTimeout(() => setNewOrderToast(null), 8000) // disparaît après 8s
+    setTimeout(() => setNewOrderToast(null), 8000) // disparaÃ®t aprÃ¨s 8s
     if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification('🛒 Khaled Shoes — Nouvelle Commande !', {
+      new Notification('ðŸ›’ Khaled Shoes â€” Nouvelle Commande !', {
         body: message,
         icon: '/logo.png'
       })
@@ -178,7 +178,7 @@ export default function AdminLayout() {
       if (prev !== null) {
         const newNormal = newCounts.normal - prev.normal
         if (newNormal > 0) {
-          triggerDesktopNotification(`${newNormal} nouvelle${newNormal > 1 ? 's' : ''} commande${newNormal > 1 ? 's' : ''} reçue${newNormal > 1 ? 's' : ''} !`, newNormal)
+          triggerDesktopNotification(`${newNormal} nouvelle${newNormal > 1 ? 's' : ''} commande${newNormal > 1 ? 's' : ''} reÃ§ue${newNormal > 1 ? 's' : ''} !`, newNormal)
         }
       }
       
@@ -230,7 +230,7 @@ export default function AdminLayout() {
     const resetTimeout = () => {
       clearTimeout(timeoutId)
       timeoutId = setTimeout(() => {
-        alert("Session expirée pour inactivité.")
+        alert("Session expirÃ©e pour inactivitÃ©.")
         handleLogout()
       }, 15 * 60 * 1000)
     }
@@ -255,16 +255,16 @@ export default function AdminLayout() {
     return () => clearInterval(timer)
   }, [])
 
-  // Guard: not logged in — use Navigate component, not navigate()
+  // Guard: not logged in â€” use Navigate component, not navigate()
   if (!user) {
-    return <Navigate to="/kh-76/login" replace />
+    return <Navigate to="/kh-secure-2026/login" replace />
   }
 
   const handleLogout = () => {
     localStorage.removeItem('admin_access_token')
     localStorage.removeItem('admin_refresh_token')
     localStorage.removeItem('admin_user')
-    navigate('/kh-76/login')
+    navigate('/kh-secure-2026/login')
   }
 
   const initials = (user.first_name?.[0] || user.username?.[0] || 'A').toUpperCase()
@@ -284,15 +284,15 @@ export default function AdminLayout() {
           fontWeight: 700, fontSize: '1rem', letterSpacing: '0.3px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <span style={{ fontSize: '1.6rem', animation: 'bellRing 0.5s ease infinite alternate' }}>🛒</span>
+            <span style={{ fontSize: '1.6rem', animation: 'bellRing 0.5s ease infinite alternate' }}>ðŸ›’</span>
             <div>
               <div style={{ fontSize: '1.05rem' }}>NOUVELLE COMMANDE !</div>
               <div style={{ fontSize: '0.82rem', fontWeight: 400, opacity: 0.9 }}>{newOrderToast.message}</div>
             </div>
           </div>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-            <a href="/kh-76/orders" style={{ background: 'white', color: '#dc2626', padding: '6px 16px', borderRadius: 50, fontSize: '0.82rem', fontWeight: 700, textDecoration: 'none' }}>Voir les commandes</a>
-            <button onClick={() => setNewOrderToast(null)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '1.2rem', lineHeight: 1 }}>✖</button>
+            <a href="/kh-secure-2026/orders" style={{ background: 'white', color: '#dc2626', padding: '6px 16px', borderRadius: 50, fontSize: '0.82rem', fontWeight: 700, textDecoration: 'none' }}>Voir les commandes</a>
+            <button onClick={() => setNewOrderToast(null)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '1.2rem', lineHeight: 1 }}>âœ–</button>
           </div>
         </div>
       )}
@@ -322,7 +322,7 @@ export default function AdminLayout() {
                 >
                   {link.icon}
                   <span style={{ flex: 1 }}>{link.label}</span>
-                  {link.to === '/kh-76/orders' && unviewed.normal > 0 && (
+                  {link.to === '/kh-secure-2026/orders' && unviewed.normal > 0 && (
                     <span className="admin-nav-badge">{unviewed.normal}</span>
                   )}
 
@@ -370,7 +370,7 @@ export default function AdminLayout() {
             {/* Fullscreen Toggle (like F11) */}
             <button
               onClick={toggleFullscreen}
-              title={isFullscreen ? 'Quitter le plein écran' : 'Plein écran (F11)'}
+              title={isFullscreen ? 'Quitter le plein Ã©cran' : 'Plein Ã©cran (F11)'}
               style={{ background: 'none', border: 'none', color: 'var(--admin-text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '6px', borderRadius: '8px', transition: 'all 0.2s' }}
             >
               {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
@@ -398,7 +398,7 @@ export default function AdminLayout() {
                 {isMaintenance ? 'Maintenance' : 'En Ligne'}
               </span>
               <div className="toggle-wrap">
-                <label className="toggle" title="Activer/Désactiver le mode maintenance">
+                <label className="toggle" title="Activer/DÃ©sactiver le mode maintenance">
                   <input type="checkbox" checked={isMaintenance} onChange={toggleMaintenance} />
                   <span className="toggle-slider" />
                 </label>
@@ -415,7 +415,7 @@ export default function AdminLayout() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
               <button 
                 onClick={requestNotificationPermission}
-                title={notificationPerm === 'granted' ? "Notifications activées (Cliquer pour tester)" : "Activer les notifications"}
+                title={notificationPerm === 'granted' ? "Notifications activÃ©es (Cliquer pour tester)" : "Activer les notifications"}
                 style={{ 
                   background: 'none', border: 'none', 
                   color: notificationPerm === 'granted' ? 'var(--admin-success)' : 'var(--admin-text-muted)', 
@@ -434,17 +434,17 @@ export default function AdminLayout() {
                 </div>
                 {isUserMenuOpen && (
                   <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: 8, background: 'var(--admin-surface)', border: '1px solid var(--admin-border)', borderRadius: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', minWidth: 200, zIndex: 50 }}>
-                     <Link to="/kh-76/profile" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
-                      ð¤ Mon Profil
+                     <Link to="/kh-secure-2026/profile" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
+                      Ã°ÂŸÂ‘Â¤ Mon Profil
                     </Link>
-                    <Link to="/kh-76/settings" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
-                      âï¸ Paramètres
+                    <Link to="/kh-secure-2026/settings" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
+                      Ã¢ÂšÂ™Ã¯Â¸Â ParamÃ¨tres
                     </Link>
-                    <Link to="/kh-76/history" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
-                      Historique d'activité
+                    <Link to="/kh-secure-2026/history" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
+                      Historique d'activitÃ©
                     </Link>
                     <button style={{ display: 'block', width: '100%', textAlign: 'left', padding: '12px 16px', background: 'none', border: 'none', color: 'var(--admin-danger)', cursor: 'pointer' }} onClick={() => { setIsUserMenuOpen(false); handleLogout(); }}>
-                      Se déconnecter
+                      Se dÃ©connecter
                     </button>
                   </div>
                 )}

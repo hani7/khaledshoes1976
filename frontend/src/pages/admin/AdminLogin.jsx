@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import adminClient from '../../api/adminClient'
 import { Eye, EyeOff } from 'lucide-react'
@@ -28,14 +28,14 @@ export default function AdminLogin() {
       }
       const { user, access, refresh } = res.data
       if (!user.is_staff && !user.is_superuser) {
-        setError('Accès refusé. Compte administrateur requis.')
+        setError('AccÃ¨s refusÃ©. Compte administrateur requis.')
         setLoading(false)
         return
       }
       localStorage.setItem('admin_access_token', access)
       localStorage.setItem('admin_refresh_token', refresh)
       localStorage.setItem('admin_user', JSON.stringify(user))
-      navigate('/kh-76')
+      navigate('/kh-secure-2026')
     } catch {
       setError('Identifiants invalides.')
     } finally {
@@ -53,9 +53,9 @@ export default function AdminLogin() {
       localStorage.setItem('admin_access_token', access)
       localStorage.setItem('admin_refresh_token', refresh)
       localStorage.setItem('admin_user', JSON.stringify(user))
-      navigate('/kh-76')
+      navigate('/kh-secure-2026')
     } catch {
-      setError('Code OTP invalide ou expiré.')
+      setError('Code OTP invalide ou expirÃ©.')
     } finally {
       setLoading(false)
     }
@@ -104,7 +104,7 @@ export default function AdminLogin() {
             fontSize: '0.85rem', color: 'rgba(255,255,255,0.3)',
             maxWidth: 280, lineHeight: 1.6,
           }}>
-            Espace sécurisé réservé aux administrateurs Khaled Shoes.
+            Espace sÃ©curisÃ© rÃ©servÃ© aux administrateurs Khaled Shoes.
           </p>
         </div>
 
@@ -114,7 +114,7 @@ export default function AdminLogin() {
           fontSize: '0.72rem', color: 'rgba(255,255,255,0.2)',
           letterSpacing: '0.1em',
         }}>
-          &copy; {new Date().getFullYear()} Khaled Shoes - Accès restreint
+          &copy; {new Date().getFullYear()} Khaled Shoes - AccÃ¨s restreint
         </div>
       </div>
 
@@ -143,7 +143,7 @@ export default function AdminLogin() {
               Connexion
             </h2>
             <p style={{ marginTop: 6, color: '#94a3b8', fontSize: '0.9rem' }}>
-              Entrez vos identifiants pour accéder au panel
+              Entrez vos identifiants pour accÃ©der au panel
             </p>
           </div>
 
@@ -194,7 +194,7 @@ export default function AdminLogin() {
                   <input
                     id="admin-password"
                     type={showPass ? 'text' : 'password'}
-                    placeholder=""
+                    placeholder="Â•Â•Â•Â•Â•Â•Â•Â•"
                     value={form.password}
                     onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
                     required
@@ -242,7 +242,7 @@ export default function AdminLogin() {
           ) : (
             <form onSubmit={handleVerifyOtp} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
               <div style={{ fontSize: '0.9rem', color: '#64748b', lineHeight: 1.6 }}>
-                Un code de sécurité a été envoyé à votre e-mail. Saisissez-le ci-dessous.
+                Un code de sÃ©curitÃ© a Ã©tÃ© envoyÃ© Ã  votre e-mail. Saisissez-le ci-dessous.
               </div>
               <div>
                 <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#475569', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
@@ -275,7 +275,7 @@ export default function AdminLogin() {
                   boxShadow: '0 4px 14px rgba(168,85,247,0.35)',
                 }}
               >
-                {loading ? 'Vérification...' : 'Valider le code'}
+                {loading ? 'VÃ©rification...' : 'Valider le code'}
               </button>
               <button
                 type="button"

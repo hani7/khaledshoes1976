@@ -1,4 +1,4 @@
-import axios from 'axios'
+﻿import axios from 'axios'
 
 const adminClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',
@@ -32,7 +32,7 @@ adminClient.interceptors.response.use(
         localStorage.removeItem('admin_access_token')
         localStorage.removeItem('admin_refresh_token')
         localStorage.removeItem('admin_user')
-        window.location.href = '/kh-76/login'
+        window.location.href = '/kh-secure-2026/login'
       }
     }
     return Promise.reject(error)

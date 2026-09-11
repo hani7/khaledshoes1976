@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import adminClient from '../../api/adminClient'
 import { Printer, RefreshCw, Edit2, Store } from 'lucide-react'
 
 const STATUS_LABELS = {
   pending: 'En attente',
-  payment_failed: 'Paiement échoué',
-  confirmed: 'Confirmé',
+  payment_failed: 'Paiement Ã©chouÃ©',
+  confirmed: 'ConfirmÃ©',
   en_cours: 'En cours',
   shipped: 'En livraison',
-  fulfilled: 'Livrée',
-  cancelled: 'Annulée',
-  returned: 'Retournée',
+  fulfilled: 'LivrÃ©e',
+  cancelled: 'AnnulÃ©e',
+  returned: 'RetournÃ©e',
 }
 
 const STATUS_BADGE = {
@@ -31,22 +31,22 @@ const YALIDINE_STATUS_STYLE = (s = '') => {
   const sl = s.toLowerCase()
   // Noms du portail Yalidine (API traduits vers portal names)
   if (sl.includes('delivered in forward') || sl === 'delivered')
-                                               return { bg: '#dcfce7', color: '#15803d', border: '#86efac', icon: '✅' }
+                                               return { bg: '#dcfce7', color: '#15803d', border: '#86efac', icon: 'âœ…' }
   if (sl.includes('ready in forward delivery') || sl.includes('out for delivery'))
-                                               return { bg: '#dbeafe', color: '#1d4ed8', border: '#93c5fd', icon: '🚚' }
+                                               return { bg: '#dbeafe', color: '#1d4ed8', border: '#93c5fd', icon: 'ðŸšš' }
   if (sl.includes('received in hub in shuttling') || sl.includes('shuttling'))
-                                               return { bg: '#e0e7ff', color: '#4338ca', border: '#a5b4fc', icon: '📦' }
+                                               return { bg: '#e0e7ff', color: '#4338ca', border: '#a5b4fc', icon: 'ðŸ“¦' }
   if (sl.includes('in transit') || sl.includes('in transit to destination'))
-                                               return { bg: '#fef9c3', color: '#a16207', border: '#fde047', icon: '🔄' }
+                                               return { bg: '#fef9c3', color: '#a16207', border: '#fde047', icon: 'ðŸ”„' }
   if (sl.includes('ready in picking') || sl.includes('ready for pickup'))
-                                               return { bg: '#fef3c7', color: '#b45309', border: '#fcd34d', icon: '📋' }
+                                               return { bg: '#fef3c7', color: '#b45309', border: '#fcd34d', icon: 'ðŸ“‹' }
   if (sl.includes('ready in pickup') || sl.includes('data uploaded') || sl.includes('shipment created'))
-                                               return { bg: '#f1f5f9', color: '#475569', border: '#cbd5e1', icon: '📤' }
+                                               return { bg: '#f1f5f9', color: '#475569', border: '#cbd5e1', icon: 'ðŸ“¤' }
   if (sl.includes('returned') || sl.includes('reverse') || sl.includes('return'))
-                                               return { bg: '#fee2e2', color: '#b91c1c', border: '#fca5a5', icon: '↩️' }
-  if (sl.includes('cancel'))                   return { bg: '#f3f4f6', color: '#6b7280', border: '#d1d5db', icon: '❌' }
-  if (sl.includes('failed'))                   return { bg: '#fee2e2', color: '#b91c1c', border: '#fca5a5', icon: '⚠️' }
-  return { bg: '#fff7ed', color: '#c2410c', border: '#fed7aa', icon: '📦' }
+                                               return { bg: '#fee2e2', color: '#b91c1c', border: '#fca5a5', icon: 'â†©ï¸' }
+  if (sl.includes('cancel'))                   return { bg: '#f3f4f6', color: '#6b7280', border: '#d1d5db', icon: 'âŒ' }
+  if (sl.includes('failed'))                   return { bg: '#fee2e2', color: '#b91c1c', border: '#fca5a5', icon: 'âš ï¸' }
+  return { bg: '#fff7ed', color: '#c2410c', border: '#fed7aa', icon: 'ðŸ“¦' }
 }
 
 export default function AdminOrderDetail() {
@@ -72,7 +72,7 @@ export default function AdminOrderDetail() {
   const [editForm, setEditForm] = useState({})
   const [editItems, setEditItems] = useState([])
   const [editSaving, setEditSaving] = useState(false)
-  // Ajout de nouveaux produits à la commande
+  // Ajout de nouveaux produits Ã  la commande
   const [newItems, setNewItems] = useState([])          // [{product, variant, quantity}]
   const [addSearch, setAddSearch] = useState('')
   const [addResults, setAddResults] = useState([])
@@ -118,7 +118,7 @@ export default function AdminOrderDetail() {
     }
   }
 
-  // Recherche produit pour ajout à la commande
+  // Recherche produit pour ajout Ã  la commande
   useEffect(() => {
     if (!addSearch || addSearch.length < 2) { setAddResults([]); return }
     const t = setTimeout(async () => {
@@ -149,7 +149,7 @@ export default function AdminOrderDetail() {
       .then(r => setDetail(r.data))
       .catch(() => {
         alert('Erreur: Commande introuvable')
-        navigate('/kh-76/orders')
+        navigate('/kh-secure-2026/orders')
       })
       .finally(() => setLoading(false))
   }
@@ -180,7 +180,7 @@ export default function AdminOrderDetail() {
   }
 
 
-  // ── Auto-sync Yalidine dès le chargement (silencieux) ──────────────────────
+  // â”€â”€ Auto-sync Yalidine dÃ¨s le chargement (silencieux) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   useEffect(() => {
     if (!detail?.yalidine_tracking) return
     adminClient.get(`/admin/orders/${id}/yalidine_track/`)
@@ -196,7 +196,7 @@ export default function AdminOrderDetail() {
           } : prev)
           setTrackingData(tracking)
           setShowTracking(tracking.length > 0)
-          // Date du statut le plus récent (index 0 = plus récent)
+          // Date du statut le plus rÃ©cent (index 0 = plus rÃ©cent)
           if (tracking.length > 0 && tracking[0].Date) {
             setYalidineStatusDate(tracking[0].Date)
           }
@@ -211,15 +211,15 @@ export default function AdminOrderDetail() {
   }
 
   const handleYalidineShip = async () => {
-    if (!window.confirm('Voulez-vous générer un colis Yalidine pour cette commande ?')) return
+    if (!window.confirm('Voulez-vous gÃ©nÃ©rer un colis Yalidine pour cette commande ?')) return
     setYalidineLoading(true)
     try {
       await adminClient.post(`/admin/orders/${id}/yalidine_ship/`)
-      alert('Colis Yalidine créé avec succès.')
+      alert('Colis Yalidine crÃ©Ã© avec succÃ¨s.')
       load()
     } catch (e) {
-      const msg = e.response?.data?.message || e.response?.data?.error || JSON.stringify(e.response?.data) || 'Erreur lors de la création du colis.'
-      alert('âŒ ' + msg)
+      const msg = e.response?.data?.message || e.response?.data?.error || JSON.stringify(e.response?.data) || 'Erreur lors de la crÃ©ation du colis.'
+      alert('Ã¢ÂÅ’ ' + msg)
     } finally {
       setYalidineLoading(false)
     }
@@ -236,14 +236,14 @@ h2{color:#38bdf8}h3{color:#fbbf24;margin-top:20px}
 .ok{color:#4ade80}.err{color:#f87171}
 pre{background:#1e293b;padding:16px;border-radius:8px;overflow:auto;white-space:pre-wrap;word-break:break-all;font-size:12px;max-height:400px}
 </style></head><body>
-<h2>ðŸ” Debug Payload Yalidine — Commande #${d.order_id}</h2>
+<h2>Ã°Å¸â€Â Debug Payload Yalidine â€” Commande #${d.order_id}</h2>
 <div class="${d.yalidine_tracking_already_set ? 'err' : 'ok'}">
-  Barcode déjà enregistré: ${d.yalidine_tracking_already_set ? 'âŒ OUI â†’ ' + d.yalidine_tracking : 'âœ… Non (nouvelle expédition)'}
+  Barcode dÃ©jÃ  enregistrÃ©: ${d.yalidine_tracking_already_set ? 'Ã¢ÂÅ’ OUI Ã¢â€ â€™ ' + d.yalidine_tracking : 'Ã¢Å“â€¦ Non (nouvelle expÃ©dition)'}
 </div>
-${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.error}\n\n${d.traceback}</pre>` : ''}
-<h3>Payload qui sera envoyé à Yalidine:</h3>
+${d.error ? `<h3>Ã¢ÂÅ’ ERREUR lors de la construction du payload</h3><pre>${d.error}\n\n${d.traceback}</pre>` : ''}
+<h3>Payload qui sera envoyÃ© Ã  Yalidine:</h3>
 <pre>${JSON.stringify(d.payload, null, 2)}</pre>
-<h3>WarehouseName: <span class="${d.warehouse ? 'ok' : 'err'}">${d.warehouse || '(vide — non envoyé)'}</span></h3>
+<h3>WarehouseName: <span class="${d.warehouse ? 'ok' : 'err'}">${d.warehouse || '(vide â€” non envoyÃ©)'}</span></h3>
 </body></html>`
       const w = window.open('', '_blank', 'width=900,height=700')
       w.document.write(html)
@@ -286,7 +286,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
     setYalidineLoading(true)
     try {
       await adminClient.post(`/admin/orders/${id}/yalidine_cancel/`)
-      alert('Envoi annulé avec succès.')
+      alert('Envoi annulÃ© avec succÃ¨s.')
       load()
     } catch (e) {
       alert(e.response?.data?.message || "Erreur lors de l'annulation.")
@@ -308,7 +308,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
       w.document.write(r.data)
       w.document.close()
     } catch (e) {
-      alert('Erreur lors de la génération du bordereau')
+      alert('Erreur lors de la gÃ©nÃ©ration du bordereau')
     }
   }
 
@@ -319,12 +319,12 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
     <>
     <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
-        <button className="btn-icon" onClick={() => navigate('/kh-76/orders')} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '50%', padding: 8 }}>
+        <button className="btn-icon" onClick={() => navigate('/kh-secure-2026/orders')} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '50%', padding: 8 }}>
           <svg viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" width="20" height="20"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </button>
         <div>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 700, margin: 0, color: '#1e293b', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-            Détails Commande
+            DÃ©tails Commande
             <span style={{
               background: '#f2b01e', color: '#fff', borderRadius: 50,
               padding: '3px 16px', fontSize: '1.1rem', fontWeight: 800,
@@ -332,7 +332,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
             }}>#{detail.id}</span>
           </h2>
           <div style={{ fontSize: '0.85rem', color: '#64748b', marginTop: 4 }}>
-            {detail.payment_method === 'cib' ? 'Paiement en ligne (CIB/Edahabia)' : detail.payment_method === 'yassir' ? 'Yassir Cash' : 'Paiement à la livraison'} - {new Date(detail.created_at).toLocaleString('fr-DZ')}
+            {detail.payment_method === 'cib' ? 'Paiement en ligne (CIB/Edahabia)' : detail.payment_method === 'yassir' ? 'Yassir Cash' : 'Paiement Ã  la livraison'} - {new Date(detail.created_at).toLocaleString('fr-DZ')}
           </div>
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -353,7 +353,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
           ) : (
              <>
                <button className="admin-btn-primary" style={{ padding: '6px 12px', fontSize: '0.8rem', borderRadius: 20, display: 'flex', alignItems: 'center', border: 'none', backgroundColor: '#FFC349', color: '#1e293b', fontWeight: 'bold' }} onClick={handleYalidineShip} disabled={yalidineLoading || detail.status === 'boutique'}>
-                 EXPÉDIER
+                 EXPÃ‰DIER
                </button>
 
              </>
@@ -363,7 +363,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
             style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px', fontSize: '0.85rem', background: '#10b981', color: '#fff', border: 'none', borderRadius: 20, cursor: 'pointer', fontWeight: 600 }}
             onClick={openEdit}
           >
-            ✏️ Modifier
+            âœï¸ Modifier
           </button>
           <button 
             className="btn" 
@@ -385,9 +385,9 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
           {/* 4 Info Cards Grid */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
 
-            {/* Général */}
+            {/* GÃ©nÃ©ral */}
             <div className="admin-card" style={{ padding: 16, border: '1px solid #e2e8f0', boxShadow: 'none' }}>
-              <h4 style={{ fontSize: '0.85rem', textTransform: 'uppercase', color: '#64748b', marginBottom: 12, borderBottom: '1px solid #f1f5f9', paddingBottom: 8 }}>Général</h4>
+              <h4 style={{ fontSize: '0.85rem', textTransform: 'uppercase', color: '#64748b', marginBottom: 12, borderBottom: '1px solid #f1f5f9', paddingBottom: 8 }}>GÃ©nÃ©ral</h4>
               <div style={{ fontSize: '0.88rem', marginBottom: 7, display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ color: '#64748b' }}>Date</span>
                 <span style={{ fontWeight: 600 }}>{new Date(detail.created_at).toLocaleDateString('fr-DZ', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
@@ -402,7 +402,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                   background: detail.user ? '#e0f2fe' : '#f1f5f9',
                   color: detail.user ? '#0369a1' : '#475569',
                   borderRadius: 20, padding: '2px 10px', fontSize: '0.78rem', fontWeight: 700
-                }}>{detail.user ? 'Inscrit' : 'Invité'}</span>
+                }}>{detail.user ? 'Inscrit' : 'InvitÃ©'}</span>
               </div>
               <div style={{ fontSize: '0.88rem', marginBottom: 7, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ color: '#64748b' }}>Paiement</span>
@@ -420,12 +420,12 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
               )}
               {detail.discount_amount > 0 && (
                 <div style={{ fontSize: '0.88rem', marginBottom: 7, display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#64748b' }}>Réduction</span>
+                  <span style={{ color: '#64748b' }}>RÃ©duction</span>
                   <span style={{ fontWeight: 700, color: '#10b981' }}>- {Number(detail.discount_amount).toLocaleString('fr-DZ')} DA</span>
                 </div>
               )}
               <div style={{ fontSize: '0.88rem', marginTop: 14 }}>
-                <strong style={{ color: '#475569', display: 'block', marginBottom: 4 }}>Changer l'état:</strong>
+                <strong style={{ color: '#475569', display: 'block', marginBottom: 4 }}>Changer l'Ã©tat:</strong>
                 <select className="status-select" value={detail.status} onChange={e => handleStatus(e.target.value)} style={{ width: '100%', padding: 8 }}>
                   {Object.entries(STATUS_LABELS).map(([v, l]) => (
                     <option key={v} value={v}>{l}</option>
@@ -447,15 +447,15 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                 {detail.is_blacklisted && <span className="badge badge-danger" style={{ fontSize: '0.6rem', padding: '2px 5px', borderRadius: 4 }}>BLACKLIST</span>}
               </div>
               <div style={{ fontSize: '0.88rem', color: '#475569', marginBottom: 10 }}>{detail.shipping_address}</div>
-              <div style={{ fontSize: '0.88rem', color: '#475569', marginBottom: 12, fontWeight: 600 }}>{detail.wilaya} — {detail.city}</div>
+              <div style={{ fontSize: '0.88rem', color: '#475569', marginBottom: 12, fontWeight: 600 }}>{detail.wilaya} â€” {detail.city}</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.88rem', color: '#0f172a' }}>
                   <svg viewBox="0 0 24 24" width="13" height="13" stroke="#64748b" strokeWidth="2" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                  {detail.guest_email || <span style={{ color: '#94a3b8' }}>—</span>}
+                  {detail.guest_email || <span style={{ color: '#94a3b8' }}>â€”</span>}
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.88rem', color: '#0f172a', fontWeight: 600 }}>
                   <svg viewBox="0 0 24 24" width="13" height="13" stroke="#64748b" strokeWidth="2" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                  {detail.guest_phone || <span style={{ color: '#94a3b8', fontWeight: 400 }}>—</span>}
+                  {detail.guest_phone || <span style={{ color: '#94a3b8', fontWeight: 400 }}>â€”</span>}
                 </div>
                 {detail.guest_phone2 && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.88rem', color: '#0f172a', fontWeight: 600 }}>
@@ -466,20 +466,20 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
               </div>
             </div>
 
-            {/* Expédition */}
+            {/* ExpÃ©dition */}
             <div className="admin-card" style={{ padding: 16, border: '1px solid #e2e8f0', boxShadow: 'none' }}>
-              <h4 style={{ fontSize: '0.85rem', textTransform: 'uppercase', color: '#64748b', marginBottom: 12, borderBottom: '1px solid #f1f5f9', paddingBottom: 8 }}>Expédition</h4>
+              <h4 style={{ fontSize: '0.85rem', textTransform: 'uppercase', color: '#64748b', marginBottom: 12, borderBottom: '1px solid #f1f5f9', paddingBottom: 8 }}>ExpÃ©dition</h4>
               <div style={{ fontSize: '0.88rem', color: '#475569', marginBottom: 4 }}>{detail.shipping_address}</div>
-              <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#1e293b', marginBottom: 16 }}>{detail.wilaya} — {detail.city}</div>
+              <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#1e293b', marginBottom: 16 }}>{detail.wilaya} â€” {detail.city}</div>
               <div style={{ background: '#f8fafc', padding: 10, borderRadius: 6, display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <div>
                   <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Transporteur</div>
-                  <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#0f172a', marginTop: 2 }}>{detail.delivery_company_name || 'Non spécifié'}</div>
+                  <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#0f172a', marginTop: 2 }}>{detail.delivery_company_name || 'Non spÃ©cifiÃ©'}</div>
                 </div>
                 <div>
                   <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Type</div>
                   <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#0f172a', marginTop: 2 }}>
-                    {detail.delivery_type === 'desk' ? '🏢 Stopdesk' : '🚚 À domicile'}
+                    {detail.delivery_type === 'desk' ? 'ðŸ¢ Stopdesk' : 'ðŸšš Ã€ domicile'}
                   </div>
                 </div>
                 {detail.yalidine_tracking && (
@@ -491,11 +491,11 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
               </div>
             </div>
 
-            {/* Résumé Financier */}
+            {/* RÃ©sumÃ© Financier */}
             <div className="admin-card" style={{ padding: 16, border: '1px solid #e2e8f0', boxShadow: 'none' }}>
-              <h4 style={{ fontSize: '0.85rem', textTransform: 'uppercase', color: '#64748b', marginBottom: 12, borderBottom: '1px solid #f1f5f9', paddingBottom: 8 }}>Résumé Financier</h4>
+              <h4 style={{ fontSize: '0.85rem', textTransform: 'uppercase', color: '#64748b', marginBottom: 12, borderBottom: '1px solid #f1f5f9', paddingBottom: 8 }}>RÃ©sumÃ© Financier</h4>
               {(()=>{
-                // Source de vérité : somme des items (recalcul côté frontend)
+                // Source de vÃ©ritÃ© : somme des items (recalcul cÃ´tÃ© frontend)
                 const itemsSubtotal = (detail.items || []).reduce((acc, it) => acc + Number(it.subtotal || (it.price_at_purchase * it.quantity)), 0)
                 const delivery = Number(detail.delivery_cost || 0)
                 const discount = Number(detail.discount_amount || 0)
@@ -510,12 +510,12 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                   <>
                     <Row label="Produits" value={`${itemsSubtotal.toLocaleString('fr-DZ')} DA`} />
                     <Row label="Livraison" value={`${delivery.toLocaleString('fr-DZ')} DA`} />
-                    {discount > 0 && <Row label="Réduction" value={`- ${discount.toLocaleString('fr-DZ')} DA`} color="#10b981" />}
+                    {discount > 0 && <Row label="RÃ©duction" value={`- ${discount.toLocaleString('fr-DZ')} DA`} color="#10b981" />}
                     <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: 8, marginTop: 4 }}>
                       <Row label="Total" value={`${total.toLocaleString('fr-DZ')} DA`} bold />
                     </div>
                     <div style={{ marginTop: 10, background: '#0f172a', color: '#fff', borderRadius: 10, padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>Bénéfice net</span>
+                      <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>BÃ©nÃ©fice net</span>
                       <span style={{ fontWeight: 800, fontSize: '1rem', color: '#4ade80' }}>{itemsSubtotal.toLocaleString('fr-DZ')} DA</span>
                     </div>
                   </>
@@ -532,7 +532,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                 <tr>
                   <th colSpan="2" style={{ paddingLeft: 20 }}>Article</th>
                   <th style={{ textAlign: 'right' }}>Prix Unitaire</th>
-                  <th style={{ textAlign: 'center' }}>Qté</th>
+                  <th style={{ textAlign: 'center' }}>QtÃ©</th>
                   <th style={{ textAlign: 'right', paddingRight: 20 }}>Total</th>
                 </tr>
               </thead>
@@ -553,7 +553,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                       {item.variant_name && <div style={{ fontSize: '0.85rem', color: '#64748b', marginTop: 2 }}>Variante: {item.variant_name}</div>}
                     </td>
                     <td style={{ textAlign: 'right', color: '#475569', fontSize: '0.9rem' }}>{Number(item.price_at_purchase).toLocaleString('fr-DZ')} DA</td>
-                    <td style={{ textAlign: 'center', fontWeight: 500 }}>× {item.quantity}</td>
+                    <td style={{ textAlign: 'center', fontWeight: 500 }}>Ã— {item.quantity}</td>
                     <td style={{ textAlign: 'right', fontWeight: 600, color: '#0f172a', paddingRight: 20 }}>{Number(item.subtotal).toLocaleString('fr-DZ')} DA</td>
                   </tr>
                 ))}
@@ -578,7 +578,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 12, fontSize: '0.95rem', color: '#475569', fontWeight: 600 }}>
                   <span>Mode de paiement:</span>
                   <span style={{ color: detail.payment_method === 'cib' || detail.payment_method === 'yassir' ? 'var(--color-accent)' : 'inherit' }}>
-                    {detail.payment_method === 'cib' ? 'CIB ou Edahabia' : detail.payment_method === 'yassir' ? 'Yassir Cash' : 'À la livraison (Cash)'}
+                    {detail.payment_method === 'cib' ? 'CIB ou Edahabia' : detail.payment_method === 'yassir' ? 'Yassir Cash' : 'Ã€ la livraison (Cash)'}
                   </span>
                 </div>
               </div>
@@ -599,7 +599,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
               <button className="btn btn-outline" style={{ width: '100%', color: '#dc3545', borderColor: '#dc3545', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8 }} onClick={async () => {
                 if(window.confirm('Supprimer cette commande ?')) {
                   await adminClient.delete(`/admin/orders/${detail.id}/`);
-                  navigate('/kh-76/orders')
+                  navigate('/kh-secure-2026/orders')
                 }
               }}>
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
@@ -646,7 +646,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                           </div>
                           {fmtDate && (
                             <div style={{ marginTop: 6, fontSize: '0.75rem', color: ms.color, opacity: 0.8 }}>
-                              📅 {fmtDate}
+                              ðŸ“… {fmtDate}
                             </div>
                           )}
                         </div>
@@ -693,10 +693,10 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
              ) : (
                <div>
                  <div style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: 12 }}>
-                   Aucun colis généré pour cette commande.
+                   Aucun colis gÃ©nÃ©rÃ© pour cette commande.
                  </div>
                  <button className="btn" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, background: '#FFC349', color: '#1e293b', fontWeight: 'bold', borderRadius: 50, border: 'none', padding: '10px 0' }} onClick={handleYalidineShip} disabled={yalidineLoading || detail.status === 'boutique'}>
-                   Expédier
+                   ExpÃ©dier
                  </button>
                </div>
              )}
@@ -752,7 +752,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                 {detail.notes}
               </div>
             ) : (
-              <div style={{ color: '#94a3b8', fontSize: '0.9rem', fontStyle: 'italic' }}>Aucune note laissée par le client.</div>
+              <div style={{ color: '#94a3b8', fontSize: '0.9rem', fontStyle: 'italic' }}>Aucune note laissÃ©e par le client.</div>
             )}
           </div>
 
@@ -764,7 +764,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
               direct:   { label: 'Direct',     color: '#6366f1', bg: '#eef2ff' },
               google:   { label: 'Google',     color: '#34a853', bg: '#e6f4ea' },
               tiktok:   { label: 'TikTok',     color: '#010101', bg: '#f1f5f9' },
-              referral: { label: 'Référent',   color: '#10b981', bg: '#ecfdf5' },
+              referral: { label: 'RÃ©fÃ©rent',   color: '#10b981', bg: '#ecfdf5' },
             }
             const raw = detail.source || ''
             const parts = raw.split(' | ')
@@ -805,9 +805,9 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                   </span>
                 </div>
 
-                {medium && <Row label="Médium" value={medium === 'paid' ? '💰 Payant (paid)' : medium} />}
+                {medium && <Row label="MÃ©dium" value={medium === 'paid' ? 'ðŸ’° Payant (paid)' : medium} />}
                 {campaign && <Row label="Campaign ID" value={campaign} mono />}
-                <Row label="Facebook Click" value={hasFbclid ? '✅ Oui (fbclid détecté)' : '— Non'} />
+                <Row label="Facebook Click" value={hasFbclid ? 'âœ… Oui (fbclid dÃ©tectÃ©)' : 'â€” Non'} />
                 {referrer && <Row label="Referrer" value={referrer} mono />}
 
                 {!raw && (
@@ -830,7 +830,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
 
     </div>
 
-    {/* ── EDIT PANEL MODAL ── */}
+    {/* â”€â”€ EDIT PANEL MODAL â”€â”€ */}
     {showEdit && (
       <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex' }}>
         {/* Backdrop */}
@@ -847,10 +847,10 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
           {/* Header */}
           <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f8fafc' }}>
             <div>
-              <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: '#1e293b' }}>✏️ Modifier la commande #{id}</h3>
-              <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b', marginTop: 2 }}>Les modifications sont sauvegardées immédiatement</p>
+              <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: '#1e293b' }}>âœï¸ Modifier la commande #{id}</h3>
+              <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b', marginTop: 2 }}>Les modifications sont sauvegardÃ©es immÃ©diatement</p>
             </div>
-            <button onClick={() => setShowEdit(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: '#64748b', fontSize: '1.3rem' }}>✕</button>
+            <button onClick={() => setShowEdit(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: '#64748b', fontSize: '1.3rem' }}>âœ•</button>
           </div>
 
           {/* Body */}
@@ -876,7 +876,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                 ))}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                   <div>
-                    <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569', display: 'block', marginBottom: 4 }}>📞 Téléphone 1</label>
+                    <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569', display: 'block', marginBottom: 4 }}>ðŸ“ž TÃ©lÃ©phone 1</label>
                     <input
                       type="tel"
                       value={editForm.guest_phone || ''}
@@ -885,12 +885,12 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                     />
                   </div>
                   <div>
-                    <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#10b981', display: 'block', marginBottom: 4 }}>📞 Téléphone 2 (optionnel)</label>
+                    <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#10b981', display: 'block', marginBottom: 4 }}>ðŸ“ž TÃ©lÃ©phone 2 (optionnel)</label>
                     <input
                       type="tel"
                       value={editForm.guest_phone2 || ''}
                       onChange={e => setEditForm({ ...editForm, guest_phone2: e.target.value })}
-                      placeholder="2ème numéro"
+                      placeholder="2Ã¨me numÃ©ro"
                       style={{ width: '100%', padding: '8px 12px', border: '1px solid #a7f3d0', borderRadius: 8, fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', background: '#f0fdf4' }}
                     />
                   </div>
@@ -903,7 +903,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
               <h4 style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#94a3b8', marginBottom: 12 }}>Adresse de livraison</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div>
-                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569', display: 'block', marginBottom: 4 }}>Adresse complète</label>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569', display: 'block', marginBottom: 4 }}>Adresse complÃ¨te</label>
                   <textarea
                     rows={2}
                     value={editForm.shipping_address || ''}
@@ -957,7 +957,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                       <button
                         onClick={() => setEditItems(editItems.map((it, j) => j === i ? { ...it, _qty: Math.max(0, Number(it._qty) - 1) } : it))}
                         style={{ width: 28, height: 28, border: '1px solid #e2e8f0', borderRadius: 6, background: '#fff', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ef4444' }}
-                      >−</button>
+                      >âˆ’</button>
                       <input
                         type="number"
                         min="0"
@@ -974,13 +974,13 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                         title="Supprimer cet article"
                         onClick={() => setEditItems(editItems.map((it, j) => j === i ? { ...it, _qty: 0 } : it))}
                         style={{ width: 28, height: 28, border: '1px solid #fecaca', borderRadius: 6, background: '#fef2f2', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem' }}
-                      >🗑️</button>
+                      >ðŸ—‘ï¸</button>
                     </div>
                   </div>
                 ))}
                 {editItems.some(i => i._qty == 0) && (
                   <div style={{ fontSize: '0.73rem', color: '#ef4444', textAlign: 'center', padding: '4px 0' }}>
-                    ⚠️ Les articles rayés (quantité = 0) seront supprimés définitivement à l'enregistrement
+                    âš ï¸ Les articles rayÃ©s (quantitÃ© = 0) seront supprimÃ©s dÃ©finitivement Ã  l'enregistrement
                   </div>
                 )}
               </div>
@@ -1018,7 +1018,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                   )}
                 </div>
 
-                {/* Produits à ajouter */}
+                {/* Produits Ã  ajouter */}
                 {newItems.length > 0 && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {newItems.map((ni, i) => (
@@ -1034,7 +1034,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                               }}
                               style={{ marginTop: 3, fontSize: '0.77rem', padding: '2px 6px', border: '1px solid #86efac', borderRadius: 4, background: '#f0fdf4', outline: 'none' }}
                             >
-                              <option value="">— Teinte —</option>
+                              <option value="">â€” Teinte â€”</option>
                               {ni.product.variants.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
                             </select>
                           )}
@@ -1043,14 +1043,14 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                         <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
                           <button onClick={() => setNewItems(newItems.map((n, j) => j === i ? { ...n, quantity: Math.max(1, n.quantity - 1) } : n))}
                             style={{ width: 24, height: 24, border: '1px solid #86efac', borderRadius: 4, background: '#fff', cursor: 'pointer', color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem' }}
-                          >−</button>
+                          >âˆ’</button>
                           <span style={{ width: 26, textAlign: 'center', fontWeight: 700, fontSize: '0.88rem' }}>{ni.quantity}</span>
                           <button onClick={() => setNewItems(newItems.map((n, j) => j === i ? { ...n, quantity: n.quantity + 1 } : n))}
                             style={{ width: 24, height: 24, border: '1px solid #86efac', borderRadius: 4, background: '#fff', cursor: 'pointer', color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem' }}
                           >+</button>
                           <button onClick={() => setNewItems(newItems.filter((_, j) => j !== i))}
                             style={{ width: 24, height: 24, border: '1px solid #fecaca', borderRadius: 4, background: '#fef2f2', cursor: 'pointer', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', marginLeft: 2 }}
-                          >×</button>
+                          >Ã—</button>
                         </div>
                       </div>
                     ))}
@@ -1075,7 +1075,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
               return (
                 <section style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '14px 16px' }}>
                   <h4 style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#64748b', margin: '0 0 12px 0' }}>
-                    📊 Récapitulatif (aperçu)
+                    ðŸ“Š RÃ©capitulatif (aperÃ§u)
                   </h4>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 7, fontSize: '0.85rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', color: '#475569' }}>
@@ -1090,13 +1090,13 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                     )}
                     {discount > 0 && (
                       <div style={{ display: 'flex', justifyContent: 'space-between', color: '#10b981' }}>
-                        <span>Réduction (coupon)</span>
+                        <span>RÃ©duction (coupon)</span>
                         <span>- {discount.toLocaleString('fr-DZ')} DA</span>
                       </div>
                     )}
                     {removedCount > 0 && (
                       <div style={{ fontSize: '0.73rem', color: '#ef4444', padding: '4px 8px', background: '#fef2f2', borderRadius: 6 }}>
-                        ⚠️ {removedCount} article(s) seront supprimé(s)
+                        âš ï¸ {removedCount} article(s) seront supprimÃ©(s)
                       </div>
                     )}
                     <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: 8, display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: '0.95rem', color: '#0f172a' }}>
@@ -1105,7 +1105,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
                         {grand.toLocaleString('fr-DZ')} DA
                         {grand !== Number(detail.total) && (
                           <span style={{ fontSize: '0.72rem', color: '#94a3b8', marginLeft: 6, fontWeight: 400 }}>
-                            (était {Number(detail.total).toLocaleString('fr-DZ')} DA)
+                            (Ã©tait {Number(detail.total).toLocaleString('fr-DZ')} DA)
                           </span>
                         )}
                       </span>
@@ -1136,7 +1136,7 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
               disabled={editSaving}
               style={{ flex: 1, padding: '12px', background: '#10b981', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, fontSize: '0.95rem', cursor: editSaving ? 'not-allowed' : 'pointer', opacity: editSaving ? 0.7 : 1 }}
             >
-              {editSaving ? '⏳ Enregistrement...' : '✅ Enregistrer les modifications'}
+              {editSaving ? 'â³ Enregistrement...' : 'âœ… Enregistrer les modifications'}
             </button>
             <button
               onClick={() => setShowEdit(false)}
@@ -1149,13 +1149,13 @@ ${d.error ? `<h3>âŒ ERREUR lors de la construction du payload</h3><pre>${d.e
       </div>
     )}
 
-    {/* ── BOUTIQUE TRANSFER MODAL ── */}
+    {/* â”€â”€ BOUTIQUE TRANSFER MODAL â”€â”€ */}
     {showBoutiqueModal && (
       <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(2px)' }} onClick={() => setShowBoutiqueModal(false)} />
         <div style={{ position: 'relative', background: '#fff', borderRadius: 12, padding: 24, width: 400, maxWidth: '90vw', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
-          <h3 style={{ marginTop: 0, color: '#1e293b' }}>Assigner à une boutique</h3>
-          <p style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: 16 }}>Veuillez sélectionner la boutique pour transférer cette commande.</p>
+          <h3 style={{ marginTop: 0, color: '#1e293b' }}>Assigner Ã  une boutique</h3>
+          <p style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: 16 }}>Veuillez sÃ©lectionner la boutique pour transfÃ©rer cette commande.</p>
           <select 
             value={selectedBoutique}
             onChange={e => setSelectedBoutique(e.target.value)}

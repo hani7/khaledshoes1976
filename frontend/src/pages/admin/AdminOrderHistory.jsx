@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RefreshCw } from 'lucide-react'
 import adminClient from '../../api/adminClient'
@@ -7,9 +7,9 @@ function Pagination({ page, totalPages, onPage }) {
   const actualTotalPages = Math.max(1, totalPages)
   if (actualTotalPages <= 1) return (
     <div className="admin-pagination">
-      <button className="admin-page-btn" disabled>«</button>
+      <button className="admin-page-btn" disabled>Â«</button>
       <button className="admin-page-btn active">1</button>
-      <button className="admin-page-btn" disabled>»</button>
+      <button className="admin-page-btn" disabled>Â»</button>
     </div>
   )
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -21,20 +21,20 @@ function Pagination({ page, totalPages, onPage }) {
     }, [])
   return (
     <div className="admin-pagination">
-      <button className="admin-page-btn" disabled={page === 1} onClick={() => onPage(page - 1)}>«</button>
+      <button className="admin-page-btn" disabled={page === 1} onClick={() => onPage(page - 1)}>Â«</button>
       {pages.map((p, i) =>
         p === '...'
-          ? <span key={`e${i}`} style={{ color: 'var(--admin-text-muted)', padding: '0 4px' }}>…</span>
+          ? <span key={`e${i}`} style={{ color: 'var(--admin-text-muted)', padding: '0 4px' }}>â€¦</span>
           : <button key={p} className={`admin-page-btn ${p === page ? 'active' : ''}`} onClick={() => onPage(p)}>{p}</button>
       )}
-      <button className="admin-page-btn" disabled={page === totalPages} onClick={() => onPage(page + 1)}>»</button>
+      <button className="admin-page-btn" disabled={page === totalPages} onClick={() => onPage(page + 1)}>Â»</button>
     </div>
   )
 }
 
 const STATUS_LABELS = {
-  pending: 'En attente', confirmed: 'Confirmé',
-  shipped: 'En livraison', fulfilled: 'Livrée', cancelled: 'Annulée', returned: 'Retournée',
+  pending: 'En attente', confirmed: 'ConfirmÃ©',
+  shipped: 'En livraison', fulfilled: 'LivrÃ©e', cancelled: 'AnnulÃ©e', returned: 'RetournÃ©e',
 }
 
 const STATUS_BADGE = {
@@ -94,7 +94,7 @@ export default function AdminOrderHistory() {
         </h2>
         <div style={{ display: 'flex', gap: '12px' }}>
             <button className="btn" style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', fontSize: '0.8rem', background: '#3b82f6', color: 'white', borderRadius: 50, border: 'none', whiteSpace: 'nowrap', cursor: 'pointer' }} onClick={load}>
-              <RefreshCw size={14}/> Rafraîchir
+              <RefreshCw size={14}/> RafraÃ®chir
             </button>
         </div>
       </div>
@@ -129,9 +129,9 @@ export default function AdminOrderHistory() {
               onChange={e => setPaymentFilter(e.target.value)}
             >
               <option value="">Paiement: Tous</option>
-              <option value="unpaid">Non payé</option>
-              <option value="paid">Payé</option>
-              <option value="refunded">Remboursé</option>
+              <option value="unpaid">Non payÃ©</option>
+              <option value="paid">PayÃ©</option>
+              <option value="refunded">RemboursÃ©</option>
             </select>
             <select
               className="admin-filter-select"
@@ -140,7 +140,7 @@ export default function AdminOrderHistory() {
             >
               <option value="">Archivage: Tout</option>
               <option value="false">Actives seulement</option>
-              <option value="true">Supprimées (Corbeille)</option>
+              <option value="true">SupprimÃ©es (Corbeille)</option>
             </select>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--admin-text-muted)', fontSize: '0.85rem' }}>
               Afficher
@@ -179,12 +179,12 @@ export default function AdminOrderHistory() {
                     </td>
                     <td style={{ fontWeight: 500 }}>
                       {o.customer_name}
-                      {o.is_deleted && <div style={{ fontSize: '0.65rem', color: '#dc2626', marginTop: 2, fontWeight: 700 }}>SUPPRIMÉE</div>}
+                      {o.is_deleted && <div style={{ fontSize: '0.65rem', color: '#dc2626', marginTop: 2, fontWeight: 700 }}>SUPPRIMÃ‰E</div>}
                     </td>
                     <td style={{ color: 'var(--admin-text-muted)', fontSize: '0.82rem' }}>
-                      {o.guest_phone || '—'}
+                      {o.guest_phone || 'â€”'}
                     </td>
-                    <td style={{ color: 'var(--admin-text-muted)', fontSize: '0.82rem' }}>{o.wilaya || '—'}</td>
+                    <td style={{ color: 'var(--admin-text-muted)', fontSize: '0.82rem' }}>{o.wilaya || 'â€”'}</td>
                     <td style={{ fontWeight: 700, color: o.is_deleted ? 'var(--admin-text-muted)' : 'var(--color-black)' }}>
                       {Number(o.total).toLocaleString('fr-DZ')} DA
                     </td>
@@ -196,7 +196,7 @@ export default function AdminOrderHistory() {
                     <td style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)' }}>
                         {o.is_deleted ? (
                            <>
-                             <span style={{ color: '#ef4444', fontWeight: 600 }}>Archivée</span><br/>
+                             <span style={{ color: '#ef4444', fontWeight: 600 }}>ArchivÃ©e</span><br/>
                              par {o.deleted_by_name || 'Inconnu'}<br/>
                              le {new Date(o.deleted_at).toLocaleDateString('fr-DZ')}
                            </>
@@ -210,8 +210,8 @@ export default function AdminOrderHistory() {
                         <button 
                           className="btn-icon" 
                           style={{ padding: '6px', background: '#f1f5f9', borderRadius: '50%', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28 }} 
-                          onClick={() => navigate(`/kh-76/orders/${o.id}`)} 
-                          title="Détails"
+                          onClick={() => navigate(`/kh-secure-2026/orders/${o.id}`)} 
+                          title="DÃ©tails"
                         >
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                         </button>
@@ -220,7 +220,7 @@ export default function AdminOrderHistory() {
                   </tr>
                 ))}
                   {orders.length === 0 && (
-                    <tr><td colSpan={10}><div className="admin-empty"><p>Aucune commande trouvée.</p></div></td></tr>
+                    <tr><td colSpan={10}><div className="admin-empty"><p>Aucune commande trouvÃ©e.</p></div></td></tr>
                   )}
                 </tbody>
               </table>

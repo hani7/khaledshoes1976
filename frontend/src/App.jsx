@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense, lazy } from 'react'
+﻿import { useState, useEffect, Suspense, lazy } from 'react'
 import { Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom'
 import client from './api/client'
 import Navbar from './components/Navbar'
@@ -76,7 +76,7 @@ const BoutiqueLayout = lazy(() => import('./pages/boutique/BoutiqueLayout'))
 const BoutiqueDashboard = lazy(() => import('./pages/boutique/BoutiqueDashboard'))
 const BoutiqueOrders = lazy(() => import('./pages/boutique/BoutiqueOrders'))
 
-// Redirect /category/:slug → /:slug (backwards compatibility)
+// Redirect /category/:slug â†’ /:slug (backwards compatibility)
 function CategoryRedirect() {
   const { slug } = useParams()
   return <Navigate to={`/${slug}`} replace />
@@ -92,7 +92,7 @@ function ScrollToTop() {
 
 export default function App() {
   const { pathname } = useLocation()
-  const isAdmin = pathname.startsWith('/kh-76')
+  const isAdmin = pathname.startsWith('/kh-secure-2026')
   const user = useAuthStore(s => s.user)
 
   const [settings, setSettings] = useState(null)
@@ -213,8 +213,8 @@ export default function App() {
           </Route>
 
           {/* Admin */}
-          <Route path="/kh-76/login" element={<AdminLogin />} />
-          <Route path="/kh-76" element={<AdminLayout />}>
+          <Route path="/kh-secure-2026/login" element={<AdminLogin />} />
+          <Route path="/kh-secure-2026" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="products" element={<AdminProducts />} />
             <Route path="categories" element={<AdminCategories />} />
@@ -245,7 +245,7 @@ export default function App() {
             <Route path="reports/profit" element={<AdminProfitReport />} />
           </Route>
 
-          {/* Catch-all → category page */}
+          {/* Catch-all â†’ category page */}
           <Route path="/:slug" element={<CategoryPage />} />
         </Routes>
       </Suspense>

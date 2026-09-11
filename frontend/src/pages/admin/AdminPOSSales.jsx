@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { X, Plus, Trash2, Printer, RefreshCw } from 'lucide-react'
 import adminClient from '../../api/adminClient'
@@ -35,13 +35,13 @@ function Pagination({ page, totalPages, onPage }) {
 
 const STATUS_LABELS = {
   pending: 'En attente',
-  payment_failed: 'Paiement échoué',
-  confirmed: 'Confirmé',
+  payment_failed: 'Paiement Ã©chouÃ©',
+  confirmed: 'ConfirmÃ©',
   en_cours: 'En cours',
   shipped: 'En livraison',
-  fulfilled: 'Livrée',
-  cancelled: 'Annulée',
-  returned: 'Retournée',
+  fulfilled: 'LivrÃ©e',
+  cancelled: 'AnnulÃ©e',
+  returned: 'RetournÃ©e',
   boutique: 'En Boutique',
 }
 
@@ -57,26 +57,26 @@ const STATUS_BADGE = {
   boutique: 'badge-pending',
 }
 
-// Couleurs calquées sur le portail Yalidine
+// Couleurs calquÃ©es sur le portail Yalidine
 export const YALIDINE_STATUS_STYLE = (s = '') => {
   const sl = s.toLowerCase()
-  if (sl.includes('livré'))
-                                               return { bg: '#dcfce7', color: '#15803d', border: '#86efac', icon: '✅' }
+  if (sl.includes('livrÃ©'))
+                                               return { bg: '#dcfce7', color: '#15803d', border: '#86efac', icon: 'âœ…' }
   if (sl.includes('en cours de livraison') || sl.includes('out for delivery'))
-                                               return { bg: '#dbeafe', color: '#1d4ed8', border: '#93c5fd', icon: '🚚' }
+                                               return { bg: '#dbeafe', color: '#1d4ed8', border: '#93c5fd', icon: 'ðŸšš' }
   if (sl.includes('centre'))
-                                               return { bg: '#e0e7ff', color: '#4338ca', border: '#a5b4fc', icon: '🏢' }
+                                               return { bg: '#e0e7ff', color: '#4338ca', border: '#a5b4fc', icon: 'ðŸ¢' }
   if (sl.includes('transit'))
-                                               return { bg: '#fef9c3', color: '#a16207', border: '#fde047', icon: '🚛' }
-  if (sl.includes('prép') || sl.includes('pickup'))
-                                               return { bg: '#fef3c7', color: '#b45309', border: '#fcd34d', icon: '📦' }
-  if (sl.includes('cré') || sl.includes('upload') || sl.includes('created'))
-                                               return { bg: '#f1f5f9', color: '#475569', border: '#cbd5e1', icon: '📝' }
+                                               return { bg: '#fef9c3', color: '#a16207', border: '#fde047', icon: 'ðŸš›' }
+  if (sl.includes('prÃ©p') || sl.includes('pickup'))
+                                               return { bg: '#fef3c7', color: '#b45309', border: '#fcd34d', icon: 'ðŸ“¦' }
+  if (sl.includes('crÃ©') || sl.includes('upload') || sl.includes('created'))
+                                               return { bg: '#f1f5f9', color: '#475569', border: '#cbd5e1', icon: 'ðŸ“' }
   if (sl.includes('retour') || sl.includes('reverse') || sl.includes('return'))
-                                               return { bg: '#fee2e2', color: '#b91c1c', border: '#fca5a5', icon: '↩️' }
-  if (sl.includes('cancel'))                   return { bg: '#f3f4f6', color: '#6b7280', border: '#d1d5db', icon: '❌' }
-  if (sl.includes('echec') || sl.includes('failed')) return { bg: '#fee2e2', color: '#b91c1c', border: '#fca5a5', icon: '⚠️' }
-  return { bg: '#fff7ed', color: '#c2410c', border: '#fed7aa', icon: '📦' }
+                                               return { bg: '#fee2e2', color: '#b91c1c', border: '#fca5a5', icon: 'â†©ï¸' }
+  if (sl.includes('cancel'))                   return { bg: '#f3f4f6', color: '#6b7280', border: '#d1d5db', icon: 'âŒ' }
+  if (sl.includes('echec') || sl.includes('failed')) return { bg: '#fee2e2', color: '#b91c1c', border: '#fca5a5', icon: 'âš ï¸' }
+  return { bg: '#fff7ed', color: '#c2410c', border: '#fed7aa', icon: 'ðŸ“¦' }
 }
 
 export default function AdminPOSSales() {
@@ -96,7 +96,7 @@ export default function AdminPOSSales() {
   const [yalidineSyncing, setYalidineSyncing] = useState(false)
 
   const handleModalShip = async (orderId) => {
-    if (!window.confirm('Expédier cette commande via Yalidine ?')) return
+    if (!window.confirm('ExpÃ©dier cette commande via Yalidine ?')) return
     setYalidineShipping(true)
     try {
       await adminClient.post(`/admin/orders/${orderId}/yalidine_ship/`)
@@ -111,18 +111,18 @@ export default function AdminPOSSales() {
     }
   }
 
-  // ── Sync statut Yalidine → Piové ──────────────────────────────────────────
+  // â”€â”€ Sync statut Yalidine â†’ PiovÃ© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const handleSyncYalidine = async (orderId) => {
     setYalidineSyncing(true)
     try {
       const res = await adminClient.get(`/admin/orders/${orderId}/yalidine_track/`)
       const fresh = await adminClient.get(`/admin/orders/${orderId}/`)
       setDetail(fresh.data)
-      // Mettre à jour dans la liste aussi
+      // Mettre Ã  jour dans la liste aussi
       setOrders(prev => prev.map(o => o.id === orderId ? { ...o, yalidine_status: fresh.data.yalidine_status, status: fresh.data.status } : o))
       const myStatus = res.data?.yalidine_status || ''
       const pioveStatus = res.data?.piove_status || fresh.data.status || ''
-      alert(`✅ Sync réussie\nYalidine : ${myStatus}\nStatut Piové : ${STATUS_LABELS[pioveStatus] || pioveStatus}`)
+      alert(`âœ… Sync rÃ©ussie\nYalidine : ${myStatus}\nStatut PiovÃ© : ${STATUS_LABELS[pioveStatus] || pioveStatus}`)
     } catch (e) {
       const msg = e.response?.data?.error || e.response?.data?.message || 'Impossible de contacter Yalidine'
       alert('\u274C ' + msg)
@@ -134,7 +134,7 @@ export default function AdminPOSSales() {
   const load = () => {
     setLoading(true)
     const params = new URLSearchParams()
-    // Only send standard Piové status to backend — Yalidine filters are client-side only
+    // Only send standard PiovÃ© status to backend â€” Yalidine filters are client-side only
     if (filter && !filter.startsWith('yalidine:')) params.append('status', filter)
     if (paymentFilter) params.append('payment_status', paymentFilter)
     if (deliveryFilter) params.append('delivery_type', deliveryFilter)
@@ -158,10 +158,10 @@ export default function AdminPOSSales() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [detail])
 
-  // ── Auto-sync Yalidine quand on ouvre un détail avec barcode ───────────────────
+  // â”€â”€ Auto-sync Yalidine quand on ouvre un dÃ©tail avec barcode â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   useEffect(() => {
     if (!detail?.yalidine_tracking) return
-    // Sync silencieux en arrière-plan
+    // Sync silencieux en arriÃ¨re-plan
     adminClient.get(`/admin/orders/${detail.id}/yalidine_track/`)
       .then(res => {
         const newYalidine = res.data?.yalidine_status
@@ -207,24 +207,24 @@ export default function AdminPOSSales() {
   }
 
   const handleBulkDelete = async () => {
-    if (!window.confirm(`Êtes-vous sûr de vouloir supprimer les ${selectedIds.length} commande(s) sélectionnée(s) ?`)) return
+    if (!window.confirm(`ÃŠtes-vous sÃ»r de vouloir supprimer les ${selectedIds.length} commande(s) sÃ©lectionnÃ©e(s) ?`)) return
     try {
       await adminClient.post('/admin/orders/bulk_delete/', { ids: selectedIds })
       setSelectedIds([])
       load()
     } catch (e) {
-      alert('Erreur lors de la suppression groupée')
+      alert('Erreur lors de la suppression groupÃ©e')
     }
   }
 
   const handleBulkStatusUpdate = async (statusId) => {
-    if (!window.confirm(`Mettre à jour le statut des ${selectedIds.length} commandes vers "${STATUS_LABELS[statusId]}" ?`)) return
+    if (!window.confirm(`Mettre Ã  jour le statut des ${selectedIds.length} commandes vers "${STATUS_LABELS[statusId]}" ?`)) return
     try {
       await adminClient.post('/admin/orders/bulk_update_status/', { ids: selectedIds, status: statusId })
       setSelectedIds([])
       load()
     } catch (e) {
-      alert('Erreur lors de la mise à jour')
+      alert('Erreur lors de la mise Ã  jour')
     }
   }
 
@@ -251,23 +251,23 @@ export default function AdminPOSSales() {
       w.document.write(r.data)
       w.document.close()
     } catch (e) {
-      alert('Erreur lors de la génération des bons')
+      alert('Erreur lors de la gÃ©nÃ©ration des bons')
     }
   }
 
   const handleBulkYalidineShip = async () => {
     if (selectedIds.length === 0) return
-    if (!window.confirm('Voulez-vous générer les colis Yalidine pour les commandes sélectionnées ?')) return
+    if (!window.confirm('Voulez-vous gÃ©nÃ©rer les colis Yalidine pour les commandes sÃ©lectionnÃ©es ?')) return
     try {
       const res = await adminClient.post('/admin/orders/bulk_yalidine_ship/', { ids: selectedIds })
       const results = res.data?.results || []
       const failed = results.filter(r => !r.success)
       const ok = results.filter(r => r.success)
       if (failed.length === 0) {
-        alert(`âœ… ${ok.length} colis Yalidine créé(s) avec succès.`)
+        alert(`Ã¢Å“â€¦ ${ok.length} colis Yalidine crÃ©Ã©(s) avec succÃ¨s.`)
       } else {
         const msgs = failed.map(r => `#${r.id}: ${r.message || r.error || 'Erreur inconnue'}`).join('\n')
-        alert(`⚠️ ${ok.length} réussi(s), ${failed.length} échec(s):\n\n${msgs}`)
+        alert(`âš ï¸ ${ok.length} rÃ©ussi(s), ${failed.length} Ã©chec(s):\n\n${msgs}`)
       }
       load()
     } catch (e) {
@@ -280,7 +280,7 @@ export default function AdminPOSSales() {
     if (selectedIds.length === 0) return
     try {
       await adminClient.post('/admin/orders/bulk_yalidine_track/', { ids: selectedIds })
-      alert('Statuts Yalidine actualisés.')
+      alert('Statuts Yalidine actualisÃ©s.')
       load()
     } catch (e) {
       alert("Erreur lors de l'actualisation Yalidine.")
@@ -289,10 +289,10 @@ export default function AdminPOSSales() {
 
   const handleBulkYalidineCancel = async () => {
     if (selectedIds.length === 0) return
-    if (!window.confirm('Voulez-vous vraiment annuler les envois Yalidine sélectionnés ?')) return
+    if (!window.confirm('Voulez-vous vraiment annuler les envois Yalidine sÃ©lectionnÃ©s ?')) return
     try {
       await adminClient.post('/admin/orders/bulk_yalidine_cancel/', { ids: selectedIds })
-      alert('Envois Yalidine annulés.')
+      alert('Envois Yalidine annulÃ©s.')
       load()
     } catch (e) {
       alert("Erreur lors de l'annulation Yalidine.")
@@ -309,15 +309,15 @@ h2{color:#38bdf8;margin-bottom:16px}
 .ok{color:#4ade80}.err{color:#f87171}.sec{color:#fbbf24;margin-top:16px;font-weight:bold}
 pre{background:#1e293b;padding:16px;border-radius:8px;overflow:auto;white-space:pre-wrap;word-break:break-all;font-size:13px}
 </style></head><body>
-<h2>ðŸ”§ Diagnostic Yalidine</h2>
+<h2>Ã°Å¸â€Â§ Diagnostic Yalidine</h2>
 <pre>Username    : ${d.username || '(vide)'}
-Password    : ${d.password_set ? '<span class="ok">âœ… Configuré</span>' : '<span class="err">âŒ Non configuré</span>'}
+Password    : ${d.password_set ? '<span class="ok">Ã¢Å“â€¦ ConfigurÃ©</span>' : '<span class="err">Ã¢ÂÅ’ Non configurÃ©</span>'}
 Warehouse   : ${d.warehouse || '(vide)'}
 Base URL    : ${d.base_url}
 Auth        : <span class="${d.auth === 'OK' ? 'ok' : 'err'}">${d.auth}</span></pre>
 ${d.addorders_status ? `<div class="sec">--- Test AddOrders ---</div>
 <pre>HTTP Status : <span class="${d.addorders_status < 300 ? 'ok' : 'err'}">${d.addorders_status}</span>
-Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw || d.addorders_error, null, 2)}</pre>` : ''}
+RÃ©ponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw || d.addorders_error, null, 2)}</pre>` : ''}
 </body></html>`
       const w = window.open('', '_blank', 'width=800,height=600')
       w.document.write(html)
@@ -333,34 +333,34 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
       w.document.write(r.data)
       w.document.close()
     } catch (e) {
-      alert('Erreur lors de la génération du bordereau')
+      alert('Erreur lors de la gÃ©nÃ©ration du bordereau')
     }
   }
 
   // Vrais statuts Yalidine Algeria connus
   const YALIDINE_STATUS_OPTIONS = [
-    'En préparation',
+    'En prÃ©paration',
     'En centre',
     'En transit',
     'En cours de livraison',
-    'Livré',
+    'LivrÃ©',
     'Echec de livraison',
     'Retour vers centre',
-    'Retourné à l\'expéditeur',
+    'RetournÃ© Ã  l\'expÃ©diteur',
   ]
 
-  // Statuts Yalidine dynamiques (présents dans les commandes chargées)
+  // Statuts Yalidine dynamiques (prÃ©sents dans les commandes chargÃ©es)
   const dynamicYalidineStatuses = [...new Set(orders.map(o => o.yalidine_status).filter(Boolean))]
   // Fusionner statuts connus + dynamiques sans doublons
   const allYalidineStatuses = [...new Set([...YALIDINE_STATUS_OPTIONS, ...dynamicYalidineStatuses])]
 
   const filteredOrders = (() => {
-    // Filtre par statut Yalidine (préfixé 'yalidine:')
+    // Filtre par statut Yalidine (prÃ©fixÃ© 'yalidine:')
     if (filter?.startsWith('yalidine:')) {
       const ms = filter.slice(9)
       return orders.filter(o => (o.yalidine_status || '') === ms)
     }
-    // Filtre par statut Piové standard
+    // Filtre par statut PiovÃ© standard
     if (filter) return orders.filter(o => o.status === filter)
     return orders
   })()
@@ -384,7 +384,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
       : 0,
   }
 
-  // Yalidine stats — count orders per Yalidine status
+  // Yalidine stats â€” count orders per Yalidine status
   const yalidineOrdersTotal = orders.filter(o => o.yalidine_tracking).length
   const yalidineStatsCounts = {}
   allYalidineStatuses.forEach(s => yalidineStatsCounts[s] = 0)
@@ -395,7 +395,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
     }
   })
   
-  // Conserver l'ordre logique défini par allYalidineStatuses
+  // Conserver l'ordre logique dÃ©fini par allYalidineStatuses
   const yalidineStatsEntries = allYalidineStatuses.map(s => [s, yalidineStatsCounts[s]])
   const yalidineTotal = yalidineStatsEntries.reduce((s, [, c]) => s + c, 0)
 
@@ -426,14 +426,14 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
 
   return (
     <div>
-      {/* ── Piové KPIs ── */}
+      {/* â”€â”€ PiovÃ© KPIs â”€â”€ */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 9, marginBottom: 10 }}>
-        <KpiCard label="Total"       value={stats.total}                                              color="#0f172a"  icon="📋" />
-        <KpiCard label="Revenus"     value={`${stats.revenue.toLocaleString('fr-DZ')} DA`}            color="#10b981"  icon="💰" sub="hors annulées" />
-        <KpiCard label="Panier Moy." value={`${stats.avgBasket.toLocaleString('fr-DZ')} DA`}          color="#6366f1"  icon="🛒" sub="cmd actives" />
-        <KpiCard label="En Attente"  value={stats.pending}                                            color="#f59e0b"  icon="⏳" />
-        <KpiCard label="Confirmées"  value={stats.confirmed}                                          color="#8b5cf6"  icon="✅" />
-        <KpiCard label="Annulées"    value={`${stats.cancelled}${stats.total > 0 ? ` · ${Math.round(stats.cancelled/stats.total*100)}%` : ''}`} color="#94a3b8" icon="🚫" />
+        <KpiCard label="Total"       value={stats.total}                                              color="#0f172a"  icon="ðŸ“‹" />
+        <KpiCard label="Revenus"     value={`${stats.revenue.toLocaleString('fr-DZ')} DA`}            color="#10b981"  icon="ðŸ’°" sub="hors annulÃ©es" />
+        <KpiCard label="Panier Moy." value={`${stats.avgBasket.toLocaleString('fr-DZ')} DA`}          color="#6366f1"  icon="ðŸ›’" sub="cmd actives" />
+        <KpiCard label="En Attente"  value={stats.pending}                                            color="#f59e0b"  icon="â³" />
+        <KpiCard label="ConfirmÃ©es"  value={stats.confirmed}                                          color="#8b5cf6"  icon="âœ…" />
+        <KpiCard label="AnnulÃ©es"    value={`${stats.cancelled}${stats.total > 0 ? ` Â· ${Math.round(stats.cancelled/stats.total*100)}%` : ''}`} color="#94a3b8" icon="ðŸš«" />
       </div>
 
 
@@ -454,7 +454,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
             </select>
 
             <button className="btn" style={{ padding: '6px 12px', fontSize: '0.8rem', background: '#3b82f6', color: 'white', borderRadius: 50, border: 'none', whiteSpace: 'nowrap' }} onClick={handleBulkYalidineShip}>
-              Expédier
+              ExpÃ©dier
             </button>
             <button className="btn" style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', fontSize: '0.8rem', background: '#f59e0b', color: 'white', borderRadius: 50, border: 'none', whiteSpace: 'nowrap' }} onClick={handleBulkYalidineTrack}>
               <RefreshCw size={14}/> Actualiser
@@ -466,7 +466,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
               <Printer size={14}/> Imprimer
             </button>
             <button className="btn" style={{ padding: '6px 12px', fontSize: '0.8rem', background: '#10b981', color: 'white', borderRadius: 50, border: 'none', whiteSpace: 'nowrap' }} onClick={handleBulkExportExcel}>
-              📊 Exporter
+              ðŸ“Š Exporter
             </button>
             <button className="btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '6px', background: '#1f2937', color: 'white', borderRadius: 50, border: 'none' }} title="Supprimer" onClick={handleBulkDelete}>
               <Trash2 size={16}/>
@@ -474,8 +474,8 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
             </div>
           ) : (
             <>
-            <button className="btn-primary" onClick={() => navigate('/kh-76/orders/new')}>
-              <Plus size={16}/> Créer une Commande
+            <button className="btn-primary" onClick={() => navigate('/kh-secure-2026/orders/new')}>
+              <Plus size={16}/> CrÃ©er une Commande
             </button>
             </>
           )}
@@ -490,7 +490,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
                 <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
               <input
-                placeholder="Nom, téléphone..."
+                placeholder="Nom, tÃ©lÃ©phone..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 id="orders-search"
@@ -503,14 +503,14 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
               id="orders-filter"
             >
               <option value="">Tous les statuts</option>
-              <optgroup label="── Statuts Piové ──">
+              <optgroup label="â”€â”€ Statuts PiovÃ© â”€â”€">
                 {Object.entries(STATUS_LABELS).map(([v, l]) => (
                   <option key={v} value={v}>{l}</option>
                 ))}
               </optgroup>
-              <optgroup label="── Statuts Yalidine ──">
+              <optgroup label="â”€â”€ Statuts Yalidine â”€â”€">
                 {allYalidineStatuses.map(s => (
-                  <option key={s} value={`yalidine:${s}`}>📦 {s}</option>
+                  <option key={s} value={`yalidine:${s}`}>ðŸ“¦ {s}</option>
                 ))}
               </optgroup>
             </select>
@@ -520,9 +520,9 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
               onChange={e => setPaymentFilter(e.target.value)}
             >
               <option value="">Paiement: Tous</option>
-              <option value="unpaid">Non payé</option>
-              <option value="paid">Payé</option>
-              <option value="refunded">Remboursé</option>
+              <option value="unpaid">Non payÃ©</option>
+              <option value="paid">PayÃ©</option>
+              <option value="refunded">RemboursÃ©</option>
             </select>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--admin-text-muted)', fontSize: '0.85rem' }}>
               Afficher
@@ -578,9 +578,9 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
                       {o.is_blacklisted && <span className="badge badge-danger" style={{marginLeft: 8, fontSize: '0.65rem', padding: '2px 4px'}}>BLACKLIST</span>}
                     </td>
                     <td style={{ color: 'var(--admin-text-muted)', fontSize: '0.82rem' }}>
-                      {o.guest_phone || (o.user ? '—' : '—')}
+                      {o.guest_phone || (o.user ? 'â€”' : 'â€”')}
                     </td>
-                    <td style={{ color: 'var(--admin-text-muted)', fontSize: '0.82rem' }}>{o.wilaya || '—'}</td>
+                    <td style={{ color: 'var(--admin-text-muted)', fontSize: '0.82rem' }}>{o.wilaya || 'â€”'}</td>
                     <td style={{ fontWeight: 600 }}>{(o.items || []).reduce((acc, it) => acc + Number(it.subtotal || (it.price_at_purchase * it.quantity)), 0).toLocaleString('fr-DZ')} DA</td>
                     <td style={{ color: 'var(--color-gray-500)' }}>{Number(o.delivery_cost).toLocaleString('fr-DZ')} DA</td>
                     <td style={{ fontWeight: 700, color: 'var(--color-black)' }}>{Number(o.total).toLocaleString('fr-DZ')} DA</td>
@@ -617,7 +617,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
                           </span>
                           {o.status === 'boutique' && o.boutique_name && (
                             <span style={{ fontSize: '0.65rem', color: '#8b5cf6', fontWeight: 700, background: '#f5f3ff', padding: '2px 6px', borderRadius: '4px', border: '1px solid #ddd6fe', whiteSpace: 'nowrap' }}>
-                              📍 {o.boutique_name}
+                              ðŸ“ {o.boutique_name}
                             </span>
                           )}
                         </div>
@@ -625,7 +625,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
                     </td>
                     <td style={{ fontSize: '0.78rem', whiteSpace: 'nowrap' }}>
                       {(() => {
-                        if (!o.source) return <span style={{ color: 'var(--admin-text-muted)' }}>—</span>
+                        if (!o.source) return <span style={{ color: 'var(--admin-text-muted)' }}>â€”</span>
                         const parts = o.source.split(' | ')
                         const mainSource = parts[0]
                         const extras = parts.slice(1).join(' / ')
@@ -636,7 +636,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
                           direct:  { label: 'Direct',    bg: '#6366f1' },
                           google:  { label: 'Google',    bg: '#34a853' },
                           tiktok:  { label: 'TikTok',    bg: '#010101' },
-                          referral:{ label: 'Référent',  bg: '#10b981' },
+                          referral:{ label: 'RÃ©fÃ©rent',  bg: '#10b981' },
                         }
                         const s = SRC[mainSource] || { label: mainSource, bg: '#64748b' }
                         return (
@@ -656,15 +656,15 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
                           className="btn-icon" 
                           style={{ padding: '6px', background: '#f1f5f9', borderRadius: '50%', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28 }} 
                           onClick={() => setDetail(o)} 
-                          title="Aperçu rapide"
+                          title="AperÃ§u rapide"
                         >
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                         </button>
                         <button 
                           className="btn-icon" 
                           style={{ padding: '6px', background: '#f1f5f9', borderRadius: '50%', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28 }} 
-                          onClick={() => navigate(`/kh-76/orders/${o.id}`)} 
-                          title="Détails complets"
+                          onClick={() => navigate(`/kh-secure-2026/orders/${o.id}`)} 
+                          title="DÃ©tails complets"
                         >
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                         </button>
@@ -703,7 +703,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
         <div className="admin-modal-overlay" onClick={e => e.target === e.currentTarget && setDetail(null)}>
           <div className="admin-modal" style={{ maxWidth: 600 }}>
             <div className="admin-modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span className="admin-modal-title">Aperçu Commande #{detail.id}</span>
+              <span className="admin-modal-title">AperÃ§u Commande #{detail.id}</span>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <span style={{ fontSize: '0.85rem', color: 'var(--admin-text-muted)', marginRight: 16, fontWeight: 500, background: '#f1f5f9', padding: '4px 10px', borderRadius: 20 }}>{detail.items?.length || 0} article{detail.items?.length > 1 ? 's' : ''}</span>
                 <button type="button" className="admin-modal-close" onClick={() => setDetail(null)}><X size={20}/></button>
@@ -713,13 +713,13 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
                 <div>
                   <div style={{ fontWeight: 600 }}>{detail.customer_name}</div>
-                  <div style={{ color: 'var(--admin-text-muted)', fontSize: '0.85rem' }}>{detail.guest_phone || '—'}</div>
+                  <div style={{ color: 'var(--admin-text-muted)', fontSize: '0.85rem' }}>{detail.guest_phone || 'â€”'}</div>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   <div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)', marginBottom: 4 }}>LIVRAISON</div>
                     <div style={{ fontSize: '0.9rem' }}>{detail.shipping_address}</div>
-                    <div style={{ color: 'var(--admin-text-muted)', fontSize: '0.85rem' }}>{detail.wilaya} — {detail.city}</div>
+                    <div style={{ color: 'var(--admin-text-muted)', fontSize: '0.85rem' }}>{detail.wilaya} â€” {detail.city}</div>
                   </div>
                   {/* Badge type de paiement */}
                   <div style={{
@@ -728,20 +728,20 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
                     background: detail.payment_method === 'cib' ? '#e0e7ff' : detail.payment_method === 'yassir' ? '#fef08a' : '#f0fdf4',
                     border: `1px solid ${detail.payment_method === 'cib' ? '#c7d2fe' : detail.payment_method === 'yassir' ? '#fde047' : '#bbf7d0'}`,
                   }}>
-                    <span style={{ fontSize: '1rem' }}>{detail.payment_method === 'cib' ? '💳' : detail.payment_method === 'yassir' ? '📱' : '💵'}</span>
+                    <span style={{ fontSize: '1rem' }}>{detail.payment_method === 'cib' ? 'ðŸ’³' : detail.payment_method === 'yassir' ? 'ðŸ“±' : 'ðŸ’µ'}</span>
                     <div>
                       <div style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', color: detail.payment_method === 'cib' ? '#3730a3' : detail.payment_method === 'yassir' ? '#854d0e' : '#166534' }}>
                         {detail.payment_method === 'cib' ? 'En ligne' : detail.payment_method === 'yassir' ? 'Yassir Cash' : 'Cash'}
                       </div>
                       <div style={{ fontSize: '0.72rem', color: detail.payment_method === 'cib' ? '#4338ca' : detail.payment_method === 'yassir' ? '#a16207' : '#15803d' }}>
-                        {detail.payment_method === 'cib' ? 'CIB / Edahabia' : detail.payment_method === 'yassir' ? "Paiement via l'application Yassir" : 'Paiement à la livraison'}
+                        {detail.payment_method === 'cib' ? 'CIB / Edahabia' : detail.payment_method === 'yassir' ? "Paiement via l'application Yassir" : 'Paiement Ã  la livraison'}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* ── Bloc statut Yalidine (si barcode) ── */}
+              {/* â”€â”€ Bloc statut Yalidine (si barcode) â”€â”€ */}
               {detail.yalidine_tracking && (() => {
                 const ms = YALIDINE_STATUS_STYLE(detail.yalidine_status)
                 return (
@@ -788,7 +788,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
                           <span style={{ fontStyle: 'italic' }}>{item.variant_name}</span>
                         </div>
                       )}
-                      <div style={{ fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>Qté: {item.quantity}</div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>QtÃ©: {item.quantity}</div>
                     </div>
                     <div style={{ fontWeight: 600 }}>{Number(item.subtotal).toLocaleString('fr-DZ')} DA</div>
                   </div>
@@ -816,7 +816,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
                     gap: 8,
                     alignItems: 'flex-start',
                   }}>
-                    <span style={{ fontSize: '0.95rem', flexShrink: 0 }}>💬</span>
+                    <span style={{ fontSize: '0.95rem', flexShrink: 0 }}>ðŸ’¬</span>
                     <div>
                       <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#92400e', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 2 }}>Note du client</div>
                       <div style={{ fontSize: '0.85rem', color: '#78350f', lineHeight: 1.5 }}>{detail.notes}</div>
@@ -836,20 +836,20 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
               </div>
             </div>
             <div className="admin-modal-footer" style={{ display: 'flex', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
-               <button className="btn" style={{ background: '#eab308', color: 'white', borderRadius: 20, border: 'none', fontWeight: 600, padding: '8px 20px' }} onClick={() => navigate(`/kh-76/orders/${detail.id}`)}>Voir tout</button>
+               <button className="btn" style={{ background: '#eab308', color: 'white', borderRadius: 20, border: 'none', fontWeight: 600, padding: '8px 20px' }} onClick={() => navigate(`/kh-secure-2026/orders/${detail.id}`)}>Voir tout</button>
                <button className="btn" style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#3b82f6', color: 'white', border: 'none', borderRadius: 20, fontWeight: 600, padding: '8px 20px' }} onClick={() => handlePrintSingleBordereau(detail.id)}>
                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
                  Bordereau
                </button>
 
-               {/* Bouton Sync Yalidine — uniquement si barcode existant */}
+               {/* Bouton Sync Yalidine â€” uniquement si barcode existant */}
                {detail.yalidine_tracking && (
                  <button
                    className="btn"
                    style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#f59e0b', color: 'white', border: 'none', borderRadius: 20, fontWeight: 600, padding: '8px 18px', opacity: yalidineSyncing ? 0.7 : 1, cursor: yalidineSyncing ? 'not-allowed' : 'pointer' }}
                    onClick={() => handleSyncYalidine(detail.id)}
                    disabled={yalidineSyncing}
-                   title="Récupérer le statut Yalidine et mettre à jour la commande"
+                   title="RÃ©cupÃ©rer le statut Yalidine et mettre Ã  jour la commande"
                  >
                    {yalidineSyncing
                      ? <><div className="spin" style={{ width: 13, height: 13, borderWidth: 2 }} /> Sync...</>
@@ -857,11 +857,11 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
                  </button>
                )}
 
-               {/* Barcode + statut ou bouton Expédier */}
+               {/* Barcode + statut ou bouton ExpÃ©dier */}
                {detail.yalidine_tracking ? (
                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
                    <span style={{ display: 'flex', alignItems: 'center', gap: 5, background: '#dcfce7', color: '#15803d', borderRadius: 20, padding: '8px 16px', fontWeight: 600, fontSize: '0.82rem', border: '1px solid #86efac' }}>
-                     ✅ {detail.yalidine_tracking}
+                     âœ… {detail.yalidine_tracking}
                    </span>
                    {detail.yalidine_status && (
                      <span style={{ fontSize: '0.72rem', color: '#6b7280', fontStyle: 'italic', paddingRight: 8 }}>
@@ -881,7 +881,7 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
                    ) : (
                      <>
                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                       Expédier
+                       ExpÃ©dier
                      </>
                    )}
                  </button>

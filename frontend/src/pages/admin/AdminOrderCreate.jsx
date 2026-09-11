@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, Search, Plus, Trash2 } from 'lucide-react'
 import adminClient from '../../api/adminClient'
 import './admin.css'
 
 const WILAYAS = [
-  'Adrar','Chlef','Laghouat','Oum El Bouaghi','Batna','Béjaïa','Biskra','Béchar',
-  'Blida','Bouira','Tamanrasset','Tébessa','Tlemcen','Tiaret','Tizi Ouzou','Alger',
-  'Djelfa','Jijel','Sétif','Saïda','Skikda','Sidi Bel Abbès','Annaba','Guelma',
-  'Constantine','Médéa','Mostaganem','M\'Sila','Mascara','Ouargla','Oran',
-  'El Bayadh','Illizi','Bordj Bou Arreridj','Boumerdès','El Tarf','Tindouf',
-  'Tissemsilt','El Oued','Khenchela','Souk Ahras','Tipaza','Mila','Aïn Defla',
-  'Naâma','Aïn Témouchent','Ghardaïa','Relizane','Timimoun','Bordj Badji Mokhtar',
-  'Ouled Djellal','Béni Abbès','In Salah','In Guezzam','Touggourt','Djanet',
+  'Adrar','Chlef','Laghouat','Oum El Bouaghi','Batna','BÃ©jaÃ¯a','Biskra','BÃ©char',
+  'Blida','Bouira','Tamanrasset','TÃ©bessa','Tlemcen','Tiaret','Tizi Ouzou','Alger',
+  'Djelfa','Jijel','SÃ©tif','SaÃ¯da','Skikda','Sidi Bel AbbÃ¨s','Annaba','Guelma',
+  'Constantine','MÃ©dÃ©a','Mostaganem','M\'Sila','Mascara','Ouargla','Oran',
+  'El Bayadh','Illizi','Bordj Bou Arreridj','BoumerdÃ¨s','El Tarf','Tindouf',
+  'Tissemsilt','El Oued','Khenchela','Souk Ahras','Tipaza','Mila','AÃ¯n Defla',
+  'NaÃ¢ma','AÃ¯n TÃ©mouchent','GhardaÃ¯a','Relizane','Timimoun','Bordj Badji Mokhtar',
+  'Ouled Djellal','BÃ©ni AbbÃ¨s','In Salah','In Guezzam','Touggourt','Djanet',
   'El M\'Ghair','El Meniaa'
 ]
 
@@ -160,10 +160,10 @@ export default function AdminOrderCreate() {
         }))
       }
       const res = await adminClient.post('/admin/orders/create_order/', payload)
-      navigate(`/kh-76/orders/${res.data.id}`)
+      navigate(`/kh-secure-2026/orders/${res.data.id}`)
     } catch (err) {
       console.error(err)
-      alert("Erreur lors de la création de la commande : " + JSON.stringify(err.response?.data))
+      alert("Erreur lors de la crÃ©ation de la commande : " + JSON.stringify(err.response?.data))
     } finally {
       setSaving(false)
     }
@@ -173,11 +173,11 @@ export default function AdminOrderCreate() {
     <div className="admin-page" style={{ paddingBottom: 60 }}>
       <div className="admin-page-header">
         <h2 style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <button className="btn-icon" onClick={() => navigate('/kh-76/orders')}><ArrowLeft size={20}/></button>
-          {'Créer une Commande'}
+          <button className="btn-icon" onClick={() => navigate('/kh-secure-2026/orders')}><ArrowLeft size={20}/></button>
+          {'CrÃ©er une Commande'}
         </h2>
         <button className="btn-primary" onClick={handleSubmit} disabled={saving}>
-          {saving ? 'Création...' : 'Valider la commande'}
+          {saving ? 'CrÃ©ation...' : 'Valider la commande'}
         </button>
       </div>
 
@@ -188,14 +188,14 @@ export default function AdminOrderCreate() {
           
           {/* Customer Selection */}
           <div className="admin-card" style={{ padding: 24 }}>
-            <h3 style={{ fontSize: '1.1rem', marginBottom: 16 }}>Détails du Client</h3>
+            <h3 style={{ fontSize: '1.1rem', marginBottom: 16 }}>DÃ©tails du Client</h3>
             
             <div className="form-group" style={{ position: 'relative' }}>
               <label>Rechercher un client existant</label>
               <div className="admin-search" style={{ margin: 0 }}>
                 <Search size={16} />
                 <input 
-                  placeholder="Nom ou Numéro de téléphone..." 
+                  placeholder="Nom ou NumÃ©ro de tÃ©lÃ©phone..." 
                   value={customerSearch}
                   onChange={e => setCustomerSearch(e.target.value)}
                 />
@@ -217,7 +217,7 @@ export default function AdminOrderCreate() {
                 <input required className="form-control" value={form.guest_name} onChange={e => setForm({...form, guest_name: e.target.value})} />
               </div>
               <div className="form-group">
-                <label>Téléphone *</label>
+                <label>TÃ©lÃ©phone *</label>
                 <input required className="form-control" value={form.guest_phone} onChange={e => setForm({...form, guest_phone: e.target.value})} />
               </div>
             </div>
@@ -238,7 +238,7 @@ export default function AdminOrderCreate() {
               <div className="form-group">
                 <label>Wilaya *</label>
                 <select required className="form-control" value={form.wilaya} onChange={e => setForm({...form, wilaya: e.target.value})}>
-                  <option value="">Sélectionner une wilaya</option>
+                  <option value="">SÃ©lectionner une wilaya</option>
                   {WILAYAS.map(w => <option key={w} value={w}>{w}</option>)}
                 </select>
               </div>
@@ -249,7 +249,7 @@ export default function AdminOrderCreate() {
             </div>
 
             <div className="form-group">
-              <label>Adresse complète *</label>
+              <label>Adresse complÃ¨te *</label>
               <input required className="form-control" value={form.shipping_address} onChange={e => setForm({...form, shipping_address: e.target.value})} />
             </div>
 
@@ -264,7 +264,7 @@ export default function AdminOrderCreate() {
               <div className="form-group">
                 <label>Type de livraison</label>
                 <select className="form-control" value={form.delivery_type} onChange={e => setForm({...form, delivery_type: e.target.value})}>
-                  <option value="home">À Domicile</option>
+                  <option value="home">Ã€ Domicile</option>
                   <option value="desk">Point Relais (Bureau)</option>
                 </select>
               </div>
@@ -354,7 +354,7 @@ export default function AdminOrderCreate() {
 
           {/* Totals */}
           <div className="admin-card" style={{ padding: 24 }}>
-            <h3 style={{ fontSize: '1.1rem', marginBottom: 16 }}>Résumé</h3>
+            <h3 style={{ fontSize: '1.1rem', marginBottom: 16 }}>RÃ©sumÃ©</h3>
             
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
               <span>Sous-total</span>
@@ -366,7 +366,7 @@ export default function AdminOrderCreate() {
             </div>
             
             <div className="form-group" style={{ marginBottom: 12 }}>
-              <label>Remise supplémentaire (DA)</label>
+              <label>Remise supplÃ©mentaire (DA)</label>
               <input type="number" className="form-control" value={form.discount_amount} onChange={e => setForm({...form, discount_amount: e.target.value})} />
             </div>
 
