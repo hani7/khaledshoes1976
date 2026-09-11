@@ -226,6 +226,7 @@ export default function ProductPage() {
             allChoicesMade={allChoicesMade}
           />
         </div>
+      </div>
 
       {/* Reviews */}
       <ProductReviews reviews={product.reviews} />
