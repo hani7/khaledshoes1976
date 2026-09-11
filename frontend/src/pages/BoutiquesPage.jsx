@@ -7,7 +7,7 @@ const STORES = [
     tag: 'Boutique principale',
     image: '/boutique-sidi-yahia.jpg',
     address: 'Chemin Sidi Yahia N°44, Sidi Yahia, Alger',
-    phone: '0770 26 34 94',
+    phone: '0553 94 74 06',
     phone2: null,
     hours: 'Lun – Sam : 9h00 – 20h00',
     mapsUrl: 'https://maps.app.goo.gl/GqGXYnfNHgM8auu79',

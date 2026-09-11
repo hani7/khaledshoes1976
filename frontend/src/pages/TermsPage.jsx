@@ -42,7 +42,7 @@ export default function TermsPage() {
             <p>Pour passer une commande, vous devez renseigner vos coordonnées complètes. Chaque commande est confirmée par SMS ou appel téléphonique par notre équipe.</p>
             <ul style={{ paddingLeft: '20px', marginTop: '10px' }}>
               <li style={{ marginBottom: '8px' }}>Khaled Shoes se réserve le droit de refuser toute commande en cas de suspicion de fraude.</li>
-              <li style={{ marginBottom: '8px' }}>En cas d'erreur sur la commande passée, contactez-nous immédiatement au <strong>0770 26 34 94</strong>.</li>
+              <li style={{ marginBottom: '8px' }}>En cas d'erreur sur la commande passée, contactez-nous immédiatement au <strong>0553 94 74 06</strong>.</li>
               <li style={{ marginBottom: '8px' }}>Les commandes sont traitées du lundi au samedi, de 9h00 à 20h00.</li>
             </ul>
           </Section>
@@ -70,7 +70,7 @@ export default function TermsPage() {
               <li style={{ marginBottom: '8px' }}>Les frais de retour sont à la charge du client.</li>
               <li style={{ marginBottom: '8px' }}>Si la pointure désirée n'est plus disponible, vous pouvez choisir un autre article de valeur équivalente.</li>
             </ul>
-            <p style={{ marginTop: '10px' }}>Pour toute demande d'échange, contactez-nous au <strong>0770 26 34 94</strong> ou sur nos réseaux sociaux.</p>
+            <p style={{ marginTop: '10px' }}>Pour toute demande d'échange, contactez-nous au <strong>0553 94 74 06</strong> ou sur nos réseaux sociaux.</p>
             <p style={{ marginTop: '8px' }}>Veuillez consulter notre <strong>guide des tailles</strong> avant de confirmer votre commande.</p>
           </Section>
 
@@ -95,7 +95,7 @@ export default function TermsPage() {
             <p>Pour toute question concernant vos commandes ou nos conditions :</p>
             <p style={{ marginTop: '10px' }}>
               📧 <strong>contact@khaledshoes.dz</strong><br />
-              📞 <strong>0770 26 34 94</strong><br />
+              📞 <strong>0553 94 74 06</strong><br />
               📍 Chemin Sidi Yahia N°44, Sidi Yahia, Alger<br />
               📍 39 Rue du Hoggar, Hydra, Alger
             </p>

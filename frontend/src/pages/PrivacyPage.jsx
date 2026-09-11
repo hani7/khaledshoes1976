@@ -91,7 +91,7 @@ export default function PrivacyPage() {
             <p>Pour toute question relative à la protection de vos données :</p>
             <p style={{ marginTop: '10px' }}>
               📧 <strong>contact@khaledshoes.dz</strong><br />
-              📞 <strong>0770 26 34 94</strong><br />
+              📞 <strong>0553 94 74 06</strong><br />
               📍 Chemin Sidi Yahia N°44, Sidi Yahia, Alger
             </p>
           </Section>

@@ -179,7 +179,7 @@ export default function ReturnsPage() {
             }}>
               ✉️ contact@khaledshoes.dz
             </a>
-            <a href="https://wa.me/213770263494" target="_blank" rel="noopener noreferrer" style={{
+            <a href="https://wa.me/213553947406" target="_blank" rel="noopener noreferrer" style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
               background: '#25D366', color: '#fff',
               padding: '12px 22px', borderRadius: '50px',

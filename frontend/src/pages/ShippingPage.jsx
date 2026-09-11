@@ -280,8 +280,8 @@ export default function ShippingPage() {
         {/* Note */}
         <div style={{ marginTop: '24px', background: '#EDDEC9', borderRadius: '10px', padding: '16px 20px' }}>
           <p style={{ fontSize: '0.88rem', color: '#444', lineHeight: 1.7 }}>
-            📞 <strong>Besoin d'aide ?</strong> Contactez-nous au <strong>0770 26 34 94</strong> ou sur{' '}
-            <a href="https://wa.me/213770263494" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-accent)', fontWeight: 600 }}>
+            📞 <strong>Besoin d'aide ?</strong> Contactez-nous au <strong>0553 94 74 06</strong> ou sur{' '}
+            <a href="https://wa.me/213553947406" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-accent)', fontWeight: 600 }}>
               WhatsApp
             </a>. Paiement à la livraison uniquement.
           </p>

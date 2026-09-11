@@ -22,7 +22,7 @@ export default function ContactPage() {
             <div style={{ fontSize: '2rem', marginBottom: '15px' }}>📞</div>
             <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>Par Téléphone</h3>
             <p style={{ color: 'var(--color-gray-600)', marginBottom: '15px' }}>Du Samedi au Jeudi, de 9h à 18h</p>
-            <a href="tel:+213770263494" style={{ fontWeight: 'bold', color: 'var(--color-accent)', fontSize: '1.2rem' }}>0770 26 34 94</a>
+            <a href="tel:+213553947406" style={{ fontWeight: 'bold', color: 'var(--color-accent)', fontSize: '1.2rem' }}>0553 94 74 06</a>
           </div>
 
           <div style={{ background: '#fff', padding: '30px', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.05)', textAlign: 'center' }}>
