@@ -145,26 +145,23 @@ export default function HomePage() {
       ) : null}
 
 
-      {/* Best Sellers Block */}
-      <ProductCarousel title="Nos Best Sellers" products={featured} isLoading={loading} />
 
-      {/* Nouveautés */}
-      <ProductCarousel title="Nouveautés" products={newArrivals} isLoading={loading} className="promo-carousel-theme" />
 
       {/* Categories */}
       <section className="section" id="categories-section" style={{ paddingTop: 0, paddingBottom: 0 }}>
         <div className="categories-grid">
           {(() => {
-            const featured = (categories || []).filter(c => c.is_active && c.is_featured)
-            const toShow = featured.length >= 6 ? featured : [
-              ...featured,
-              ...(categories || []).filter(c => c.is_active && !c.is_featured)
-            ]
-            return toShow.slice(0, 6).map((cat) => (
+            // Only show categories that actually have a non-empty image
+            const withImage = (categories || []).filter(c => c.is_active && c.image && String(c.image).trim() !== '')
+            // Featured first, then others
+            const featured = withImage.filter(c => c.is_featured)
+            const others   = withImage.filter(c => !c.is_featured)
+            const toShow   = [...featured, ...others].slice(0, 6)
+            return toShow.map((cat) => (
               <Link key={cat.slug} to={`/${cat.slug}`} className="cat-card" id={`cat-${cat.slug}`}>
                 <div className="cat-card__img">
                   {cat.image ? (
-                    <img src={mediaUrl(cat.image)} alt={cat.name} />
+                    <img src={`${mediaUrl(cat.image)}?v=${cat.updated_at || Date.now()}`} alt={cat.name} />
                   ) : (
                     <div className="cat-card__placeholder" />
                   )}
@@ -178,19 +175,143 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Offres Spéciales */}
-      <ProductCarousel title="Offres Spéciales" products={promotions} isLoading={loading} className="promo-carousel-theme" />
-
-
-      {/* Category Carousels */}
-      {(categories || [])
-        .filter(cat => cat.slug !== 'offres-speciales')
-        .map(cat => (
-          <CategoryCarouselSection key={cat.slug} category={cat} />
-      ))}
 
 
 
+      {/* ── Brand Manifesto ── */}
+      <section style={{
+        background: '#fff',
+        padding: '72px 24px',
+        textAlign: 'center',
+      }}>
+        <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+          <p style={{
+            fontSize: '0.65rem',
+            fontWeight: 700,
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: '#999',
+            marginBottom: '18px',
+          }}>
+            Since 2001
+          </p>
+          <h2 style={{
+            fontSize: 'clamp(1.3rem, 3.5vw, 2rem)',
+            fontWeight: 700,
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            color: '#111',
+            marginBottom: '28px',
+            lineHeight: 1.25,
+          }}>
+            MAISON DE CHAUSSURES À L'ÉLÉGANCE ITALIENNE
+          </h2>
+          <div style={{
+            width: '48px',
+            height: '2px',
+            background: '#111',
+            margin: '0 auto 28px',
+          }} />
+          <p style={{
+            fontSize: '1rem',
+            color: '#444',
+            lineHeight: 1.9,
+            marginBottom: '16px',
+          }}>
+            Plongez dans l'univers de Khaled Shoes, une maison née d'une conviction : une chaussure peut être élégante et dans l'air du temps, tout en restant confortable, raffinée et accessible.
+          </p>
+          <p style={{
+            fontSize: '1rem',
+            color: '#444',
+            lineHeight: 1.9,
+            marginBottom: '16px',
+          }}>
+            Depuis 2001, nous sélectionnons avec passion des chaussures et des sacs inspirés du style italien, pour accompagner chaque femme au quotidien comme lors de ses plus belles occasions.
+          </p>
+          <p style={{
+            fontSize: '0.95rem',
+            color: '#666',
+            lineHeight: 1.9,
+            fontStyle: 'italic',
+          }}>
+            Depuis le premier jour, nous ne faisons aucun compromis sur le style, la qualité et le confort.
+          </p>
+        </div>
+      </section>
+
+      {/* ── Best Sellers ── */}
+      <section style={{ background: '#fff', padding: '60px 0 70px' }}>
+        <p style={{
+          textAlign: 'center',
+          fontSize: '1rem',
+          fontWeight: 700,
+          letterSpacing: '0.28em',
+          textTransform: 'uppercase',
+          color: '#111',
+          marginBottom: '36px',
+        }}>
+          ⭐ &nbsp; Best Sellers
+        </p>
+        <ProductCarousel
+          title=""
+          products={featured}
+          isLoading={loading}
+        />
+      </section>
+
+      {/* ── Loyalty Promo Block ── */}
+      <section className="loyalty-block">
+        <div className="loyalty-block__inner">
+          {/* Left — illustration */}
+          <div className="loyalty-block__emoji">🎁</div>
+
+          {/* Divider */}
+          <div className="loyalty-block__divider" />
+
+          {/* Right — text */}
+          <div className="loyalty-block__content">
+            <p className="loyalty-block__label">Programme Fidélité</p>
+            <h2 className="loyalty-block__title">
+              Profitez de notre programme fidélité<br />
+              <span style={{ color: '#9a6b40' }}>jusqu'à 10 000 DA</span> en bons d'achat
+            </h2>
+            <p className="loyalty-block__desc">
+              Chaque achat vous rapproche d'une réduction exclusive. Cumulez vos points et bénéficiez de 10% de remise sur votre prochaine commande dès 25 000 DA d'achats.
+            </p>
+            <Link
+              to="/fidelite"
+              className="loyalty-block__btn"
+              onMouseEnter={e => { e.currentTarget.style.background = '#9a6b40' }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#111' }}
+            >
+              Découvrir le programme
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Promotions ── */}
+      {(promotions.length > 0 || loading) && (
+        <section style={{ background: '#fafafa', padding: '60px 0 70px' }}>
+          <p style={{
+            textAlign: 'center',
+            fontSize: '1rem',
+            fontWeight: 700,
+            letterSpacing: '0.28em',
+            textTransform: 'uppercase',
+            color: '#111',
+            marginBottom: '36px',
+          }}>
+            🏷️ &nbsp; PROMO
+          </p>
+          <ProductCarousel
+            title=""
+            products={promotions}
+            isLoading={loading}
+          />
+        </section>
+      )}
 
     </main>
   )

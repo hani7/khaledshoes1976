@@ -100,9 +100,7 @@ export default function SizeGuidePage() {
           <SizeTable title="CHAUSSURES FEMME" rows={WOMEN_SIZES} />
         </section>
 
-        <section className="size-guide__section">
-          <SizeTable title="CHAUSSURES HOMME" rows={MEN_SIZES} />
-        </section>
+
 
         {/* Info */}
         <section className="size-guide__section size-guide__info">

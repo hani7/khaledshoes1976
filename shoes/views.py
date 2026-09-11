@@ -50,13 +50,10 @@ class BrandViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = BrandSerializer
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Category.objects.filter(is_active=True)
+    queryset = Category.objects.filter(is_active=True).order_by('order', 'name')
     serializer_class = CategorySerializer
     lookup_field = 'slug'
-
-    @method_decorator(cache_page(60 * 15))
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+    pagination_class = None
 
 
 # ÔöÇÔöÇÔöÇ Products ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
@@ -902,6 +899,22 @@ class AdminProductViewSet(ActivityLogMixin, viewsets.ModelViewSet):
     search_fields = ['name', 'description']
     filterset_fields = ['categories', 'is_active', 'is_featured', 'is_new']
     ordering_fields = ['created_at', 'price', 'stock', 'name']
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            from .serializers import AdminProductListSerializer
+            return AdminProductListSerializer
+        return AdminProductSerializer
+
+    def get_queryset(self):
+        if self.action == 'list':
+            # Lightweight queryset for list — skip heavy relations
+            return Product.objects.all().select_related('brand').prefetch_related(
+                'categories'
+            ).order_by('-created_at')
+        return Product.objects.all().select_related('brand').prefetch_related(
+            'categories', 'variants', 'images', 'boutique_stocks__boutique', 'related_products'
+        ).order_by('-created_at')
 
     @action(detail=False, methods=['patch'])
     def bulk_update(self, request):

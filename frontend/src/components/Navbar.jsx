@@ -80,6 +80,10 @@ export default function Navbar() {
   return (
     <>
       <header className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
+        {/* Italy bar — inside fixed navbar so it's always visible */}
+        <div className="navbar__italy-bar">
+          🇮🇹 &nbsp; PRODUITS FABRIQUÉS EN ITALIE
+        </div>
         <div className="navbar__inner navbar__inner--wide">
           {/* Left: Hamburger + Nav links */}
           <div className="navbar__left">

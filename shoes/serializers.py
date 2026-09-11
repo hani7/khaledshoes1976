@@ -407,10 +407,38 @@ class BoutiqueStockSerializer(serializers.ModelSerializer):
         model = BoutiqueStock
         fields = ['id', 'boutique', 'boutique_name', 'quantity', 'updated_at']
 
+class AdminProductListSerializer(AbsoluteImageMixin, serializers.ModelSerializer):
+    """Lightweight serializer for admin product LIST — no nested variants/images/boutique_stocks"""
+    category_names = serializers.SerializerMethodField()
+    brand_name = serializers.SerializerMethodField()
+    is_promo = serializers.BooleanField(read_only=True)
+    effective_price = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
+
+    def get_category_names(self, obj):
+        return [c.name for c in obj.categories.all()]
+
+    def get_brand_name(self, obj):
+        return obj.brand.name if obj.brand else None
+
+    class Meta:
+        model = Product
+        fields = [
+            'id', 'name', 'slug', 'price', 'promo_price', 'cost_price',
+            'effective_price', 'is_promo', 'stock', 'min_stock_alert',
+            'is_featured', 'is_new', 'is_bestseller', 'is_promotion', 'is_active',
+            'thumbnail', 'brand_name', 'category_names', 'created_at', 'updated_at',
+        ]
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep['thumbnail'] = self._abs(instance.thumbnail.url if instance.thumbnail else None)
+        return rep
+
+
 class AdminProductSerializer(AbsoluteImageMixin, serializers.ModelSerializer):
     categories = AdminCategorySerializer(many=True, read_only=True)
     brand = AdminBrandSerializer(read_only=True)
-    
+
     brand_id = serializers.PrimaryKeyRelatedField(
         queryset=Brand.objects.all(), source='brand', required=False, allow_null=True
     )
@@ -442,6 +470,7 @@ class AdminProductSerializer(AbsoluteImageMixin, serializers.ModelSerializer):
         rep = super().to_representation(instance)
         rep['thumbnail'] = self._abs(instance.thumbnail.url if instance.thumbnail else None)
         return rep
+
 
 
 

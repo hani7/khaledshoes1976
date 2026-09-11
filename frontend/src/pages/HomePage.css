@@ -369,20 +369,19 @@
 .cat-card__overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.25);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  transition: background 0.3s ease;
 }
-.cat-card:hover .cat-card__overlay { background: linear-gradient(to top, rgba(201,72,91,0.8) 0%, transparent 70%); }
 .cat-card__name {
   font-family: var(--font-serif);
   font-size: 1.3rem;
   font-weight: 500;
   color: white;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.6);
 }
 .cat-card__count { font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 2px; }
 
@@ -453,3 +452,120 @@
   bottom: -250px; right: -100px;
 }
 .promo-banner__deco { position: relative; width: 200px; height: 200px; }
+
+/* ── Loyalty Block ── */
+.loyalty-block {
+  background: #EDDEC9;
+  overflow: hidden;
+}
+.loyalty-block__inner {
+  display: flex;
+  align-items: center;
+  min-height: 240px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.loyalty-block__emoji {
+  flex: 0 0 280px;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 6rem;
+  user-select: none;
+}
+.loyalty-block__divider {
+  width: 1px;
+  background: rgba(0,0,0,0.12);
+  align-self: stretch;
+  margin: 32px 0;
+}
+.loyalty-block__content {
+  flex: 1;
+  padding: 40px 48px;
+}
+.loyalty-block__label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 16px;
+}
+.loyalty-block__title {
+  font-size: clamp(1.2rem, 3vw, 1.9rem);
+  font-weight: 700;
+  line-height: 1.3;
+  color: #111;
+  margin-bottom: 12px;
+}
+.loyalty-block__desc {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.75;
+  margin-bottom: 28px;
+}
+.loyalty-block__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #111;
+  color: #fff;
+  padding: 13px 28px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+/* ── Mobile: Loyalty block stacks vertically ── */
+@media (max-width: 680px) {
+  .loyalty-block__inner {
+    flex-direction: column;
+    min-height: unset;
+    padding: 36px 0 40px;
+    text-align: center;
+  }
+  .loyalty-block__emoji {
+    flex: none;
+    height: auto;
+    font-size: 4rem;
+    margin-bottom: 8px;
+  }
+  .loyalty-block__divider { display: none; }
+  .loyalty-block__content {
+    padding: 16px 24px 0;
+  }
+  .loyalty-block__btn {
+    margin: 0 auto;
+  }
+
+  /* Categories grid: 2 columns on mobile */
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Boutique cards: 1 col */
+  .boutique-grid { grid-template-columns: 1fr !important; }
+
+  /* Hero slider text */
+  .hero-slide__title { font-size: 1.8rem !important; }
+
+  /* Product grid: 2 cols on small phones */
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 380px) {
+  .products-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+  .loyalty-block__title { font-size: 1.1rem; }
+}

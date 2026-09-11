@@ -261,58 +261,7 @@ export default function ShopPage() {
         </button>
       </div>
 
-      {/* Inline Filter Bar: Pointure + Couleur */}
-      <div style={{ borderBottom: '1px solid #eee', background: '#fafafa', padding: '14px 0' }}>
-        <div className="container" style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'flex-start' }}>
-          {/* Pointure */}
-          <div>
-            <p style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#999', marginBottom: '8px' }}>POINTURE</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-              {['35','36','37','38','39','40','41','42','43','44','45'].map(s => (
-                <button key={s} onClick={() => updateParam('size', searchParams.get('size') === s ? '' : s)}
-                  style={{
-                    width: '38px', height: '38px', fontSize: '0.78rem', fontWeight: 600,
-                    borderRadius: '6px', border: '1.5px solid',
-                    borderColor: searchParams.get('size') === s ? 'var(--color-accent)' : '#ddd',
-                    background: searchParams.get('size') === s ? 'var(--color-accent)' : 'transparent',
-                    color: searchParams.get('size') === s ? 'white' : 'inherit',
-                    cursor: 'pointer', transition: 'all 0.2s',
-                  }}
-                >{s}</button>
-              ))}
-            </div>
-          </div>
 
-          {/* Couleur */}
-          <div>
-            <p style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#999', marginBottom: '8px' }}>COULEUR</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-              {['Noir','Blanc','Beige','Marron','Camel','Gris','Rouge','Bleu','Rose','Vert'].map(c => (
-                <button key={c} onClick={() => updateParam('color', searchParams.get('color') === c ? '' : c)}
-                  style={{
-                    padding: '5px 12px', fontSize: '0.75rem', fontWeight: 600,
-                    borderRadius: '20px', border: '1.5px solid',
-                    borderColor: searchParams.get('color') === c ? 'var(--color-accent)' : '#ddd',
-                    background: searchParams.get('color') === c ? 'var(--color-accent)' : 'transparent',
-                    color: searchParams.get('color') === c ? 'white' : 'inherit',
-                    cursor: 'pointer', transition: 'all 0.2s',
-                  }}
-                >{c}</button>
-              ))}
-            </div>
-          </div>
-
-          {/* Reset */}
-          {(searchParams.get('size') || searchParams.get('color')) && (
-            <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '2px' }}>
-              <button onClick={() => { const p = new URLSearchParams(searchParams); p.delete('size'); p.delete('color'); setSearchParams(p) }}
-                style={{ fontSize: '0.75rem', color: 'var(--color-accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, letterSpacing: '0.05em' }}>
-                ✕ RÉINITIALISER
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
 
       {/* Desktop layout: sidebar sticky + products */}
       <div className="container shop-page__body">
