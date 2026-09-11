@@ -7,7 +7,7 @@ import CommandMenu from './CommandMenu'
 
 export const NAV_ITEMS = [
   {
-    section: 'GÃ©nÃ©ral',
+    section: 'Général',
     links: [
       { to: '/piove-secure-2026', label: 'Tableau de bord', end: true, icon: <LayoutDashboard size={20} /> },
     ]
@@ -16,7 +16,7 @@ export const NAV_ITEMS = [
     section: 'Catalogue',
     links: [
       { to: '/piove-secure-2026/products', label: 'Produits', icon: <Package size={20} /> },
-      { to: '/piove-secure-2026/categories', label: 'CatÃ©gories', icon: <Tags size={20} /> },
+      { to: '/piove-secure-2026/categories', label: 'Catégories', icon: <Tags size={20} /> },
       { to: '/piove-secure-2026/brands', label: 'Marques', icon: <Tags size={20} /> },
       { to: '/piove-secure-2026/banners', label: 'Banners', icon: <Image size={20} /> },
     ]
@@ -25,10 +25,21 @@ export const NAV_ITEMS = [
     section: 'Ventes',
     marketingHidden: true,
     links: [
+      { to: '/piove-secure-2026/pos', label: 'Caisse (POS)', icon: <ShoppingCart size={20} /> },
       { to: '/piove-secure-2026/orders', label: 'Commandes', icon: <ShoppingCart size={20} /> },
       { to: '/piove-secure-2026/orders-history', label: 'Historique', icon: <History size={20} /> },
       { to: '/piove-secure-2026/coupons', label: 'Codes Promos', icon: <Ticket size={20} /> },
-      { to: '/piove-secure-2026/reports', label: 'Rapports', icon: <BarChart2 size={20} /> },
+      { to: '/piove-secure-2026/reports', label: 'Rapports Ventes', icon: <BarChart2 size={20} /> },
+    ]
+  },
+  {
+    section: 'ERP & Finance',
+    marketingHidden: true,
+    links: [
+      { to: '/piove-secure-2026/purchases', label: 'Achats & Entrées', icon: <Package size={20} /> },
+      { to: '/piove-secure-2026/stock-ledger', label: 'Mouv. de Stock', icon: <History size={20} /> },
+      { to: '/piove-secure-2026/expenses', label: 'Charges & Frais', icon: <Banknote size={20} /> },
+      { to: '/piove-secure-2026/reports/profit', label: 'Rapport Bénéfices', icon: <BarChart2 size={20} /> },
     ]
   },
   {
@@ -51,9 +62,9 @@ export const NAV_ITEMS = [
   {
     section: 'Configuration',
     links: [
-      { to: '/piove-secure-2026/mediatheque', label: 'MÃ©diathÃ¨que', icon: <Film size={20} /> },
+      { to: '/piove-secure-2026/mediatheque', label: 'Médiathèque', icon: <Film size={20} /> },
       { to: '/piove-secure-2026/boutiques', label: 'Boutiques', icon: <Store size={20} /> },
-      { to: '/piove-secure-2026/settings', label: 'ParamÃ¨tres', icon: <Settings size={20} /> },
+      { to: '/piove-secure-2026/settings', label: 'Paramètres', icon: <Settings size={20} /> },
     ]
   },
 ]
@@ -104,8 +115,8 @@ export default function AdminLayout() {
         setNotificationPerm(perm)
         if (perm === 'granted') {
           playNotificationSound() // play a test sound
-          new Notification('Khaled ShoesÃ©  Admin', {
-            body: "Notifications activÃ©es avec succÃ¨s !",
+          new Notification('Khaled Shoesé  Admin', {
+            body: "Notifications activées avec succès !",
             icon: '/logo.png'
           })
         }
@@ -113,7 +124,7 @@ export default function AdminLayout() {
     }
   }
 
-  // === SONNERIE DOUCE â carillon mÃ©lodique ===
+  // === SONNERIE DOUCE â carillon mélodique ===
   const playNotificationSound = () => {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)()
@@ -130,16 +141,16 @@ export default function AdminLayout() {
         const gain = ctx.createGain()
         osc.connect(gain)
         gain.connect(ctx.destination)
-        osc.type = 'sine'              // onde sinusoÃ¯dale = son doux
+        osc.type = 'sine'              // onde sinusoïdale = son doux
         osc.frequency.value = freq
         gain.gain.setValueAtTime(0, ctx.currentTime + start)
-        gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + start + 0.05)  // montÃ©e douce
+        gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + start + 0.05)  // montée douce
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + 1.2) // fondu long
         osc.start(ctx.currentTime + start)
         osc.stop(ctx.currentTime + start + 1.3)
       })
     } catch (e) {
-      console.warn('Audio non supportÃ©:', e)
+      console.warn('Audio non supporté:', e)
     }
   }
 
@@ -147,9 +158,9 @@ export default function AdminLayout() {
     playNotificationSound()
     // Afficher le toast visuel
     setNewOrderToast({ message, count: orderCount })
-    setTimeout(() => setNewOrderToast(null), 8000) // disparaÃ®t aprÃ¨s 8s
+    setTimeout(() => setNewOrderToast(null), 8000) // disparaît après 8s
     if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification('ðï¸ Khaled ShoesÃ© â Nouvelle Commande !', {
+      new Notification('ðï¸ Khaled Shoesé â Nouvelle Commande !', {
         body: message,
         icon: '/logo.png'
       })
@@ -165,7 +176,7 @@ export default function AdminLayout() {
       if (prev !== null) {
         const newNormal = newCounts.normal - prev.normal
         if (newNormal > 0) {
-          triggerDesktopNotification(`${newNormal} nouvelle${newNormal > 1 ? 's' : ''} commande${newNormal > 1 ? 's' : ''} reÃ§ue${newNormal > 1 ? 's' : ''} !`, newNormal)
+          triggerDesktopNotification(`${newNormal} nouvelle${newNormal > 1 ? 's' : ''} commande${newNormal > 1 ? 's' : ''} reçue${newNormal > 1 ? 's' : ''} !`, newNormal)
         }
       }
       
@@ -217,7 +228,7 @@ export default function AdminLayout() {
     const resetTimeout = () => {
       clearTimeout(timeoutId)
       timeoutId = setTimeout(() => {
-        alert("Session expirÃ©e pour inactivitÃ©.")
+        alert("Session expirée pour inactivité.")
         handleLogout()
       }, 15 * 60 * 1000)
     }
@@ -357,7 +368,7 @@ export default function AdminLayout() {
             {/* Fullscreen Toggle (like F11) */}
             <button
               onClick={toggleFullscreen}
-              title={isFullscreen ? 'Quitter le plein Ã©cran' : 'Plein Ã©cran (F11)'}
+              title={isFullscreen ? 'Quitter le plein écran' : 'Plein écran (F11)'}
               style={{ background: 'none', border: 'none', color: 'var(--admin-text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '6px', borderRadius: '8px', transition: 'all 0.2s' }}
             >
               {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
@@ -385,7 +396,7 @@ export default function AdminLayout() {
                 {isMaintenance ? 'Maintenance' : 'En Ligne'}
               </span>
               <div className="toggle-wrap">
-                <label className="toggle" title="Activer/DÃ©sactiver le mode maintenance">
+                <label className="toggle" title="Activer/Désactiver le mode maintenance">
                   <input type="checkbox" checked={isMaintenance} onChange={toggleMaintenance} />
                   <span className="toggle-slider" />
                 </label>
@@ -402,7 +413,7 @@ export default function AdminLayout() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
               <button 
                 onClick={requestNotificationPermission}
-                title={notificationPerm === 'granted' ? "Notifications activÃ©es (Cliquer pour tester)" : "Activer les notifications"}
+                title={notificationPerm === 'granted' ? "Notifications activées (Cliquer pour tester)" : "Activer les notifications"}
                 style={{ 
                   background: 'none', border: 'none', 
                   color: notificationPerm === 'granted' ? 'var(--admin-success)' : 'var(--admin-text-muted)', 
@@ -425,13 +436,13 @@ export default function AdminLayout() {
                       ð¤ Mon Profil
                     </Link>
                     <Link to="/piove-secure-2026/settings" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
-                      âï¸ ParamÃ¨tres
+                      âï¸ Paramètres
                     </Link>
                     <Link to="/piove-secure-2026/history" style={{ display: 'block', padding: '12px 16px', color: 'var(--admin-text)', textDecoration: 'none', borderBottom: '1px solid var(--admin-border)' }} onClick={() => setIsUserMenuOpen(false)}>
-                      Historique d'activitÃ©
+                      Historique d'activité
                     </Link>
                     <button style={{ display: 'block', width: '100%', textAlign: 'left', padding: '12px 16px', background: 'none', border: 'none', color: 'var(--admin-danger)', cursor: 'pointer' }} onClick={() => { setIsUserMenuOpen(false); handleLogout(); }}>
-                      Se dÃ©connecter
+                      Se déconnecter
                     </button>
                   </div>
                 )}

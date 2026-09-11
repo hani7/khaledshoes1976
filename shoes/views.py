@@ -606,6 +606,30 @@ class OrderViewSet(viewsets.ModelViewSet):
 
             qty = item_data['quantity']
 
+            # Deduct stock logic (online order)
+            from .models import BoutiqueStock, StockMovement
+            b_stocks = BoutiqueStock.objects.filter(product=product, variant=variant).order_by('-quantity')
+            fulfilled_boutique = None
+            if b_stocks.exists():
+                bs = b_stocks.first()
+                if bs.quantity > 0:
+                    fulfilled_boutique = bs.boutique
+                    bs.quantity -= qty
+                    bs.save()
+                    StockMovement.objects.create(
+                        product=product,
+                        variant=variant,
+                        boutique=bs.boutique,
+                        quantity=-qty,
+                        movement_type='sale',
+                        reference=f"Order #{order.id} (Online)"
+                    )
+            
+            # Record the fulfilled boutique for this order if not set
+            if fulfilled_boutique and not order.fulfilled_by:
+                order.fulfilled_by = fulfilled_boutique
+                order.save(update_fields=['fulfilled_by'])
+
             OrderItem.objects.create(
                 order=order,
                 product=product,
@@ -614,6 +638,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 variant_name=variant.name if variant else '',
                 quantity=qty,
                 price_at_purchase=price,
+                cost_price_at_purchase=product.cost_price,
             )
             total += price * qty
 
@@ -850,7 +875,9 @@ class AdminDashboardView(APIView):
 
 
 class AdminProductViewSet(ActivityLogMixin, viewsets.ModelViewSet):
-    queryset = Product.objects.all().prefetch_related('categories').order_by('-created_at')
+    queryset = Product.objects.all().select_related('brand').prefetch_related(
+        'categories', 'variants', 'images', 'boutique_stocks__boutique', 'related_products'
+    ).order_by('-created_at')
     serializer_class = AdminProductSerializer
     permission_classes = [IsAdminUser]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
@@ -875,6 +902,20 @@ class AdminProductViewSet(ActivityLogMixin, viewsets.ModelViewSet):
                     if 'promo_price' in data: product.promo_price = data['promo_price'] or None
                     if 'stock' in data: product.stock = data['stock']
                     product.save(update_fields=['price', 'promo_price', 'stock'])
+                    
+                    # Update boutique stocks if present
+                    from .models import Boutique, BoutiqueStock
+                    for key, val in data.items():
+                        if key.startswith('boutique_'):
+                            try:
+                                b_id = key.split('_')[1]
+                                boutique = Boutique.objects.get(pk=b_id)
+                                bs, _ = BoutiqueStock.objects.get_or_create(product=product, boutique=boutique)
+                                bs.quantity = int(val) if val else 0
+                                bs.save()
+                            except Exception:
+                                pass
+                                
                     updated += 1
                 except Product.DoesNotExist:
                     pass
@@ -3669,3 +3710,114 @@ def meta_product_feed(request):
 
     xml_content = '\n'.join(lines)
     return HttpResponse(xml_content, content_type='application/xml; charset=utf-8')
+
+# ─── ERP ViewSets ────────────────────────────────────────────────────────
+from .serializers import PurchaseSerializer, ExpenseSerializer, StockMovementSerializer
+from .models import Purchase, Expense, StockMovement, BoutiqueStock
+
+class PurchaseViewSet(ActivityLogMixin, viewsets.ModelViewSet):
+    queryset = Purchase.objects.all().order_by('-date')
+    serializer_class = PurchaseSerializer
+    permission_classes = [IsAdminUser]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['boutique', 'product']
+
+    def perform_create(self, serializer):
+        purchase = serializer.save()
+        # Mettre à jour le stock par magasin
+        bs, created = BoutiqueStock.objects.get_or_create(
+            product=purchase.product,
+            variant=purchase.variant,
+            boutique=purchase.boutique
+        )
+        bs.quantity += purchase.quantity
+        bs.save()
+
+        # Update le product global cost_price (Dernier prix d'achat)
+        product = purchase.product
+        product.cost_price = purchase.unit_price
+        product.save(update_fields=['cost_price'])
+
+        # Enregistrer le mouvement
+        StockMovement.objects.create(
+            product=purchase.product,
+            variant=purchase.variant,
+            boutique=purchase.boutique,
+            quantity=purchase.quantity,
+            movement_type='purchase',
+            reference=f"Achat #{purchase.id}"
+        )
+        super().perform_create(serializer)
+
+
+class ExpenseViewSet(ActivityLogMixin, viewsets.ModelViewSet):
+    queryset = Expense.objects.all().order_by('-date')
+    serializer_class = ExpenseSerializer
+    permission_classes = [IsAdminUser]
+
+
+class StockMovementViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = StockMovement.objects.all().order_by('-date')
+    serializer_class = StockMovementSerializer
+    permission_classes = [IsAdminUser]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['boutique', 'movement_type']
+
+
+class ProfitReportView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        month = request.query_params.get('month')
+        year = request.query_params.get('year')
+
+        from django.db.models import Sum, F
+        import datetime
+        now = datetime.datetime.now()
+        if not month: month = now.month
+        if not year: year = now.year
+
+        # Commandes payées
+        orders = Order.objects.filter(
+            created_at__year=year,
+            created_at__month=month,
+            is_deleted=False
+        ).exclude(status__in=['cancelled', 'payment_failed', 'returned'])
+
+        # Revenu total
+        revenue = orders.aggregate(total=Sum('total'))['total'] or Decimal('0.00')
+
+        # Cout de revient des articles vendus
+        # On somme (cost_price_at_purchase * quantity) pour chaque OrderItem des commandes validées
+        order_items = OrderItem.objects.filter(order__in=orders)
+        cost_of_goods_sold = sum(
+            (item.cost_price_at_purchase or Decimal('0.00')) * item.quantity for item in order_items
+        )
+
+        # Total des charges (Expenses)
+        expenses = Expense.objects.filter(date__year=year, date__month=month)
+        total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or Decimal('0.00')
+
+        net_profit = Decimal(str(revenue)) - Decimal(str(cost_of_goods_sold)) - Decimal(str(total_expenses))
+        
+        # Additional stats
+        orders_count = orders.count()
+        average_order_value = float(revenue) / orders_count if orders_count > 0 else 0.0
+        
+        gross_profit = float(revenue) - float(cost_of_goods_sold)
+        gross_margin_percentage = (gross_profit / float(revenue) * 100) if float(revenue) > 0 else 0.0
+        net_margin_percentage = (float(net_profit) / float(revenue) * 100) if float(revenue) > 0 else 0.0
+
+        return Response({
+            'month': month,
+            'year': year,
+            'revenue': float(revenue),
+            'cost_of_goods_sold': float(cost_of_goods_sold),
+            'expenses': float(total_expenses),
+            'net_profit': float(net_profit),
+            'orders_count': orders_count,
+            'average_order_value': average_order_value,
+            'gross_margin_percentage': round(gross_margin_percentage, 2),
+            'net_margin_percentage': round(net_margin_percentage, 2),
+        })
+

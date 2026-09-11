@@ -109,6 +109,7 @@ class Product(models.Model):
     short_description = models.CharField(max_length=300, blank=True, help_text="Courte description affichée sous la contenance sur la page produit")
     price = models.DecimalField(max_digits=10, decimal_places=2)
     promo_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    cost_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, help_text="Prix de revient / dernier prix d'achat")
     units_per_carton = models.PositiveIntegerField(default=1)
     weight_box = models.DecimalField(max_digits=6, decimal_places=2, default=0.00, help_text="Poids par boîte (kg)")
     weight_carton = models.DecimalField(max_digits=6, decimal_places=2, default=0.00, help_text="Poids par carton (kg)")
@@ -364,6 +365,7 @@ class Order(models.Model):
 
     # Boutique pickup integration
     boutique = models.ForeignKey('Boutique', null=True, blank=True, on_delete=models.SET_NULL, related_name='orders', verbose_name='Boutique')
+    fulfilled_by = models.ForeignKey('Boutique', on_delete=models.SET_NULL, null=True, blank=True, related_name='fulfilled_orders', verbose_name='Stock déduit de')
     boutique_status = models.CharField(max_length=20, choices=BOUTIQUE_STATUS_CHOICES, blank=True, default='', verbose_name='Statut Boutique')
     boutique_transferred_at = models.DateTimeField(null=True, blank=True, verbose_name='Transférée en boutique le')
     payment_method = models.CharField(max_length=20, choices=[('cash', 'Paiement à la livraison'), ('cib', 'CIB ou Edahabia'), ('yassir', 'Yassir Cash')], default='cash')
@@ -414,6 +416,7 @@ class OrderItem(models.Model):
     variant_name = models.CharField(max_length=100, blank=True)  # snapshot
     quantity = models.PositiveIntegerField(default=1)
     price_at_purchase = models.DecimalField(max_digits=10, decimal_places=2)
+    cost_price_at_purchase = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     @property
     def subtotal(self):
@@ -475,3 +478,79 @@ class MediaFile(models.Model):
 
     def __str__(self):
         return self.name or f"Media #{self.pk}"
+
+# ─── ERP / Gestion de Stock & Charges ───────────────────────────────────────
+
+class BoutiqueStock(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='boutique_stocks')
+    variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, null=True, blank=True, related_name='boutique_stocks')
+    boutique = models.ForeignKey(Boutique, on_delete=models.CASCADE, related_name='stocks')
+    quantity = models.IntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('product', 'variant', 'boutique')
+
+    def __str__(self):
+        v_name = f" - {self.variant.name}" if self.variant else ""
+        return f"{self.boutique.name} : {self.product.name}{v_name} ({self.quantity})"
+
+
+class Purchase(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='purchases')
+    variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, null=True, blank=True, related_name='purchases')
+    boutique = models.ForeignKey(Boutique, on_delete=models.CASCADE, related_name='purchases')
+    quantity = models.PositiveIntegerField(default=1)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        return f"Achat {self.quantity} x {self.product.name} @ {self.unit_price}DA"
+
+
+class Expense(models.Model):
+    EXPENSE_TYPES = [
+        ('salary', 'Salaire'),
+        ('rent', 'Loyer'),
+        ('bills', 'Factures (Électricité, Internet...)'),
+        ('marketing', 'Marketing / Pub'),
+        ('other', 'Autre'),
+    ]
+    title = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    expense_type = models.CharField(max_length=50, choices=EXPENSE_TYPES, default='other')
+    date = models.DateField()
+    notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        return f"Charge: {self.title} - {self.amount} DA"
+
+
+class StockMovement(models.Model):
+    MOVEMENT_TYPES = [
+        ('purchase', 'Achat (Entrée)'),
+        ('sale', 'Vente (Sortie)'),
+        ('adjustment', 'Ajustement'),
+        ('transfer', 'Transfert'),
+    ]
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='stock_movements')
+    variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, null=True, blank=True, related_name='stock_movements')
+    boutique = models.ForeignKey(Boutique, on_delete=models.CASCADE, related_name='stock_movements')
+    quantity = models.IntegerField(help_text="Positif pour entrée, Négatif pour sortie")
+    movement_type = models.CharField(max_length=20, choices=MOVEMENT_TYPES)
+    reference = models.CharField(max_length=255, blank=True, help_text="ID Commande ou Achat")
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        return f"[{self.movement_type}] {self.product.name} ({self.quantity}) @ {self.boutique.name}"
+

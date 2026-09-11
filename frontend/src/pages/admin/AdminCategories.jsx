@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Plus, Edit, Trash2, Image as ImageIcon, X } from 'lucide-react'
+import { Plus, Edit, Trash2, Image as ImageIcon, X, Search } from 'lucide-react'
 import adminClient from '../../api/adminClient'
 
 const EMPTY_FORM = { name: '', order: 0, is_active: true }
@@ -13,6 +13,7 @@ export default function AdminCategories() {
   const [imgFile, setImgFile] = useState(null)
   const [imgPreview, setImgPreview] = useState(null)
   const [saving, setSaving] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
 
   const load = () => {
     setLoading(true)
@@ -62,17 +63,29 @@ export default function AdminCategories() {
     load()
   }
 
+  const filteredCats = cats.filter(c => c.name.toLowerCase().includes(searchTerm.toLowerCase()))
+
   return (
     <div>
       <h2 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: 24 }}>Catégories</h2>
 
       <div className="admin-card">
-        <div className="admin-card-header">
-          <span className="admin-card-title">{cats.length} catégorie{cats.length !== 1 ? 's' : ''}</span>
-          <button className="btn-primary" onClick={openAdd} id="add-category-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
-              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
+        <div className="admin-card-header" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <span className="admin-card-title" style={{ flex: 1 }}>{filteredCats.length} catégorie{filteredCats.length !== 1 ? 's' : ''}</span>
+          
+          <div className="search-wrap" style={{ display: 'flex', alignItems: 'center', background: 'var(--admin-surface2)', borderRadius: '8px', padding: '6px 12px', border: '1px solid var(--admin-border)', width: '300px' }}>
+            <Search size={16} color="var(--admin-text-muted)" style={{ marginRight: '8px' }} />
+            <input 
+              type="text" 
+              placeholder="Rechercher une catégorie..." 
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              style={{ border: 'none', background: 'transparent', outline: 'none', width: '100%', fontSize: '0.9rem' }}
+            />
+          </div>
+
+          <button className="btn-primary" onClick={openAdd} id="add-category-btn" style={{ flexShrink: 0 }}>
+            <Plus size={16} />
             Ajouter
           </button>
         </div>
@@ -88,11 +101,11 @@ export default function AdminCategories() {
                 </tr>
               </thead>
               <tbody>
-                {cats.map(c => (
+                {filteredCats.map(c => (
                   <tr key={c.id}>
                     <td>
                       {c.image
-                        ? <img src={c.image} alt={c.name} />
+                        ? <img src={c.image} alt={c.name} style={{ width: 44, height: 44, borderRadius: 8, objectFit: 'cover' }} />
                         : <div style={{ width: 44, height: 44, borderRadius: 8, background: 'var(--admin-surface2)' }} />
                       }
                     </td>

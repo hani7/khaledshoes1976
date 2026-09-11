@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef } from 'react'
 import { X, Edit, Trash2, LayoutList, LayoutGrid, Eye, Save, Plus, Printer } from 'lucide-react'
 import adminClient from '../../api/adminClient'
 import mediaUrl from '../../api/mediaUrl'
@@ -10,13 +11,14 @@ const EMPTY_FORM = {
 
 const printBarcode = (product) => {
   const canvas = document.createElement('canvas')
-  const code = product.id.toString().padStart(10, '0')
+  const code = product.id.toString()
   JsBarcode(canvas, code, {
     format: "CODE128",
     displayValue: true,
-    fontSize: 16,
+    fontSize: 14,
     margin: 0,
-    height: 40
+    height: 30,
+    width: 1.5
   })
   const imgData = canvas.toDataURL("image/png")
   
@@ -40,8 +42,8 @@ const printBarcode = (product) => {
           .right { width: 60%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center; }
           .logo-text { font-size: 10px; font-weight: bold; text-align: center; line-height: 1; margin-bottom: 2px; letter-spacing: 0.5px; }
           .logo-shoes { font-size: 8px; font-weight: normal; letter-spacing: 1px; }
-          .product-name { font-size: 10px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; line-height: 1; margin-bottom: 2px; }
-          .product-price { font-size: 9px; font-weight: bold; margin-bottom: 2px; letter-spacing: 0.5px; }
+          .product-name { font-size: 8.5px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; line-height: 1; margin-bottom: 0; }
+          .product-price { font-size: 9px; font-weight: bold; margin-bottom: 0; letter-spacing: 0.5px; }
           .barcode-container { flex: 1; display: flex; justify-content: center; align-items: flex-end; width: 100%; }
           .barcode-img { width: 100%; max-height: 100%; object-fit: contain; }
         </style>
@@ -53,7 +55,7 @@ const printBarcode = (product) => {
           </div>
           <div class="right">
             <div class="product-name">${nameStr}</div>
-            <div class="product-price">PRIX : ${priceStr}</div>
+            <div class="product-price">${priceStr}</div>
             <div class="barcode-container">
               <img class="barcode-img" src="${imgData}" />
             </div>
@@ -97,6 +99,7 @@ function Pagination({ page, totalPages, onPage }) {
 export default function AdminProducts() {
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
+  const [boutiques, setBoutiques] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [filterCat, setFilterCat] = useState('')
@@ -144,11 +147,13 @@ export default function AdminProducts() {
   const load = () => {
     setLoading(true)
     Promise.all([
-      adminClient.get('/admin/products/?page_size=500'),
+      adminClient.get('/admin/products/?page_size=2000'),
       adminClient.get('/admin/categories/?page_size=100'),
-    ]).then(([p, c]) => {
+      adminClient.get('/admin/boutiques/'),
+    ]).then(([p, c, b]) => {
       setProducts(p.data.results || p.data)
       setCategories(c.data.results || c.data)
+      setBoutiques(b.data.results || b.data)
     }).finally(() => setLoading(false))
   }
 
@@ -163,7 +168,7 @@ export default function AdminProducts() {
   }, [modal])
 
   const filtered = products.filter(p => {
-    const matchSearch = p.name.toLowerCase().includes(search.toLowerCase())
+    const matchSearch = (p.name || '').toLowerCase().includes((search || '').toLowerCase())
     const matchCat = filterCat === '' || p.categories?.some(c => String(c.id) === filterCat)
     return matchSearch && matchCat
   })
@@ -476,8 +481,8 @@ export default function AdminProducts() {
               </label>
               <span style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--admin-text-muted)' }}>Mode Édition Rapide</span>
             </div>
-            {Object.keys(modifiedProducts).length > 0 && (
-              <button className="btn-primary" onClick={handleBulkSave} disabled={saving} style={{ padding: '6px 16px', fontSize: '0.8rem' }}>
+            {spreadsheetMode && (
+              <button className="btn-primary" onClick={handleBulkSave} disabled={saving || Object.keys(modifiedProducts).length === 0} style={{ padding: '6px 16px', fontSize: '0.8rem', marginLeft: 'auto' }}>
                 {saving ? 'Sauvegarde...' : 'Sauvegarder tout'}
               </button>
             )}
@@ -532,7 +537,7 @@ export default function AdminProducts() {
                 <table className="admin-table">
                   <thead>
                     <tr>
-                      <th>Image</th><th>Nom</th><th>Catégorie</th><th>Contenance</th><th>Prix</th><th>Stock</th><th>Statut</th><th>Actions</th>
+                      <th>Image</th><th>Nom</th><th>Catégorie</th><th>Contenance</th><th>Prix</th><th>Coût de revient</th><th>Stock Magasins</th><th>Statut</th><th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -566,11 +571,38 @@ export default function AdminProducts() {
                         </td>
                         <td>
                           {spreadsheetMode ? (
-                            <input type="number" className={`spreadsheet-input ${modifiedProducts[p.id]?.stock !== undefined ? 'changed' : ''}`} value={modifiedProducts[p.id]?.stock ?? p.stock} onChange={e => handleInlineChange(p.id, 'stock', e.target.value)} style={{ width: '80px' }} />
+                            <span style={{ fontWeight: 600, color: 'var(--admin-warning)', fontSize: '0.85rem' }}>{Number(p.cost_price || 0).toLocaleString('fr-DZ')} DA</span>
                           ) : (
-                            <span style={{ color: p.stock === 0 ? 'var(--admin-danger)' : p.stock <= p.min_stock_alert ? 'var(--admin-warning)' : 'var(--admin-success)', fontWeight: 600 }}>
-                              {p.stock}
-                            </span>
+                            <div style={{ fontWeight: 600, color: 'var(--admin-warning)' }}>{Number(p.cost_price || 0).toLocaleString('fr-DZ')} DA</div>
+                          )}
+                        </td>
+                        <td>
+                          {spreadsheetMode ? (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                              <input type="number" className={`spreadsheet-input ${modifiedProducts[p.id]?.stock !== undefined ? 'changed' : ''}`} value={modifiedProducts[p.id]?.stock ?? p.stock} onChange={e => handleInlineChange(p.id, 'stock', e.target.value)} style={{ width: '100px', fontWeight: 'bold' }} placeholder="Stock Global" title="Stock Global" />
+                              {boutiques.map(b => {
+                                const bs = p.boutique_stocks?.find(s => s.boutique === b.id)
+                                const fieldKey = `boutique_${b.id}`
+                                const currentVal = modifiedProducts[p.id]?.[fieldKey] ?? (bs ? bs.quantity : 0)
+                                return (
+                                  <div key={b.id} style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8rem' }}>
+                                    <span style={{ width: '50px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={b.name}>{b.name}</span>
+                                    <input type="number" className={`spreadsheet-input ${modifiedProducts[p.id]?.[fieldKey] !== undefined ? 'changed' : ''}`} value={currentVal} onChange={e => handleInlineChange(p.id, fieldKey, e.target.value)} style={{ width: '46px', padding: '2px 4px', height: '24px' }} title={`Stock pour ${b.name}`} />
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          ) : (
+                            <div>
+                               <div style={{ color: p.stock === 0 ? 'var(--admin-danger)' : p.stock <= p.min_stock_alert ? 'var(--admin-warning)' : 'var(--admin-success)', fontWeight: 600, marginBottom: '4px', fontSize: '0.9rem' }}>Global: {p.stock}</div>
+                               {p.boutique_stocks && p.boutique_stocks.length > 0 ? (
+                                   p.boutique_stocks.map(bs => (
+                                       <div key={bs.id} style={{ fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>{bs.boutique_name}: {bs.quantity}</div>
+                                   ))
+                               ) : (
+                                   <div style={{ fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>Aucun mag.</div>
+                               )}
+                            </div>
                           )}
                         </td>
                         <td><span className={`badge ${p.is_active ? 'badge-active' : 'badge-inactive'}`}>{p.is_active ? 'Actif' : 'Inactif'}</span></td>
@@ -593,7 +625,7 @@ export default function AdminProducts() {
                       </tr>
                     ))}
                     {paginated.length === 0 && (
-                      <tr><td colSpan={8}><div className="admin-empty"><p>Aucun produit trouvé.</p></div></td></tr>
+                      <tr><td colSpan={9}><div className="admin-empty"><p>Aucun produit trouvé.</p></div></td></tr>
                     )}
                   </tbody>
                 </table>

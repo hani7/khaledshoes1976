@@ -19,6 +19,7 @@ from .views import (
     AdminBoutiqueViewSet, BoutiqueOrderViewSet, BoutiqueLoginView,
     yassir_initiate, yassir_callback, yassir_webhook, yassir_verify,
     meta_product_feed,
+    PurchaseViewSet, ExpenseViewSet, StockMovementViewSet, ProfitReportView,
 )
 from django.core.management import call_command
 from django.http import JsonResponse
@@ -63,6 +64,9 @@ admin_router.register(r'orders', AdminOrderViewSet, basename='admin-order')
 admin_router.register(r'customers', CustomerViewSet, basename='admin-customer')
 admin_router.register(r'coupons', AdminCouponViewSet, basename='admin-coupon')
 admin_router.register(r'boutiques', AdminBoutiqueViewSet, basename='admin-boutique')
+admin_router.register(r'purchases', PurchaseViewSet, basename='admin-purchase')
+admin_router.register(r'expenses', ExpenseViewSet, basename='admin-expense')
+admin_router.register(r'stock-movements', StockMovementViewSet, basename='admin-stock-movement')
 
 boutique_router = DefaultRouter()
 boutique_router.register(r'orders', BoutiqueOrderViewSet, basename='boutique-order')
@@ -103,6 +107,7 @@ urlpatterns = [
     # Admin
     path('admin/dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
     path('admin/reports/', AdminReportView.as_view(), name='admin-reports'),
+    path('admin/reports/profit/', ProfitReportView.as_view(), name='admin-profit-report'),
     path('admin/media/', AdminMediaView.as_view(), name='admin-media'),
     path('admin/newsletter/send/', AdminNewsletterSendView.as_view(), name='admin-newsletter-send'),
     path('admin/newsletter/upload-image/', AdminNewsletterUploadImageView.as_view(), name='admin-newsletter-upload-image'),

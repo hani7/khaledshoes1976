@@ -4,7 +4,8 @@ from django.conf import settings
 from .models import (
     Category, Product, ProductImage, ProductVariant,
     Banner, Brand, Order, OrderItem, Review, UserProfile,
-    DeliveryCompany, DeliveryRate, Customer, OrderStatusHistory, Coupon, Boutique
+    DeliveryCompany, DeliveryRate, Customer, OrderStatusHistory, Coupon, Boutique,
+    BoutiqueStock, Purchase, Expense, StockMovement
 )
 
 
@@ -400,6 +401,12 @@ class AdminProductImageSerializer(AbsoluteImageMixin, serializers.ModelSerialize
         return rep
 
 
+class BoutiqueStockSerializer(serializers.ModelSerializer):
+    boutique_name = serializers.CharField(source='boutique.name', read_only=True)
+    class Meta:
+        model = BoutiqueStock
+        fields = ['id', 'boutique', 'boutique_name', 'quantity', 'updated_at']
+
 class AdminProductSerializer(AbsoluteImageMixin, serializers.ModelSerializer):
     categories = AdminCategorySerializer(many=True, read_only=True)
     brand = AdminBrandSerializer(read_only=True)
@@ -415,6 +422,7 @@ class AdminProductSerializer(AbsoluteImageMixin, serializers.ModelSerializer):
 
     variants = AdminProductVariantSerializer(many=True, read_only=True)
     images = AdminProductImageSerializer(many=True, read_only=True)
+    boutique_stocks = BoutiqueStockSerializer(many=True, read_only=True)
     related_products = ProductListSerializer(many=True, read_only=True)
     related_product_ids = serializers.PrimaryKeyRelatedField(
         queryset=Product.objects.all(), many=True, source='related_products', required=False
@@ -424,9 +432,9 @@ class AdminProductSerializer(AbsoluteImageMixin, serializers.ModelSerializer):
         model = Product
         fields = [
             'id', 'name', 'slug', 'brand', 'categories', 'brand_id', 'category_ids',
-            'description', 'short_description', 'price', 'promo_price', 'effective_price', 'is_promo',
+            'description', 'short_description', 'price', 'promo_price', 'cost_price', 'effective_price', 'is_promo',
             'units_per_carton', 'stock', 'min_stock_alert', 'is_featured', 'is_new', 'is_bestseller', 'is_promotion', 'is_active',
-            'thumbnail', 'weight_box', 'weight_carton', 'contenance', 'contenance_unit', 'created_at', 'updated_at', 'variants', 'images', 'related_products', 'related_product_ids'
+            'thumbnail', 'weight_box', 'weight_carton', 'contenance', 'contenance_unit', 'created_at', 'updated_at', 'variants', 'images', 'boutique_stocks', 'related_products', 'related_product_ids'
         ]
         read_only_fields = ['slug', 'created_at', 'updated_at']
 
@@ -574,3 +582,23 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ['id', 'name', 'phone', 'email', 'is_blacklisted', 'total_orders', 'total_spent', 'created_at', 'updated_at']
+
+# ─── ERP Serializers ────────────────────────────────────────────────────────
+class PurchaseSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='product.name', read_only=True)
+    boutique_name = serializers.CharField(source='boutique.name', read_only=True)
+    class Meta:
+        model = Purchase
+        fields = '__all__'
+
+class ExpenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Expense
+        fields = '__all__'
+
+class StockMovementSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='product.name', read_only=True)
+    boutique_name = serializers.CharField(source='boutique.name', read_only=True)
+    class Meta:
+        model = StockMovement
+        fields = '__all__'

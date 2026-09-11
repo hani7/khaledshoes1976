@@ -57,6 +57,11 @@ const AdminSettings = lazy(() => import('./pages/admin/AdminSettings'))
 const AdminMediatheque = lazy(() => import('./pages/admin/AdminMediatheque'))
 const AdminProfile = lazy(() => import('./pages/admin/AdminProfile'))
 const AdminBoutiques = lazy(() => import('./pages/admin/AdminBoutiques'))
+const AdminPurchases = lazy(() => import('./pages/admin/AdminPurchases'))
+const AdminExpenses = lazy(() => import('./pages/admin/AdminExpenses'))
+const AdminStockLedger = lazy(() => import('./pages/admin/AdminStockLedger'))
+const AdminProfitReport = lazy(() => import('./pages/admin/AdminProfitReport'))
+const AdminPOS = lazy(() => import('./pages/admin/AdminPOS'))
 
 // Boutique
 const BoutiqueLogin = lazy(() => import('./pages/boutique/BoutiqueLogin'))
@@ -258,6 +263,11 @@ export default function App() {
             <Route path="settings" element={<AdminSettings />} />
             <Route path="profile" element={<AdminProfile />} />
             <Route path="boutiques" element={<AdminBoutiques />} />
+            <Route path="pos" element={<AdminPOS />} />
+            <Route path="purchases" element={<AdminPurchases />} />
+            <Route path="expenses" element={<AdminExpenses />} />
+            <Route path="stock-ledger" element={<AdminStockLedger />} />
+            <Route path="reports/profit" element={<AdminProfitReport />} />
           </Route>
         </Routes>
       </Suspense>
