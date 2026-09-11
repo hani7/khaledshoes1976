@@ -180,8 +180,6 @@ export default function ProductPage() {
       <div className="container">
         {/* Breadcrumb */}
         <nav className="product-page__breadcrumb" aria-label="Fil d'Ariane">
-          <Link to="/">Accueil</Link>
-          <span className="breadcrumb-sep">&gt;</span>
           <Link to="/shop">Produits</Link>
           {product.categories?.length > 0 && (
             <>
