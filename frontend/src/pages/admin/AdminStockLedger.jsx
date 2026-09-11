@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import adminClient from '../../api/adminClient'
+import { Edit, Trash2 } from 'lucide-react'
 import './admin.css'
 
 export default function AdminStockLedger() {
@@ -114,6 +115,7 @@ export default function AdminStockLedger() {
                 <th>Type</th>
                 <th>Quantité</th>
                 <th>Référence</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -130,10 +132,35 @@ export default function AdminStockLedger() {
                     {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
                   </td>
                   <td>{m.reference || '—'}</td>
+                  <td>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      <button
+                        className="btn-action-icon"
+                        title="Modifier"
+                        onClick={() => alert(`Modification du mouvement #${m.id} (à implémenter)`)}
+                      >
+                        <Edit size={15} />
+                      </button>
+                      <button
+                        className="btn-action-icon"
+                        title="Supprimer"
+                        style={{ color: 'var(--admin-danger)' }}
+                        onClick={async () => {
+                          if (!window.confirm('Supprimer ce mouvement de stock ?')) return
+                          try {
+                            await adminClient.delete(`/admin/stock-movements/${m.id}/`)
+                            fetchData()
+                          } catch (e) { alert('Erreur: ' + e.message) }
+                        }}
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))}
               {movements.length === 0 && (
-                <tr><td colSpan={6}><div className="admin-empty">Aucun mouvement trouvé.</div></td></tr>
+                <tr><td colSpan={7}><div className="admin-empty">Aucun mouvement trouvé.</div></td></tr>
               )}
             </tbody>
           </table>

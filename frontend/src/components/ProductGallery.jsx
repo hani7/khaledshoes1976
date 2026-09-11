@@ -107,6 +107,7 @@ const ProductGallery = memo(function ProductGallery({
               key={i}
               className={`product-gallery__thumb ${i === selectedImage ? 'active' : ''}`}
               onClick={() => onSelectImage(i)}
+              onMouseEnter={() => onSelectImage(i)}
               id={`thumb-${i}`}
               aria-label={`Image ${i + 1}`}
             >

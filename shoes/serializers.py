@@ -50,7 +50,7 @@ class CategorySerializer(AbsoluteImageMixin, serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'slug', 'image', 'order', 'product_count']
+        fields = ['id', 'name', 'slug', 'image', 'order', 'product_count', 'is_active', 'is_featured']
 
     def get_image(self, obj):
         return self._abs(obj.image.url if obj.image else None)
@@ -104,7 +104,7 @@ class CategoryCompactSerializer(AbsoluteImageMixin, serializers.ModelSerializer)
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'slug', 'image', 'order']
+        fields = ['id', 'name', 'slug', 'image', 'order', 'is_active', 'is_featured']
 
     def get_image(self, obj):
         return self._abs(obj.image.url if obj.image else None)
@@ -369,7 +369,7 @@ class AdminCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'slug', 'image', 'order', 'is_active', 'product_count']
+        fields = ['id', 'name', 'slug', 'image', 'order', 'is_active', 'is_featured', 'product_count']
         read_only_fields = ['slug']
 
     def get_product_count(self, obj):

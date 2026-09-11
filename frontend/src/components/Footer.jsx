@@ -42,7 +42,6 @@ export default function Footer() {
 
           <div className="footer__col">
             <h4>LA MARQUE</h4>
-            <Link to="/philosophie">Notre Philosophie</Link>
             <Link to="/boutiques">Boutiques</Link>
             <Link to="/terms">Conditions Générales</Link>
             <Link to="/privacy">Politique de Confidentialité</Link>
@@ -51,7 +50,8 @@ export default function Footer() {
           <div className="footer__col">
             <h4>CONCIERGE</h4>
             <Link to="/size-guide">Guide des tailles</Link>
-            <Link to="/shipping">Expédition & Suivi</Link>
+            <Link to="/livraison">Expédition & Suivi</Link>
+            <Link to="/fidelite">Programme Fidélité</Link>
             <Link to="/returns">Retours & Remboursements</Link>
             <Link to="/faq">FAQ</Link>
           </div>

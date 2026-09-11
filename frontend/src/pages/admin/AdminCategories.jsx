@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Plus, Edit, Trash2, Image as ImageIcon, X, Search } from 'lucide-react'
 import adminClient from '../../api/adminClient'
 
-const EMPTY_FORM = { name: '', order: 0, is_active: true }
+const EMPTY_FORM = { name: '', order: 0, is_active: true, is_featured: false }
 
 export default function AdminCategories() {
   const [cats, setCats] = useState([])
@@ -37,7 +37,7 @@ export default function AdminCategories() {
   }
 
   const openEdit = (c) => {
-    setForm({ name: c.name, order: c.order, is_active: c.is_active })
+    setForm({ name: c.name, order: c.order, is_active: c.is_active, is_featured: c.is_featured || false })
     setEditId(c.id); setImgFile(null); setImgPreview(c.image || null); setModal('edit')
   }
 
@@ -97,7 +97,7 @@ export default function AdminCategories() {
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>Image</th><th>Nom</th><th>Slug</th><th>Produits</th><th>Ordre</th><th>Statut</th><th>Actions</th>
+                  <th>Image</th><th>Nom</th><th>Slug</th><th>Produits</th><th>Ordre</th><th>Statut</th><th>En avant</th><th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -114,6 +114,7 @@ export default function AdminCategories() {
                     <td style={{ fontWeight: 600 }}>{c.product_count}</td>
                     <td style={{ color: 'var(--admin-text-muted)' }}>{c.order}</td>
                     <td><span className={`badge ${c.is_active ? 'badge-active' : 'badge-inactive'}`}>{c.is_active ? 'Active' : 'Inactive'}</span></td>
+                    <td>{c.is_featured ? <span style={{ color: 'orange', fontWeight: 600 }}>⭐ Oui</span> : <span style={{ color: 'var(--admin-text-muted)' }}>Non</span>}</td>
                     <td>
                       <div style={{ display: 'flex', gap: 6 }}>
                         <button className="btn-action-icon" onClick={() => openEdit(c)} title="Modifier">
@@ -165,6 +166,10 @@ export default function AdminCategories() {
                 <label className="form-check">
                   <input type="checkbox" checked={form.is_active} onChange={e => setForm(f => ({ ...f, is_active: e.target.checked }))} />
                   Catégorie active
+                </label>
+                <label className="form-check" style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <input type="checkbox" checked={form.is_featured} onChange={e => setForm(f => ({ ...f, is_featured: e.target.checked }))} />
+                  <span>⭐ Mise en avant (afficher sur page d'accueil)</span>
                 </label>
               </div>
               <div className="admin-modal-footer">

@@ -352,7 +352,7 @@
 
 .cat-card {
   position: relative;
-  aspect-ratio: 3/4;
+  aspect-ratio: 1 / 1;
   border-radius: 0;
   overflow: hidden;
   display: block;

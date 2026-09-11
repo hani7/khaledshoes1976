@@ -65,6 +65,7 @@ class Category(models.Model):
     image = models.ImageField(upload_to='categories/', blank=True, null=True)
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
+    is_featured = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = 'Categories'

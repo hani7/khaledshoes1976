@@ -9,42 +9,6 @@ const HomePage = lazy(() => import('./pages/HomePage'))
 const ShopPage = lazy(() => import('./pages/ShopPage'))
 import { useAuthStore } from './store/authStore'
 const ProductPage = lazy(() => import('./pages/ProductPage'))
-const CategoryPage = lazy(() => import('./pages/CategoryPage'))
-const CartPage = lazy(() => import('./pages/CartPage'))
-const CheckoutPage = lazy(() => import('./pages/CheckoutPage'))
-const OrderConfirmedPage = lazy(() => import('./pages/OrderConfirmedPage'))
-const AccountPage = lazy(() => import('./pages/AccountPage'))
-const AccountLayout = lazy(() => import('./pages/AccountLayout'))
-const OrdersPage = lazy(() => import('./pages/OrdersPage'))
-const AddressesPage = lazy(() => import('./pages/AddressesPage'))
-const SettingsPage = lazy(() => import('./pages/SettingsPage'))
-const LoyaltyPage = lazy(() => import('./pages/LoyaltyPage'))
-const WishlistPage = lazy(() => import('./pages/WishlistPage'))
-import PromoBanner from './components/PromoBanner'
-import PromoPopup from './components/PromoPopup'
-import SideBanners from './components/SideBanners'
-const MaintenancePage = lazy(() => import('./pages/MaintenancePage'))
-const PaymentResultPage = lazy(() => import('./pages/PaymentResultPage'))
-const AboutPage = lazy(() => import('./pages/AboutPage'))
-const ContactPage = lazy(() => import('./pages/ContactPage'))
-const ShippingPage = lazy(() => import('./pages/ShippingPage'))
-const FaqPage = lazy(() => import('./pages/FaqPage'))
-const PrivacyPage = lazy(() => import('./pages/PrivacyPage'))
-const TermsPage = lazy(() => import('./pages/TermsPage'))
-const TrackPage = lazy(() => import('./pages/TrackPage'))
-
-// Admin
-const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'))
-const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'))
-const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
-const AdminProducts = lazy(() => import('./pages/admin/AdminProducts'))
-const AdminCategories = lazy(() => import('./pages/admin/AdminCategories'))
-const AdminBrands = lazy(() => import('./pages/admin/AdminBrands'))
-const AdminOrders = lazy(() => import('./pages/admin/AdminOrders'))
-const AdminOrderHistory = lazy(() => import('./pages/admin/AdminOrderHistory'))
-const AdminOrderCreate = lazy(() => import('./pages/admin/AdminOrderCreate'))
-const AdminOrderDetail = lazy(() => import('./pages/admin/AdminOrderDetail'))
-const AdminBanners = lazy(() => import('./pages/admin/AdminBanners'))
 const AdminDeliveryCompanies = lazy(() => import('./pages/admin/AdminDeliveryCompanies'))
 const AdminDeliveryRates = lazy(() => import('./pages/admin/AdminDeliveryRates'))
 const AdminCustomers = lazy(() => import('./pages/admin/AdminCustomers'))
@@ -200,6 +164,9 @@ export default function App() {
           <Route path="/confidentialite" element={<PrivacyPage />} />
           <Route path="/conditions" element={<TermsPage />} />
           <Route path="/suivi" element={<TrackPage />} />
+          <Route path="/size-guide" element={<SizeGuidePage />} />
+          <Route path="/fidelite" element={<FidelitePage />} />
+          <Route path="/boutiques" element={<BoutiquesPage />} />
 
           {/* Boutique */}
           <Route path="/boutique/login" element={<BoutiqueLogin />} />

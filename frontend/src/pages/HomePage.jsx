@@ -152,27 +152,29 @@ export default function HomePage() {
       <ProductCarousel title="Nouveautés" products={newArrivals} isLoading={loading} className="promo-carousel-theme" />
 
       {/* Categories */}
-      <section className="section" id="categories-section" style={{ paddingTop: '20px' }}>
-        <div className="container">
-          <p className="section-subtitle">Nos Collections</p>
-          <h2 className="section-title">Explorez par Catégorie</h2>
-          <div className="section-line" />
-        </div>
-        <div className="categories-grid" style={{ marginTop: '20px' }}>
-          {(categories || []).filter(c => c.is_active).slice(0, 6).map((cat) => (
-            <Link key={cat.slug} to={`/${cat.slug}`} className="cat-card" id={`cat-${cat.slug}`}>
-              <div className="cat-card__img">
-                {cat.image ? (
-                  <img src={mediaUrl(cat.image)} alt={cat.name} />
-                ) : (
-                  <div className="cat-card__placeholder" />
-                )}
-              </div>
-              <div className="cat-card__overlay">
-                <p className="cat-card__name">{cat.name.toUpperCase()}</p>
-              </div>
-            </Link>
-          ))}
+      <section className="section" id="categories-section" style={{ paddingTop: 0, paddingBottom: 0 }}>
+        <div className="categories-grid">
+          {(() => {
+            const featured = (categories || []).filter(c => c.is_active && c.is_featured)
+            const toShow = featured.length >= 6 ? featured : [
+              ...featured,
+              ...(categories || []).filter(c => c.is_active && !c.is_featured)
+            ]
+            return toShow.slice(0, 6).map((cat) => (
+              <Link key={cat.slug} to={`/${cat.slug}`} className="cat-card" id={`cat-${cat.slug}`}>
+                <div className="cat-card__img">
+                  {cat.image ? (
+                    <img src={mediaUrl(cat.image)} alt={cat.name} />
+                  ) : (
+                    <div className="cat-card__placeholder" />
+                  )}
+                </div>
+                <div className="cat-card__overlay">
+                  <p className="cat-card__name">{cat.name.toUpperCase()}</p>
+                </div>
+              </Link>
+            ))
+          })()}
         </div>
       </section>
 

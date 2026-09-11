@@ -92,11 +92,15 @@ export default function Navbar() {
               <span /><span /><span />
             </button>
             <nav className="navbar__links" aria-label="Catégories de produits">
-              {(categories || [])
-                .filter(c => c.slug !== 'offres-speciales' && c.slug !== 'offres-speciales')
-                .map((c) => (
-                  <Link key={c.slug} to={`/${c.slug}`}>{c.name}</Link>
-                ))}
+              <button 
+                type="button"
+                className="navbar__links-item"
+                onClick={() => setSidebarOpen(true)}
+              >
+                COLLECTIONS
+              </button>
+              <Link to="/bonnes-affaires" className="navbar__links-item">BONNES AFFAIRES</Link>
+              <Link to="/nouvelle-collection-26" className="navbar__links-item">NOUVELLE COLLECTION 2026</Link>
             </nav>
           </div>
 
