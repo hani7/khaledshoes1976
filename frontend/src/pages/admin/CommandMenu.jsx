@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+ï»¿import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import adminClient from '../../api/adminClient'
 import { Search, FileText, Package, ShoppingCart } from 'lucide-react'
@@ -121,7 +121,7 @@ export default function CommandMenu({ isOpen, setIsOpen }) {
             {loading && <div className="command-menu-loading">Recherche en cours...</div>}
             
             {!loading && allItems.length === 0 && (
-              <div className="command-menu-empty">Aucun résultat trouvé pour "{query}"</div>
+              <div className="command-menu-empty">Aucun rÃ©sultat trouvÃ© pour "{query}"</div>
             )}
 
             {!loading && allItems.length > 0 && (

@@ -273,7 +273,7 @@ export default function HomePage() {
             <p className="loyalty-block__label">Programme Fidélité</p>
             <h2 className="loyalty-block__title">
               Profitez de notre programme fidélité<br />
-              <span style={{ color: '#9a6b40' }}>jusqu'à 10 000 DA</span> en bons d'achat
+              <span style={{ color: '#9a6b40' }}>pour gagner un bon d'achat de 10%</span>
             </h2>
             <p className="loyalty-block__desc">
               Chaque achat vous rapproche d'une réduction exclusive. Cumulez vos points et bénéficiez de 10% de remise sur votre prochaine commande dès 25 000 DA d'achats.

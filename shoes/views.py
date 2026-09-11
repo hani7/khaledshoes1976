@@ -1050,8 +1050,8 @@ def handle_loyalty_points(order, old_status, new_status):
             if points_to_add <= 0:
                 return
             profile.loyalty_points += points_to_add
-            while profile.loyalty_points >= 5000:
-                profile.loyalty_points -= 5000
+            while profile.loyalty_points >= 25000:
+                profile.loyalty_points -= 25000
                 import uuid
                 from .models import Coupon
                 code = f"FIDELITE-{order.user.id}-{uuid.uuid4().hex[:6].upper()}"

@@ -17,7 +17,7 @@ export default function LoyaltyPage() {
   const profile = user.profile || {}
   const points = profile.loyalty_points || 0
   const coupons = user.coupons || []
-  const progressPercent = Math.min((points / 5000) * 100, 100)
+  const progressPercent = Math.min((points / 25000) * 100, 100)
 
   const handleCopy = (code) => {
     navigator.clipboard.writeText(code)
@@ -45,11 +45,11 @@ export default function LoyaltyPage() {
         </div>
         <div className="loyalty-progress-labels">
           <span>{points} pts</span>
-          <span>Objectif: 5 000 pts</span>
+          <span>Objectif: 25 000 pts</span>
         </div>
 
         <p className="loyalty-info">
-          À chaque fois que vous atteignez <strong>5 000 points</strong>, un coupon de{' '}
+          À chaque fois que vous atteignez <strong>25 000 points</strong>, un coupon de{' '}
           <strong>-10%</strong> est automatiquement généré pour votre prochain achat !
         </p>
       </div>
