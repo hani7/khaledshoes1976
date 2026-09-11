@@ -59,6 +59,12 @@ export default function AdminStockLedger() {
     }
   }
 
+  const totalEntriesQty = movements.filter(m => m.quantity > 0).reduce((acc, m) => acc + m.quantity, 0)
+  const totalExitsQty = movements.filter(m => m.quantity < 0).reduce((acc, m) => acc + Math.abs(m.quantity), 0)
+  
+  const totalEntriesAmount = movements.filter(m => m.quantity > 0).reduce((acc, m) => acc + (m.quantity * (parseFloat(m.product_cost_price) || parseFloat(m.product_price) || 0)), 0)
+  const totalExitsAmount = movements.filter(m => m.quantity < 0).reduce((acc, m) => acc + (Math.abs(m.quantity) * (parseFloat(m.product_cost_price) || parseFloat(m.product_price) || 0)), 0)
+
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
@@ -77,6 +83,19 @@ export default function AdminStockLedger() {
             <option value="transfer_in">Transferts In</option>
             <option value="transfer_out">Transferts Out</option>
           </select>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+        <div className="admin-card" style={{ padding: '20px', borderLeft: '4px solid var(--admin-success)' }}>
+          <div style={{ fontSize: '0.85rem', color: 'var(--admin-text-muted)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 5 }}>Total Entrées</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--admin-success)' }}>+{totalEntriesQty}</div>
+          <div style={{ fontSize: '0.9rem', color: 'var(--admin-text-muted)', marginTop: 5 }}>Montant: {totalEntriesAmount.toLocaleString('fr-DZ')} DZD</div>
+        </div>
+        <div className="admin-card" style={{ padding: '20px', borderLeft: '4px solid var(--admin-danger)' }}>
+          <div style={{ fontSize: '0.85rem', color: 'var(--admin-text-muted)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 5 }}>Total Sorties</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--admin-danger)' }}>-{totalExitsQty}</div>
+          <div style={{ fontSize: '0.9rem', color: 'var(--admin-text-muted)', marginTop: 5 }}>Montant: {totalExitsAmount.toLocaleString('fr-DZ')} DZD</div>
         </div>
       </div>
 

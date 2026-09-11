@@ -5,7 +5,7 @@ from .models import (
     Category, Product, ProductImage, ProductVariant,
     Banner, Brand, Order, OrderItem, Review, UserProfile,
     DeliveryCompany, DeliveryRate, Customer, OrderStatusHistory, Coupon, Boutique,
-    BoutiqueStock, Purchase, Expense, StockMovement
+    BoutiqueStock, Purchase, Expense, StockMovement, Supplier
 )
 
 
@@ -584,9 +584,15 @@ class CustomerSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'phone', 'email', 'is_blacklisted', 'total_orders', 'total_spent', 'created_at', 'updated_at']
 
 # ─── ERP Serializers ────────────────────────────────────────────────────────
+class AdminSupplierSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Supplier
+        fields = '__all__'
+
 class PurchaseSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='product.name', read_only=True)
     boutique_name = serializers.CharField(source='boutique.name', read_only=True)
+    supplier_name = serializers.CharField(source='supplier.name', read_only=True)
     class Meta:
         model = Purchase
         fields = '__all__'
@@ -599,6 +605,8 @@ class ExpenseSerializer(serializers.ModelSerializer):
 class StockMovementSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='product.name', read_only=True)
     boutique_name = serializers.CharField(source='boutique.name', read_only=True)
+    product_price = serializers.DecimalField(source='product.price', max_digits=10, decimal_places=2, read_only=True)
+    product_cost_price = serializers.DecimalField(source='product.cost_price', max_digits=10, decimal_places=2, read_only=True)
     class Meta:
         model = StockMovement
         fields = '__all__'

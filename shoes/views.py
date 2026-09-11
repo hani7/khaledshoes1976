@@ -793,10 +793,15 @@ class AdminDashboardView(APIView):
         )
 
         total_orders   = Order.objects.filter(is_deleted=False).count()
+        total_orders_pos = Order.objects.filter(is_deleted=False, source='pos').count()
+        total_orders_online = Order.objects.filter(is_deleted=False).exclude(source='pos').count()
+
         pending_orders = Order.objects.filter(status='pending', is_deleted=False).count()
 
         # Revenues ÔÇö only real confirmed/paid orders
         total_revenue  = Order.objects.filter(REVENUE_Q).aggregate(rev=Sum('total'))['rev'] or 0
+        total_revenue_pos = Order.objects.filter(REVENUE_Q, source='pos').aggregate(rev=Sum('total'))['rev'] or 0
+        total_revenue_online = Order.objects.filter(REVENUE_Q).exclude(source='pos').aggregate(rev=Sum('total'))['rev'] or 0
 
         today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
         daily_revenue = Order.objects.filter(REVENUE_Q, created_at__gte=today).aggregate(rev=Sum('total'))['rev'] or 0
@@ -851,10 +856,20 @@ class AdminDashboardView(APIView):
                 'orders': day_orders.count()
             })
 
+        from django.db.models import Sum
+        from .models import PageVisit
+        total_visits = PageVisit.objects.aggregate(total=Sum('count'))['total'] or 0
+        today_visits_obj = PageVisit.objects.filter(date=timezone.now().date()).first()
+        today_visits = today_visits_obj.count if today_visits_obj else 0
+
         return Response({
             'total_orders':        total_orders,
+            'total_orders_pos':    total_orders_pos,
+            'total_orders_online': total_orders_online,
             'pending_orders':      pending_orders,
             'total_revenue':       float(total_revenue),
+            'total_revenue_pos':   float(total_revenue_pos),
+            'total_revenue_online': float(total_revenue_online),
             'daily_revenue':       float(daily_revenue),
             'weekly_revenue':      float(weekly_revenue),
             'average_order_value': float(average_order_value),
@@ -871,6 +886,8 @@ class AdminDashboardView(APIView):
             },
             'trends':          trends,
             'total_customers': total_customers,
+            'total_visits':    total_visits,
+            'today_visits':    today_visits,
         })
 
 
@@ -1036,12 +1053,18 @@ def handle_loyalty_points(order, old_status, new_status):
             logging.getLogger(__name__).error(f"Loyalty points error for order {order.id}: {e}")
 
 class AdminOrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.filter(is_deleted=False).select_related('user', 'customer').prefetch_related('items__product__images', 'items__variant').order_by('-created_at')
     permission_classes = [IsAdminUser]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['status', 'payment_status', 'delivery_type']
+    filterset_fields = ['status', 'payment_status', 'delivery_type', 'source']
     search_fields = ['guest_name', 'guest_phone', 'user__username', 'user__first_name', 'id']
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+
+    def get_queryset(self):
+        qs = Order.objects.filter(is_deleted=False).select_related('user', 'customer').prefetch_related('items__product__images', 'items__variant').order_by('-created_at')
+        exclude_source = self.request.query_params.get('exclude_source')
+        if exclude_source:
+            qs = qs.exclude(source=exclude_source)
+        return qs
 
     def get_serializer_class(self):
         if self.action == 'partial_update':
@@ -2597,8 +2620,22 @@ class AdminReportView(APIView):
 class SiteSettingsView(APIView):
     permission_classes = [AllowAny]
     def get(self, request):
-        from .models import SiteSettings
+        from .models import SiteSettings, PageVisit
         settings = SiteSettings.load()
+        
+        from django.db.models import F
+        from django.utils import timezone
+        
+        # Log visit if not maintenance mode
+        if not getattr(settings, 'is_maintenance_mode', False):
+            today = timezone.now().date()
+            visit, created = PageVisit.objects.get_or_create(date=today)
+            if not created:
+                PageVisit.objects.filter(date=today).update(count=F('count') + 1)
+            else:
+                visit.count = 1
+                visit.save(update_fields=['count'])
+
         return Response({
             'is_maintenance_mode': getattr(settings, 'is_maintenance_mode', False),
             'maintenance_message': getattr(settings, 'maintenance_message', ''),
@@ -3712,8 +3749,14 @@ def meta_product_feed(request):
     return HttpResponse(xml_content, content_type='application/xml; charset=utf-8')
 
 # ─── ERP ViewSets ────────────────────────────────────────────────────────
-from .serializers import PurchaseSerializer, ExpenseSerializer, StockMovementSerializer
-from .models import Purchase, Expense, StockMovement, BoutiqueStock
+from .serializers import PurchaseSerializer, ExpenseSerializer, StockMovementSerializer, AdminSupplierSerializer
+from .models import Purchase, Expense, StockMovement, BoutiqueStock, Supplier
+
+class AdminSupplierViewSet(ActivityLogMixin, viewsets.ModelViewSet):
+    queryset = Supplier.objects.all().order_by('name')
+    serializer_class = AdminSupplierSerializer
+    permission_classes = [IsAdminUser]
+
 
 class PurchaseViewSet(ActivityLogMixin, viewsets.ModelViewSet):
     queryset = Purchase.objects.all().order_by('-date')
@@ -3798,6 +3841,11 @@ class ProfitReportView(APIView):
         expenses = Expense.objects.filter(date__year=year, date__month=month)
         total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or Decimal('0.00')
 
+        # Total des achats de stock (Purchases)
+        from .models import Purchase
+        purchases = Purchase.objects.filter(date__year=year, date__month=month)
+        total_purchases = sum((p.unit_price * p.quantity) for p in purchases)
+
         net_profit = Decimal(str(revenue)) - Decimal(str(cost_of_goods_sold)) - Decimal(str(total_expenses))
         
         # Additional stats
@@ -3807,6 +3855,18 @@ class ProfitReportView(APIView):
         gross_profit = float(revenue) - float(cost_of_goods_sold)
         gross_margin_percentage = (gross_profit / float(revenue) * 100) if float(revenue) > 0 else 0.0
         net_margin_percentage = (float(net_profit) / float(revenue) * 100) if float(revenue) > 0 else 0.0
+        
+        return Response({
+            'revenue': float(revenue),
+            'cost_of_goods_sold': float(cost_of_goods_sold),
+            'expenses': float(total_expenses),
+            'purchases': float(total_purchases),
+            'net_profit': float(net_profit),
+            'orders_count': orders_count,
+            'average_order_value': average_order_value,
+            'gross_margin_percentage': gross_margin_percentage,
+            'net_margin_percentage': net_margin_percentage,
+        })
 
         return Response({
             'month': month,

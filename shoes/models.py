@@ -6,28 +6,13 @@ from decimal import Decimal
 
 class SiteSettings(models.Model):
     is_maintenance_mode = models.BooleanField(default=False)
-    maintenance_message = models.TextField(default="Nous serons de retour très bientôt.")
-    # Free shipping
-    free_shipping_threshold = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0,
-        help_text="Montant minimum pour bénéficier de la livraison gratuite (0 = désactivé)"
-    )
-    # New account discount
-    new_account_discount_enabled = models.BooleanField(default=False)
-    new_account_discount_percent = models.DecimalField(
-        max_digits=5, decimal_places=2, default=10,
-        help_text="Pourcentage de remise offert lors de la création d'un compte"
-    )
-    # Meta Pixel
-    meta_pixel_id = models.CharField(
-        max_length=50, blank=True, default='',
-        help_text="ID du pixel Meta (Facebook) — ex: 2139405799887149"
-    )
-    # TikTok Pixel
-    tiktok_pixel_id = models.CharField(
-        max_length=50, blank=True, default='',
-        help_text="ID du pixel TikTok — ex: C1234567890"
-    )
+    maintenance_message = models.TextField(default="Le site est actuellement en maintenance. Veuillez revenir plus tard.", blank=True)
+    free_shipping_threshold = models.DecimalField(max_digits=10, decimal_places=2, default=5000, help_text="Montant à partir duquel la livraison est gratuite")
+    new_account_discount_enabled = models.BooleanField(default=False, help_text="Activer la remise pour création de compte")
+    new_account_discount_percent = models.DecimalField(max_digits=5, decimal_places=2, default=0, help_text="Pourcentage de remise pour les nouveaux comptes")
+    
+    meta_pixel_id = models.CharField(max_length=50, blank=True, help_text="ID du Pixel Facebook/Meta")
+    tiktok_pixel_id = models.CharField(max_length=50, blank=True, help_text="ID du Pixel TikTok")
 
     def save(self, *args, **kwargs):
         self.pk = 1
@@ -37,6 +22,14 @@ class SiteSettings(models.Model):
     def load(cls):
         obj, created = cls.objects.get_or_create(pk=1)
         return obj
+
+
+class PageVisit(models.Model):
+    date = models.DateField(auto_now_add=True, unique=True)
+    count = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.date} - {self.count} visites"
 
 
 class NewsletterHistory(models.Model):
@@ -481,6 +474,20 @@ class MediaFile(models.Model):
 
 # ─── ERP / Gestion de Stock & Charges ───────────────────────────────────────
 
+class Supplier(models.Model):
+    name = models.CharField(max_length=200)
+    phone = models.CharField(max_length=50, blank=True)
+    email = models.EmailField(blank=True)
+    address = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
 class BoutiqueStock(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='boutique_stocks')
     variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, null=True, blank=True, related_name='boutique_stocks')
@@ -500,8 +507,11 @@ class Purchase(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='purchases')
     variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, null=True, blank=True, related_name='purchases')
     boutique = models.ForeignKey(Boutique, on_delete=models.CASCADE, related_name='purchases')
+    supplier = models.ForeignKey(Supplier, on_delete=models.SET_NULL, null=True, blank=True, related_name='purchases')
     quantity = models.PositiveIntegerField(default=1)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
+    invoice_number = models.CharField(max_length=100, blank=True)
+    notes = models.TextField(blank=True)
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:

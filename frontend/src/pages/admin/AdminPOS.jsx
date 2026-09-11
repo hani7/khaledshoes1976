@@ -5,16 +5,18 @@ import { Search, Plus, Minus, ShoppingCart, Trash2 } from 'lucide-react'
 
 export default function AdminPOS() {
   const [products, setProducts] = useState([])
+  const [categories, setCategories] = useState([])
   const [boutiques, setBoutiques] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   
   const [search, setSearch] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedBoutique, setSelectedBoutique] = useState('')
   
   const [cart, setCart] = useState([])
-  const [customerName, setCustomerName] = useState('')
-  const [customerPhone, setCustomerPhone] = useState('')
+  const [discountInput, setDiscountInput] = useState('')
+  const [discountAmount, setDiscountAmount] = useState(0)
   
   const [processing, setProcessing] = useState(false)
 
@@ -25,14 +27,16 @@ export default function AdminPOS() {
   const fetchData = async () => {
     setLoading(true)
     try {
-      const [prodRes, boutRes] = await Promise.all([
-        adminClient.get('/admin/products/?is_active=true&page_size=100'), // Or standard /products/ endpoint
-        adminClient.get('/admin/boutiques/')
+      const [prodRes, boutRes, catRes] = await Promise.all([
+        adminClient.get('/admin/products/?is_active=true&page_size=5000'), // Load all for local search/filter
+        adminClient.get('/admin/boutiques/'),
+        adminClient.get('/admin/categories/?page_size=500')
       ])
       // Handle pagination or straight array
       setProducts(prodRes.data.results || prodRes.data)
       const bouts = boutRes.data.results || boutRes.data
       setBoutiques(bouts)
+      setCategories(catRes.data.results || catRes.data)
       if (bouts.length > 0) setSelectedBoutique(bouts[0].id)
       setError(null)
     } catch (err) {
@@ -43,7 +47,14 @@ export default function AdminPOS() {
   }
 
   const filteredProducts = products.filter(p => {
+    // 1. Filter by category
+    if (selectedCategory) {
+      const catMatches = p.categories?.some(c => c.id.toString() === selectedCategory) || (p.category_ids && p.category_ids.includes(Number(selectedCategory)))
+      if (!catMatches) return false
+    }
+    // 2. Filter by search term
     const term = search.toLowerCase().trim()
+    if (!term) return true
     return p.name.toLowerCase().includes(term) || p.id.toString() === term || p.id.toString().includes(term)
   })
 
@@ -80,6 +91,7 @@ export default function AdminPOS() {
   }
 
   const cartTotal = cart.reduce((acc, item) => acc + (parseFloat(item.price) * item.quantity), 0)
+  const finalTotal = Math.max(0, cartTotal - discountAmount)
 
   const handleCheckout = async () => {
     if (cart.length === 0) return alert('Le panier est vide')
@@ -88,13 +100,16 @@ export default function AdminPOS() {
     setProcessing(true)
     try {
       const payload = {
-        guest_name: customerName || 'Client Comptoir',
-        guest_phone: customerPhone || '0000000000',
+        guest_name: 'Client Comptoir',
+        guest_phone: '0000000000',
+        discount_amount: discountAmount,
         wilaya: 'Alger',
         shipping_address: 'Achat en magasin',
         payment_method: 'cash',
         delivery_type: 'home',
         status: 'fulfilled', // Livré et payé instantanément
+        source: 'pos',
+        boutique_id: selectedBoutique, // To pass the boutique ID explicitly
         items: cart.map(item => ({
           product_id: item.product_id,
           quantity: item.quantity,
@@ -109,8 +124,8 @@ export default function AdminPOS() {
       
       alert('Vente enregistrée avec succès !')
       setCart([])
-      setCustomerName('')
-      setCustomerPhone('')
+      setDiscountInput('')
+      setDiscountAmount(0)
     } catch (err) {
       alert('Erreur: ' + JSON.stringify(err.response?.data || err.message))
     } finally {
@@ -125,9 +140,17 @@ export default function AdminPOS() {
       <div style={{ flex: 2, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
           <h2 style={{ fontSize: '1.3rem', fontWeight: 700, margin: 0 }}>Caisse Enregistreuse (POS)</h2>
-          <div className="admin-search" style={{ margin: 0, width: '300px' }}>
-            <Search size={16} />
-            <input placeholder="Rechercher un produit..." value={search} onChange={e => setSearch(e.target.value)} />
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <select className="form-control" style={{ width: '200px' }} value={selectedCategory} onChange={e => setSelectedCategory(e.target.value)}>
+              <option value="">Toutes les catégories</option>
+              {categories.map(c => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+            <div className="admin-search" style={{ margin: 0, width: '300px' }}>
+              <Search size={16} />
+              <input placeholder="Rechercher un produit..." value={search} onChange={e => setSearch(e.target.value)} />
+            </div>
           </div>
         </div>
 
@@ -206,13 +229,23 @@ export default function AdminPOS() {
 
         <div style={{ borderTop: '2px dashed var(--admin-border)', paddingTop: '20px' }}>
           <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
-            <input className="form-control" placeholder="Nom du client (Optionnel)" value={customerName} onChange={e => setCustomerName(e.target.value)} />
-            <input className="form-control" placeholder="Téléphone" value={customerPhone} onChange={e => setCustomerPhone(e.target.value)} />
+            <input className="form-control" type="number" placeholder="Réduction (DA)" value={discountInput} onChange={e => setDiscountInput(e.target.value)} />
+            <button className="btn-primary" style={{ padding: '8px 16px' }} onClick={() => setDiscountAmount(Number(discountInput) || 0)}>Valider</button>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
+            <span style={{ fontSize: '1rem', color: 'var(--admin-text-muted)' }}>Sous-total</span>
+            <span style={{ fontSize: '1rem', fontWeight: 600 }}>{cartTotal.toLocaleString('fr-DZ')} DA</span>
+          </div>
+          {discountAmount > 0 && (
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
+              <span style={{ fontSize: '1rem', color: 'var(--admin-danger)' }}>Réduction</span>
+              <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--admin-danger)' }}>- {discountAmount.toLocaleString('fr-DZ')} DA</span>
+            </div>
+          )}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', marginTop: '10px', borderTop: '1px solid var(--admin-border)', paddingTop: '10px' }}>
             <span style={{ fontSize: '1.2rem', fontWeight: 600 }}>Total à payer</span>
-            <span style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--admin-success)' }}>{cartTotal.toLocaleString('fr-DZ')} DA</span>
+            <span style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--admin-success)' }}>{finalTotal.toLocaleString('fr-DZ')} DA</span>
           </div>
 
           <button 

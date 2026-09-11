@@ -26,7 +26,8 @@ export const NAV_ITEMS = [
     marketingHidden: true,
     links: [
       { to: '/piove-secure-2026/pos', label: 'Caisse (POS)', icon: <ShoppingCart size={20} /> },
-      { to: '/piove-secure-2026/orders', label: 'Commandes', icon: <ShoppingCart size={20} /> },
+      { to: '/piove-secure-2026/orders', label: 'Commandes (Site)', icon: <ShoppingCart size={20} /> },
+      { to: '/piove-secure-2026/pos-sales', label: 'Ventes (POS)', icon: <History size={20} /> },
       { to: '/piove-secure-2026/orders-history', label: 'Historique', icon: <History size={20} /> },
       { to: '/piove-secure-2026/coupons', label: 'Codes Promos', icon: <Ticket size={20} /> },
       { to: '/piove-secure-2026/reports', label: 'Rapports Ventes', icon: <BarChart2 size={20} /> },
@@ -37,6 +38,7 @@ export const NAV_ITEMS = [
     marketingHidden: true,
     links: [
       { to: '/piove-secure-2026/purchases', label: 'Achats & Entrées', icon: <Package size={20} /> },
+      { to: '/piove-secure-2026/suppliers', label: 'Fournisseurs', icon: <Users size={20} /> },
       { to: '/piove-secure-2026/stock-ledger', label: 'Mouv. de Stock', icon: <History size={20} /> },
       { to: '/piove-secure-2026/expenses', label: 'Charges & Frais', icon: <Banknote size={20} /> },
       { to: '/piove-secure-2026/reports/profit', label: 'Rapport Bénéfices', icon: <BarChart2 size={20} /> },
@@ -160,7 +162,7 @@ export default function AdminLayout() {
     setNewOrderToast({ message, count: orderCount })
     setTimeout(() => setNewOrderToast(null), 8000) // disparaît après 8s
     if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification('ðï¸ Khaled Shoesé â Nouvelle Commande !', {
+      new Notification('🛒 Khaled Shoes — Nouvelle Commande !', {
         body: message,
         icon: '/logo.png'
       })
@@ -253,7 +255,7 @@ export default function AdminLayout() {
     return () => clearInterval(timer)
   }, [])
 
-  // Guard: not logged in â use Navigate component, not navigate()
+  // Guard: not logged in — use Navigate component, not navigate()
   if (!user) {
     return <Navigate to="/piove-secure-2026/login" replace />
   }
@@ -282,7 +284,7 @@ export default function AdminLayout() {
           fontWeight: 700, fontSize: '1rem', letterSpacing: '0.3px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <span style={{ fontSize: '1.6rem', animation: 'bellRing 0.5s ease infinite alternate' }}>ðï¸</span>
+            <span style={{ fontSize: '1.6rem', animation: 'bellRing 0.5s ease infinite alternate' }}>🛒</span>
             <div>
               <div style={{ fontSize: '1.05rem' }}>NOUVELLE COMMANDE !</div>
               <div style={{ fontSize: '0.82rem', fontWeight: 400, opacity: 0.9 }}>{newOrderToast.message}</div>
@@ -290,7 +292,7 @@ export default function AdminLayout() {
           </div>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
             <a href="/piove-secure-2026/orders" style={{ background: 'white', color: '#dc2626', padding: '6px 16px', borderRadius: 50, fontSize: '0.82rem', fontWeight: 700, textDecoration: 'none' }}>Voir les commandes</a>
-            <button onClick={() => setNewOrderToast(null)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '1.2rem', lineHeight: 1 }}>â</button>
+            <button onClick={() => setNewOrderToast(null)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '1.2rem', lineHeight: 1 }}>✖</button>
           </div>
         </div>
       )}

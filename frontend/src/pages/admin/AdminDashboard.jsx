@@ -40,24 +40,38 @@ export default function AdminDashboard() {
   )
   if (!data) return <div className="admin-empty"><p>Impossible de charger le tableau de bord.</p></div>
 
-  const stats = [
+    const stats = [
     {
-      label: "Chiffre d'affaires (Auj.)",
-      value: `${(data.daily_revenue || 0).toLocaleString('fr-DZ', { minimumFractionDigits: 0 })} DA`,
+      label: "Visites (Auj. / Total)",
+      value: `${data.today_visits || 0} / ${data.total_visits || 0}`,
+      icon: <Users size={20} />,
+      color: '#a855f7',
+      colorBg: 'rgba(168,85,247,0.12)',
+    },
+    {
+      label: "C.A. (En Ligne)",
+      value: `${(data.total_revenue_online || 0).toLocaleString('fr-DZ', { minimumFractionDigits: 0 })} DA`,
       icon: <DollarSign size={20} />,
       color: '#5ec98e',
       colorBg: 'rgba(94,201,142,0.12)',
     },
     {
-      label: "Chiffre d'affaires (7j)",
-      value: `${(data.weekly_revenue || 0).toLocaleString('fr-DZ', { minimumFractionDigits: 0 })} DA`,
-      icon: <TrendingUp size={20} />,
+      label: "C.A. (POS / Caisse)",
+      value: `${(data.total_revenue_pos || 0).toLocaleString('fr-DZ', { minimumFractionDigits: 0 })} DA`,
+      icon: <DollarSign size={20} />,
       color: '#3b82f6',
       colorBg: 'rgba(59,130,246,0.12)',
     },
     {
-      label: 'Commandes (Total)',
-      value: data.total_orders || 0,
+      label: 'Commandes (En Ligne)',
+      value: data.total_orders_online || 0,
+      icon: <ShoppingBag size={20} />,
+      color: '#6a9ff0',
+      colorBg: 'rgba(106,159,240,0.12)',
+    },
+    {
+      label: 'Commandes (POS)',
+      value: data.total_orders_pos || 0,
       icon: <ShoppingBag size={20} />,
       color: '#6a9ff0',
       colorBg: 'rgba(106,159,240,0.12)',

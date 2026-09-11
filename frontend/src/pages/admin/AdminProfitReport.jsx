@@ -62,12 +62,22 @@ export default function AdminProfitReport() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
           
           <div className="admin-card" style={{ padding: '24px', borderLeft: '4px solid var(--admin-success)' }}>
-            <h3 style={{ fontSize: '1rem', color: 'var(--admin-text-muted)', margin: '0 0 10px 0' }}>Revenus des Ventes</h3>
+            <h3 style={{ fontSize: '1rem', color: 'var(--admin-text-muted)', margin: '0 0 10px 0' }}>Revenus (En Ligne)</h3>
             <div style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--admin-success)' }}>
-              {Number(report.revenue).toLocaleString('fr-DZ')} <span style={{ fontSize: '1rem' }}>DA</span>
+              {Number(report.revenue_online || 0).toLocaleString('fr-DZ')} <span style={{ fontSize: '1rem' }}>DA</span>
             </div>
             <p style={{ margin: '10px 0 0 0', fontSize: '0.85rem', color: 'var(--admin-text-muted)' }}>
-              Commandes livrées et payées
+              Commandes livrées (En ligne)
+            </p>
+          </div>
+
+          <div className="admin-card" style={{ padding: '24px', borderLeft: '4px solid #10b981' }}>
+            <h3 style={{ fontSize: '1rem', color: 'var(--admin-text-muted)', margin: '0 0 10px 0' }}>Revenus (POS)</h3>
+            <div style={{ fontSize: '2rem', fontWeight: 700, color: '#10b981' }}>
+              {Number(report.revenue_pos || 0).toLocaleString('fr-DZ')} <span style={{ fontSize: '1rem' }}>DA</span>
+            </div>
+            <p style={{ margin: '10px 0 0 0', fontSize: '0.85rem', color: 'var(--admin-text-muted)' }}>
+              Ventes en magasin (Caisse)
             </p>
           </div>
 
@@ -78,6 +88,16 @@ export default function AdminProfitReport() {
             </div>
             <p style={{ margin: '10px 0 0 0', fontSize: '0.85rem', color: 'var(--admin-text-muted)' }}>
               Prix d'achat des produits vendus
+            </p>
+          </div>
+
+          <div className="admin-card" style={{ padding: '24px', borderLeft: '4px solid #8b5cf6' }}>
+            <h3 style={{ fontSize: '1rem', color: 'var(--admin-text-muted)', margin: '0 0 10px 0' }}>Investissement Stock (Achats)</h3>
+            <div style={{ fontSize: '2rem', fontWeight: 700, color: '#8b5cf6' }}>
+              - {Number(report.purchases || 0).toLocaleString('fr-DZ')} <span style={{ fontSize: '1rem' }}>DA</span>
+            </div>
+            <p style={{ margin: '10px 0 0 0', fontSize: '0.85rem', color: 'var(--admin-text-muted)' }}>
+              Achat de nouveau stock (Ne réduit pas le bénéfice net)
             </p>
           </div>
 

@@ -19,7 +19,7 @@ from .views import (
     AdminBoutiqueViewSet, BoutiqueOrderViewSet, BoutiqueLoginView,
     yassir_initiate, yassir_callback, yassir_webhook, yassir_verify,
     meta_product_feed,
-    PurchaseViewSet, ExpenseViewSet, StockMovementViewSet, ProfitReportView,
+    PurchaseViewSet, ExpenseViewSet, StockMovementViewSet, ProfitReportView, AdminSupplierViewSet,
 )
 from django.core.management import call_command
 from django.http import JsonResponse
@@ -54,6 +54,7 @@ router.register(r'delivery-companies', DeliveryCompanyViewSet, basename='deliver
 router.register(r'delivery-rates', DeliveryRateViewSet, basename='delivery-rate')
 
 admin_router = DefaultRouter()
+admin_router.register(r'brands', AdminBrandViewSet, basename='admin-brand')
 admin_router.register(r'products', AdminProductViewSet, basename='admin-product')
 admin_router.register(r'categories', AdminCategoryViewSet, basename='admin-category')
 admin_router.register(r'variants', AdminProductVariantViewSet, basename='admin-variant')
@@ -67,6 +68,7 @@ admin_router.register(r'boutiques', AdminBoutiqueViewSet, basename='admin-boutiq
 admin_router.register(r'purchases', PurchaseViewSet, basename='admin-purchase')
 admin_router.register(r'expenses', ExpenseViewSet, basename='admin-expense')
 admin_router.register(r'stock-movements', StockMovementViewSet, basename='admin-stock-movement')
+admin_router.register(r'suppliers', AdminSupplierViewSet, basename='admin-supplier')
 
 boutique_router = DefaultRouter()
 boutique_router.register(r'orders', BoutiqueOrderViewSet, basename='boutique-order')

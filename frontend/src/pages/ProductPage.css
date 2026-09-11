@@ -478,10 +478,15 @@
 
 /* Swatch */
 .variant-unavailable { margin-left: 8px; font-size: 0.75rem; color: #f87171; font-weight: 600; }
-.swatch { position: relative; overflow: hidden; }
+.swatch { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .swatch__code { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; color: #555; }
 .swatch__img  { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-
+.swatch__text { font-size: 0.85rem; font-weight: 700; z-index: 1; text-align: center; }
+.swatch--out-of-stock { opacity: 0.5; cursor: not-allowed; }
+.swatch--out-of-stock::after {
+  content: ''; position: absolute; top: 50%; left: -20%; right: -20%; height: 2px;
+  background-color: rgba(0,0,0,0.8); transform: rotate(-45deg); z-index: 2;
+}
 /* Upsell */
 .product-info__upsell { margin-top: 20px; padding: 16px; background: var(--color-gray-100); border-radius: var(--radius-md); margin-bottom: 20px; }
 .upsell__title { font-size: 0.9rem; font-weight: 600; margin-bottom: 12px; }

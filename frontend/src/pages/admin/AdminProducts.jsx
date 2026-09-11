@@ -6,7 +6,7 @@ import JsBarcode from 'jsbarcode'
 
 const EMPTY_FORM = {
   name: '', category_ids: [], description: '', short_description: '', price: '',
-  promo_price: '', stock: '', min_stock_alert: 5, is_featured: false, is_new: false, is_bestseller: false, is_promotion: false, is_active: true,
+  promo_price: '', cost_price: '', stock: '', min_stock_alert: 5, is_featured: false, is_new: false, is_bestseller: false, is_promotion: false, is_active: true,
 }
 
 const printBarcode = (product) => {
@@ -15,10 +15,11 @@ const printBarcode = (product) => {
   JsBarcode(canvas, code, {
     format: "CODE128",
     displayValue: true,
-    fontSize: 14,
+    fontSize: 16,
+    fontOptions: "bold",
     margin: 0,
-    height: 30,
-    width: 1.5
+    height: 45,
+    width: 3
   })
   const imgData = canvas.toDataURL("image/png")
   
@@ -186,7 +187,7 @@ export default function AdminProducts() {
       name: p.name, category_ids: p.category_ids || [],
       description: p.description || '',
       short_description: p.short_description || '',
-      price: p.price, promo_price: p.promo_price || '',
+      price: p.price, promo_price: p.promo_price || '', cost_price: p.cost_price || '',
       stock: p.stock, min_stock_alert: p.min_stock_alert,
       is_featured: p.is_featured, is_new: p.is_new, is_bestseller: p.is_bestseller, is_promotion: p.is_promotion, is_active: p.is_active,
     })
@@ -215,7 +216,7 @@ export default function AdminProducts() {
       Object.entries(form).forEach(([k, v]) => {
         if (k === 'category_ids') {
           v.forEach(val => fd.append('category_ids', val))
-        } else if (v === '' && ['promo_price', 'description'].includes(k)) {
+        } else if (v === '' && ['promo_price', 'cost_price', 'description'].includes(k)) {
           fd.append(k, '')
         } else if (v !== '' && v !== null && v !== undefined) {
           fd.append(k, v)
@@ -537,7 +538,7 @@ export default function AdminProducts() {
                 <table className="admin-table">
                   <thead>
                     <tr>
-                      <th>Image</th><th>Nom</th><th>Catégorie</th><th>Contenance</th><th>Prix</th><th>Coût de revient</th><th>Stock Magasins</th><th>Statut</th><th>Actions</th>
+                      <th>Image</th><th>Code à barres</th><th>Nom</th><th>Catégorie</th><th>Prix</th><th>Coût d'achat</th><th>Stock Magasins</th><th>Statut</th><th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -551,11 +552,10 @@ export default function AdminProducts() {
                               </div>
                           }
                         </td>
+                        <td style={{ fontSize: '0.85rem', color: 'var(--admin-text-muted)', fontWeight: 600 }}>{p.id}</td>
                         <td style={{ fontWeight: 500 }}>{p.name}</td>
                         <td style={{ color: 'var(--admin-text-muted)' }}>{p.categories?.map(c => c.name).join(', ') || '—'}</td>
-                        <td style={{ color: 'var(--admin-text-muted)', whiteSpace: 'nowrap' }}>
-                          {p.contenance ? `${p.contenance} ${p.contenance_unit || ''}` : '—'}
-                        </td>
+
                         <td>
                           {spreadsheetMode ? (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
@@ -594,7 +594,17 @@ export default function AdminProducts() {
                             </div>
                           ) : (
                             <div>
-                               <div style={{ color: p.stock === 0 ? 'var(--admin-danger)' : p.stock <= p.min_stock_alert ? 'var(--admin-warning)' : 'var(--admin-success)', fontWeight: 600, marginBottom: '4px', fontSize: '0.9rem' }}>Global: {p.stock}</div>
+                               {(() => {
+                                 const hasVariants = p.variants && p.variants.length > 0;
+                                 const displayStock = hasVariants ? p.variants.reduce((sum, v) => sum + v.stock, 0) : p.stock;
+                                 const stockColor = displayStock === 0 ? 'var(--admin-danger)' : displayStock <= p.min_stock_alert ? 'var(--admin-warning)' : 'var(--admin-success)';
+                                 return (
+                                   <div style={{ color: stockColor, fontWeight: 600, marginBottom: '4px', fontSize: '0.9rem' }}>
+                                     Global: {displayStock}
+                                     {hasVariants && <span style={{ fontSize: '0.7rem', color: 'var(--admin-text-muted)', marginLeft: '4px', fontWeight: 'normal' }}>(Total var.)</span>}
+                                   </div>
+                                 );
+                               })()}
                                {p.boutique_stocks && p.boutique_stocks.length > 0 ? (
                                    p.boutique_stocks.map(bs => (
                                        <div key={bs.id} style={{ fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>{bs.boutique_name}: {bs.quantity}</div>
@@ -835,6 +845,10 @@ export default function AdminProducts() {
                         <div className="form-group">
                           <label>Prix Promo (DA)</label>
                           <input className="form-control" type="number" min="0" step="0.01" value={form.promo_price} onChange={e => setForm(f => ({ ...f, promo_price: e.target.value }))} placeholder="0.00" />
+                        </div>
+                        <div className="form-group">
+                          <label>Coût d'achat (DA)</label>
+                          <input className="form-control" type="number" min="0" step="0.01" value={form.cost_price} onChange={e => setForm(f => ({ ...f, cost_price: e.target.value }))} placeholder="0.00" />
                         </div>
                       </div>
                     </div>

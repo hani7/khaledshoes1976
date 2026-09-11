@@ -23,6 +23,13 @@ export default function AdminExpenses() {
     fetchData()
   }, [])
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && modal) setModal(false)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [modal])
   const fetchData = async () => {
     setLoading(true)
     try {
@@ -128,7 +135,7 @@ export default function AdminExpenses() {
 
       {modal && (
         <div className="admin-modal-overlay">
-          <div className="admin-modal" style={{ maxWidth: 500 }}>
+          <div className="admin-modal" style={{ maxWidth: 500, padding: '30px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <h3 style={{ margin: 0 }}>Enregistrer une dépense</h3>
               <button onClick={() => setModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={20} /></button>

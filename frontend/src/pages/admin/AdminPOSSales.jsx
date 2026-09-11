@@ -79,7 +79,7 @@ export const YALIDINE_STATUS_STYLE = (s = '') => {
   return { bg: '#fff7ed', color: '#c2410c', border: '#fed7aa', icon: '📦' }
 }
 
-export default function AdminOrders() {
+export default function AdminPOSSales() {
   const navigate = useNavigate()
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
@@ -140,7 +140,7 @@ export default function AdminOrders() {
     if (deliveryFilter) params.append('delivery_type', deliveryFilter)
     if (search) params.append('search', search)
     params.append('page_size', 500)
-    params.append('exclude_source', 'pos')
+    params.append('source', 'pos')
     adminClient.get(`/admin/orders/?${params}`)
       .then(r => setOrders(r.data.results || r.data))
       .catch(err => {
@@ -436,59 +436,6 @@ Réponse     : ${JSON.stringify(d.addorders_response || d.addorders_response_raw
         <KpiCard label="Annulées"    value={`${stats.cancelled}${stats.total > 0 ? ` · ${Math.round(stats.cancelled/stats.total*100)}%` : ''}`} color="#94a3b8" icon="🚫" />
       </div>
 
-      {/* ── Yalidine Stats ── */}
-      {yalidineStatsEntries.length > 0 && (
-        <div style={{
-          background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-          borderRadius: 14, marginBottom: 20,
-          padding: '10px 14px',
-          display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8,
-          boxShadow: '0 2px 8px rgba(15,23,42,0.15)',
-        }}>
-          {/* Label */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginRight: 4 }}>
-            <span style={{ fontSize: '0.85rem' }}>📦</span>
-            <span style={{ fontSize: '0.62rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '1px' }}>Yalidine</span>
-            <span style={{
-              background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)',
-              borderRadius: 8, padding: '1px 8px', fontSize: '0.7rem', fontWeight: 700,
-            }}>{yalidineTotal}</span>
-          </div>
-          <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.1)', marginRight: 4 }} />
-
-          {/* Status chips */}
-          {yalidineStatsEntries.map(([status, count]) => {
-            const ms = YALIDINE_STATUS_STYLE(status)
-            const isActive = filter === `yalidine:${status}`
-            return (
-              <button
-                key={status}
-                onClick={() => { setFilter(isActive ? '' : `yalidine:${status}`); setPage(1) }}
-                title={status}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 4,
-                  background: isActive ? ms.color : 'rgba(255,255,255,0.07)',
-                  border: `1px solid ${isActive ? ms.color : 'rgba(255,255,255,0.12)'}`,
-                  borderRadius: 8, padding: '4px 10px 4px 8px',
-                  cursor: 'pointer', transition: 'all 0.13s',
-                  boxShadow: isActive ? `0 0 0 3px ${ms.color}33` : 'none',
-                }}
-              >
-                <span style={{ fontSize: '0.75rem' }}>{ms.icon}</span>
-                <span style={{ fontSize: '0.65rem', fontWeight: 600, color: isActive ? 'white' : 'rgba(255,255,255,0.55)', whiteSpace: 'nowrap', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  {status}
-                </span>
-                <span style={{
-                  background: isActive ? 'rgba(255,255,255,0.25)' : ms.color,
-                  color: 'white', borderRadius: 6,
-                  padding: '0px 6px', fontSize: '0.68rem', fontWeight: 800,
-                  marginLeft: 2,
-                }}>{count}</span>
-              </button>
-            )
-          })}
-        </div>
-      )}
 
       <div className="admin-page-header">
         <h2 style={{ fontSize: '1.3rem', fontWeight: 700 }}>Commandes</h2>

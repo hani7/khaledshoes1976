@@ -1262,3 +1262,31 @@ select.form-control { cursor: pointer; }
   100% { transform: rotate(15deg)  scale(1.2); }
 }
 
+/* Icon Buttons */
+.btn-icon {
+  background: var(--admin-surface2);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  color: var(--admin-text-muted);
+}
+
+.btn-icon:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+.btn-icon:active {
+  transform: translateY(0);
+}
+
+.dark-mode .btn-icon:hover {
+  background: rgba(255, 255, 255, 0.1);
+}

@@ -62,6 +62,9 @@ const AdminExpenses = lazy(() => import('./pages/admin/AdminExpenses'))
 const AdminStockLedger = lazy(() => import('./pages/admin/AdminStockLedger'))
 const AdminProfitReport = lazy(() => import('./pages/admin/AdminProfitReport'))
 const AdminPOS = lazy(() => import('./pages/admin/AdminPOS'))
+const AdminSuppliers = lazy(() => import('./pages/admin/AdminSuppliers'))
+
+const AdminPOSSales = lazy(() => import('./pages/admin/AdminPOSSales'))
 
 // Boutique
 const BoutiqueLogin = lazy(() => import('./pages/boutique/BoutiqueLogin'))
@@ -139,63 +142,28 @@ export default function App() {
   // Source detection
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
-    let source = params.get('utm_source') || params.get('ref') || params.get('source')
-    const utmMedium = params.get('utm_medium') || ''
-    const utmCampaign = params.get('utm_campaign') || ''
-    const fbclid = params.get('fbclid')
-    
-    // Auto-detect from ad click IDs or referrer
-    if (!source) {
-      if (fbclid) {
-        source = 'fb'
-      } else if (document.referrer) {
-        const ref = document.referrer.toLowerCase()
-        if (ref.includes('facebook.com') || ref.includes('fb.me') || ref.includes('instagram.com/l.php')) source = 'fb'
-        else if (ref.includes('instagram.com')) source = 'ig'
-        else if (ref.includes('tiktok.com')) source = 'tiktok'
-        else if (ref.includes('google.')) source = 'google'
-        else if (ref.includes('piovecosmetics.com') || ref.includes('piovecosmetics.dz')) source = 'direct'
-        else source = 'referral'
-      }
+    let source = null
+
+    if (params.has('fbclid')) source = 'fb'
+    else if (params.has('igshid')) source = 'ig'
+    else if (params.has('ttclid')) source = 'tiktok'
+    else if (params.get('utm_source')) source = params.get('utm_source')
+    else if (document.referrer) {
+      if (document.referrer.includes('facebook.com')) source = 'fb'
+      else if (document.referrer.includes('instagram.com')) source = 'ig'
+      else if (document.referrer.includes('tiktok.com')) source = 'tiktok'
     }
-    
-    // Normalize base source
+
     if (source) {
-      source = source.toLowerCase()
-      if (source.includes('facebook') || source === 'fb') source = 'fb'
-      else if (source.includes('instagram') || source === 'ig') source = 'ig'
-      else if (source.includes('tiktok')) source = 'tiktok'
-      else if (source.includes('google')) source = 'google'
+      localStorage.setItem('piove_source', source)
     }
+  }, [pathname])
 
-    let fullOrigin = source || 'direct';
-    
-    // Add extra tracking infos
-    const extras = [];
-    if (utmMedium) extras.push(`md:${utmMedium}`);
-    if (utmCampaign) extras.push(`cp:${utmCampaign}`);
-    if (fbclid) extras.push(`fbclid`);
+  if (loadingSettings && !isAdmin) {
+    return <div style={{height:'100vh',display:'flex',alignItems:'center',justifyContent:'center'}}><div className="spin" /></div>
+  }
 
-    if (extras.length > 0) {
-        fullOrigin = `${fullOrigin} | ${extras.join(' | ')}`;
-    }
-
-    // Limit length to match backend max_length (100)
-    fullOrigin = fullOrigin.substring(0, 100);
-
-    const existing = localStorage.getItem('order_source');
-    const hasTrackingParams = params.get('utm_source') || params.get('ref') || params.get('source') || utmMedium || utmCampaign || fbclid;
-    
-    if (hasTrackingParams || !existing) {
-      localStorage.setItem('order_source', fullOrigin)
-    }
-  }, [])
-
-  // Ne pas bloquer tout le rendu — le banner et la navbar s'affichent immédiatement.
-  // La maintenance est gérée en dessous dès que les settings arrivent.
-  const isMaintenanceReady = !loadingSettings && settings?.is_maintenance_mode && !isAdmin
-
-  if (isMaintenanceReady) {
+  if (settings?.is_maintenance_mode && !isAdmin) {
     return <MaintenancePage message={settings?.maintenance_message} />
   }
 
@@ -231,7 +199,7 @@ export default function App() {
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/confidentialite" element={<PrivacyPage />} />
           <Route path="/conditions" element={<TermsPage />} />
-<Route path="/suivi" element={<TrackPage />} />
+          <Route path="/suivi" element={<TrackPage />} />
 
           {/* Boutique */}
           <Route path="/boutique/login" element={<BoutiqueLogin />} />
@@ -247,6 +215,7 @@ export default function App() {
             <Route path="categories" element={<AdminCategories />} />
             <Route path="brands" element={<AdminBrands />} />
             <Route path="orders" element={<AdminOrders />} />
+            <Route path="pos-sales" element={<AdminPOSSales />} />
             <Route path="orders-history" element={<AdminOrderHistory />} />
             <Route path="orders/new" element={<AdminOrderCreate />} />
             <Route path="orders/:id" element={<AdminOrderDetail />} />
@@ -265,6 +234,7 @@ export default function App() {
             <Route path="boutiques" element={<AdminBoutiques />} />
             <Route path="pos" element={<AdminPOS />} />
             <Route path="purchases" element={<AdminPurchases />} />
+            <Route path="suppliers" element={<AdminSuppliers />} />
             <Route path="expenses" element={<AdminExpenses />} />
             <Route path="stock-ledger" element={<AdminStockLedger />} />
             <Route path="reports/profit" element={<AdminProfitReport />} />
@@ -277,4 +247,3 @@ export default function App() {
     </>
   )
 }
-

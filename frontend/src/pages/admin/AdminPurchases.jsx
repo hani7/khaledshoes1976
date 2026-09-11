@@ -12,8 +12,14 @@ export default function AdminPurchases() {
   const [editId, setEditId] = useState(null)
   
   const [products, setProducts] = useState([])
+  const [productSearch, setProductSearch] = useState('')
+  const [productDropdownOpen, setProductDropdownOpen] = useState(false)
   const [variants, setVariants] = useState([])
   const [boutiques, setBoutiques] = useState([])
+  
+  const [suppliers, setSuppliers] = useState([])
+  const [supplierSearch, setSupplierSearch] = useState('')
+  const [supplierDropdownOpen, setSupplierDropdownOpen] = useState(false)
   
   const [form, setForm] = useState({
     product: '',
@@ -32,17 +38,26 @@ export default function AdminPurchases() {
     fetchData()
   }, [])
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && modal) setModal(false)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [modal])
   const fetchData = async () => {
     setLoading(true)
     try {
-      const [pRes, prodRes, boutRes] = await Promise.all([
+      const [pRes, prodRes, boutRes, suppRes] = await Promise.all([
         adminClient.get('/admin/purchases/'),
-        adminClient.get('/admin/products/'),
-        adminClient.get('/admin/boutiques/')
+        adminClient.get('/admin/products/?page_size=5000'),
+        adminClient.get('/admin/boutiques/'),
+        adminClient.get('/admin/suppliers/?page_size=5000')
       ])
       setPurchases(pRes.data.results || pRes.data)
       setProducts(prodRes.data.results || prodRes.data)
       setBoutiques(boutRes.data.results || boutRes.data)
+      setSuppliers(suppRes.data.results || suppRes.data)
       setError(null)
     } catch (err) {
       setError('Erreur lors du chargement des achats.')
@@ -179,7 +194,7 @@ export default function AdminPurchases() {
 
       {modal && (
         <div className="admin-modal-overlay">
-          <div className="admin-modal" style={{ maxWidth: 600 }}>
+          <div className="admin-modal" style={{ maxWidth: 600, padding: '30px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <h3 style={{ margin: 0 }}>Enregistrer un achat</h3>
               <button onClick={() => setModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={20} /></button>
@@ -197,14 +212,77 @@ export default function AdminPurchases() {
                   </select>
                 </div>
 
-                <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                <div className="form-group" style={{ gridColumn: 'span 2', position: 'relative' }}>
                   <label>Produit *</label>
-                  <select className="form-control" required value={form.product} onChange={e => handleProductChange(e.target.value)}>
-                    <option value="">Sélectionner un produit...</option>
-                    {products.map(p => (
-                      <option key={p.id} value={p.id}>{p.name}</option>
-                    ))}
-                  </select>
+                  <div 
+                    className="form-control" 
+                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--admin-surface)', minHeight: '42px' }}
+                    onClick={() => setProductDropdownOpen(!productDropdownOpen)}
+                  >
+                    {form.product ? (
+                      (() => {
+                        const p = products.find(prod => prod.id.toString() === form.product.toString());
+                        return p ? (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            {p.thumbnail ? (
+                              <img src={p.thumbnail.replace('http://localhost:8000', '')} style={{ width: 24, height: 24, objectFit: 'cover', borderRadius: 4 }} alt="" />
+                            ) : (
+                              <div style={{ width: 24, height: 24, background: 'var(--admin-border)', borderRadius: 4 }} />
+                            )}
+                            <span style={{ fontWeight: 500 }}>{p.name}</span>
+                          </div>
+                        ) : 'Sélectionner un produit...'
+                      })()
+                    ) : (
+                      <span style={{ color: 'var(--admin-text-muted)' }}>Sélectionner un produit...</span>
+                    )}
+                    <span style={{ fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>▼</span>
+                  </div>
+
+                  {productDropdownOpen && (
+                    <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: 'var(--admin-surface)', border: '1px solid var(--admin-border)', borderRadius: '8px', zIndex: 100, marginTop: '4px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)', maxHeight: '320px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                      <div style={{ padding: '10px', borderBottom: '1px solid var(--admin-surface2)', background: 'var(--admin-surface)' }}>
+                        <input 
+                          type="text" 
+                          autoFocus
+                          placeholder="Rechercher un produit (nom ou code)..." 
+                          className="form-control" 
+                          style={{ width: '100%' }}
+                          value={productSearch} 
+                          onChange={e => setProductSearch(e.target.value)} 
+                          onClick={e => e.stopPropagation()}
+                        />
+                      </div>
+                      <div style={{ overflowY: 'auto', flex: 1 }}>
+                        {products.filter(p => p.name.toLowerCase().includes(productSearch.toLowerCase()) || p.id.toString().includes(productSearch)).map(p => (
+                          <div 
+                            key={p.id} 
+                            style={{ padding: '10px 15px', display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', borderBottom: '1px solid var(--admin-surface2)', transition: 'background 0.2s' }}
+                            onClick={() => {
+                              handleProductChange(p.id.toString());
+                              setProductDropdownOpen(false);
+                              setProductSearch('');
+                            }}
+                            onMouseOver={(e) => e.currentTarget.style.background = 'var(--admin-surface2)'}
+                            onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                          >
+                            {p.thumbnail ? (
+                              <img src={p.thumbnail.replace('http://localhost:8000', '')} style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: 4 }} alt="" />
+                            ) : (
+                              <div style={{ width: 36, height: 36, background: 'var(--admin-border)', borderRadius: 4 }} />
+                            )}
+                            <div>
+                              <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{p.name}</div>
+                              <div style={{ fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>Code: {p.id}</div>
+                            </div>
+                          </div>
+                        ))}
+                        {products.filter(p => p.name.toLowerCase().includes(productSearch.toLowerCase()) || p.id.toString().includes(productSearch)).length === 0 && (
+                          <div style={{ padding: '20px', textAlign: 'center', color: 'var(--admin-text-muted)' }}>Aucun produit trouvé.</div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {variants.length > 0 && (
@@ -234,9 +312,63 @@ export default function AdminPurchases() {
                   <input className="form-control" type="number" step="0.01" value={form.total_price} onChange={e => setForm({ ...form, total_price: e.target.value })} />
                 </div>
 
-                <div className="form-group">
+                <div className="form-group" style={{ position: 'relative' }}>
                   <label>Fournisseur</label>
-                  <input className="form-control" value={form.supplier} onChange={e => setForm({ ...form, supplier: e.target.value })} />
+                  <div 
+                    className="form-control" 
+                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--admin-surface)', minHeight: '42px' }}
+                    onClick={() => setSupplierDropdownOpen(!supplierDropdownOpen)}
+                  >
+                    {form.supplier ? (
+                      (() => {
+                        const s = suppliers.find(sup => sup.id.toString() === form.supplier.toString());
+                        return s ? s.name : form.supplier
+                      })()
+                    ) : (
+                      <span style={{ color: 'var(--admin-text-muted)' }}>Sélectionner...</span>
+                    )}
+                    <span style={{ fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>▼</span>
+                  </div>
+
+                  {supplierDropdownOpen && (
+                    <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: 'var(--admin-surface)', border: '1px solid var(--admin-border)', borderRadius: '8px', zIndex: 100, marginTop: '4px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)', maxHeight: '250px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                      <div style={{ padding: '10px', borderBottom: '1px solid var(--admin-surface2)', background: 'var(--admin-surface)' }}>
+                        <input 
+                          type="text" 
+                          autoFocus
+                          placeholder="Rechercher un fournisseur..." 
+                          className="form-control" 
+                          style={{ width: '100%' }}
+                          value={supplierSearch} 
+                          onChange={e => setSupplierSearch(e.target.value)} 
+                          onClick={e => e.stopPropagation()}
+                        />
+                      </div>
+                      <div style={{ overflowY: 'auto', flex: 1 }}>
+                        <div 
+                          style={{ padding: '10px 15px', cursor: 'pointer', borderBottom: '1px solid var(--admin-surface2)', color: 'var(--admin-text-muted)' }}
+                          onClick={() => { setForm({ ...form, supplier: '' }); setSupplierDropdownOpen(false); }}
+                        >
+                          Aucun (Effacer)
+                        </div>
+                        {suppliers.filter(s => s.name.toLowerCase().includes(supplierSearch.toLowerCase())).map(s => (
+                          <div 
+                            key={s.id} 
+                            style={{ padding: '10px 15px', display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', borderBottom: '1px solid var(--admin-surface2)', transition: 'background 0.2s' }}
+                            onClick={() => {
+                              setForm({ ...form, supplier: s.id.toString() });
+                              setSupplierDropdownOpen(false);
+                              setSupplierSearch('');
+                            }}
+                            onMouseOver={(e) => e.currentTarget.style.background = 'var(--admin-surface2)'}
+                            onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                          >
+                            <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{s.name}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="form-group">

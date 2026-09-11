@@ -117,24 +117,30 @@ const ProductInfo = memo(function ProductInfo({
                       const useImage = rawColor.includes('|img_on');
                       const hexOnly = rawColor.replace('|img_on', '').replace('|img_off', '');
                       const imgUrl = useImage ? (v.image ? mediaUrl(v.image) : (hexOnly.startsWith('http') ? hexOnly : null)) : null;
-                      const isImg = !!imgUrl
-                      const code = v.name.split(' ')[0]
-                      const isSelected = chosen === v.id
+                      const isImg = !!imgUrl;
+                      const code = v.name.includes('-') ? v.name.split('-').pop().trim() : v.name;
+                      const isSelected = chosen === v.id;
+                      const isOutOfStock = v.stock <= 0;
+                      const textColor = (hexOnly && hexOnly.toLowerCase() !== '#ffffff' && hexOnly.toLowerCase() !== '#cccccc' && hexOnly.toLowerCase() !== '#f0f0f0') ? '#fff' : '#000';
+
                       return (
                         <button
                           key={v.id}
-                          className={`swatch${isSelected ? ' swatch--active' : ''}`}
+                          className={`swatch${isSelected ? ' swatch--active' : ''}${isOutOfStock ? ' swatch--out-of-stock' : ''}`}
                           style={{ background: isImg ? '#f0f0f0' : (hexOnly || '#cccccc') }}
-                          onClick={() => onChoiceSelect(groupLabel, v)}
-                          title={v.name}
+                          onClick={() => { if(!isOutOfStock) onChoiceSelect(groupLabel, v); }}
+                          title={isOutOfStock ? `${v.name} (Rupture de stock)` : v.name}
                           aria-label={v.name}
                           aria-pressed={isSelected}
                           id={`variant-${v.id}`}
+                          disabled={isOutOfStock}
                         >
-                          {isImg && (
+                          {isImg ? (
                             <span className="swatch__code">
                               <img src={imgUrl} alt={code} className="swatch__img" onError={(e) => { e.target.style.display = 'none' }} />
                             </span>
+                          ) : (
+                            <span className="swatch__text" style={{ color: textColor }}>{code}</span>
                           )}
                         </button>
                       )
@@ -179,24 +185,30 @@ const ProductInfo = memo(function ProductInfo({
               const useImage = rawColor.includes('|img_on');
               const hexOnly = rawColor.replace('|img_on', '').replace('|img_off', '');
               const imgUrl = useImage ? (v.image ? mediaUrl(v.image) : (hexOnly.startsWith('http') ? hexOnly : null)) : null;
-              const isImg = !!imgUrl
-              const code = v.name.split(' ')[0]
+              const isImg = !!imgUrl;
+              const code = v.name.includes('-') ? v.name.split('-').pop().trim() : v.name;
+              const isOutOfStock = v.stock <= 0;
+              const textColor = (hexOnly && hexOnly.toLowerCase() !== '#ffffff' && hexOnly.toLowerCase() !== '#cccccc' && hexOnly.toLowerCase() !== '#f0f0f0') ? '#fff' : '#000';
+
               return (
                 <button
                   key={v.id}
-                  className={`swatch${selectedVariant?.id === v.id ? ' swatch--active' : ''}`}
+                  className={`swatch${selectedVariant?.id === v.id ? ' swatch--active' : ''}${isOutOfStock ? ' swatch--out-of-stock' : ''}`}
                   style={{ background: isImg ? '#f0f0f0' : (hexOnly || '#cccccc') }}
-                  onClick={() => { setIsVariantLocked(true); onVariantSelect(v); }}
-                  onMouseEnter={() => { if (!isVariantLocked) onVariantSelect(v); }}
-                  title={v.name}
+                  onClick={() => { if(!isOutOfStock) { setIsVariantLocked(true); onVariantSelect(v); } }}
+                  onMouseEnter={() => { if (!isVariantLocked && !isOutOfStock) onVariantSelect(v); }}
+                  title={isOutOfStock ? `${v.name} (Rupture de stock)` : v.name}
                   aria-label={v.name}
                   aria-pressed={selectedVariant?.id === v.id}
                   id={`variant-${v.id}`}
+                  disabled={isOutOfStock}
                 >
-                  {isImg && (
+                  {isImg ? (
                     <span className="swatch__code">
                       <img src={imgUrl} alt={code} className="swatch__img" onError={(e) => { e.target.style.display = 'none' }} />
                     </span>
+                  ) : (
+                    <span className="swatch__text" style={{ color: textColor }}>{code}</span>
                   )}
                 </button>
               )
