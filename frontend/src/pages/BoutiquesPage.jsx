@@ -65,7 +65,7 @@ export default function BoutiquesPage() {
         {STORES.map((store, i) => (
           <div key={store.id} style={{
             display: 'grid',
-            gridTemplateColumns: i % 2 === 0 ? '1fr 1fr' : '1fr 1fr',
+            gridTemplateColumns: '50% 50%',
             gap: '0',
             borderRadius: '20px',
             overflow: 'hidden',
